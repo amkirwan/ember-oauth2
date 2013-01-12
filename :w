@@ -11,12 +11,12 @@ describe("ember-oauth2", function() {
     });
 
     it("should create a configuration object for Ember.OAuth2", function() {
-      expect(Ember.OAuth2.config).toBeDefined();
+      expect(Ember.OAuth2.conf).toBeDefined();
     });
   });
 
   describe("It should setup the authorization url", function() {
-    var authorizeUri;
+    var oauthUri;
     beforeEach(function() {
       var authBaseUri = 'https://foobar.dev/oauth/authorize';
       var redirectUri = 'https://qux.dev/oauth/callback';
@@ -33,15 +33,15 @@ describe("ember-oauth2", function() {
         }
       };
       App.oauth = Ember.OAuth2.create(Ember.OAuth2.config.test_auth);
-      authorizeUri = authBaseUri + '?response_type=token' + '&redirect_uri=' + redirectUri + '&client_id=' + clientId + '&state=' + state + '&scope=' + scope;
+      oauthUri = authBaseUri + '?response_type=token' + '&redirect_uri=' + redirectUri + '&client_id=' + clientId + '&scope=' + scope + '&state=' + state;
     });
 
     afterEach(function() {
-      authorizeUri = null;
+      oauthUri = null;
     });
 
     it("should setup the url", function() {
-      expect(App.oauth.authUri()).toEqual(authorizeUri)
+      expect(App.oauth.authUri()).toEqual(oauthUri)
     });
   });
 });
