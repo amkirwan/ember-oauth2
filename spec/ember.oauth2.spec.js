@@ -4,7 +4,6 @@ describe("ember-oauth2", function() {
     NAME: 'test-app'    
   });
 
-
   describe("Create Namespaces and configure object", function() {
     it("should create a OAuth2 object", function() {
       expect(Ember.OAuth2).toBeDefined();
