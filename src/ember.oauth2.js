@@ -12,7 +12,13 @@
         if (this.state) url += '&state=' + this.state;
         if (this.scope) url += '&scope=' + this.scope;
         return url;
-      }  
+      },  
+
+      auth: function() {
+        if (!this.clientId) throw new Error('No client id given.');
+        if (!this.authBaseUri) throw new Error('No auth base uri given.');
+        if (!this.redirectUri) throw new Error('No redirect uri given.');
+      }
     });
   }
 

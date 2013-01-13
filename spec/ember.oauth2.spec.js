@@ -38,9 +38,30 @@ describe("ember-oauth2", function() {
     });
   });
 
+  describe("Errors when configuration is incomplete", function() {
+    it("should require a clientId", function() {
+      Ember.OAuth2.config.test_auth.clientId = null;
+      App.oauth = Ember.OAuth2.create(Ember.OAuth2.config.test_auth);
+      expect(function() {App.oauth.auth()}).toThrow(new Error("No client id given."));
+    });
+
+    it("should require a authorization base uri", function() {
+      Ember.OAuth2.config.test_auth.authBaseUri = null;
+      App.oauth = Ember.OAuth2.create(Ember.OAuth2.config.test_auth);
+      expect(function() {App.oauth.auth()}).toThrow(new Error("No auth base uri given."));
+    });
+
+    it("should require a callback uri", function() {
+      Ember.OAuth2.config.test_auth.redirectUri = null;
+      App.oauth = Ember.OAuth2.create(Ember.OAuth2.config.test_auth);
+      expect(function() {App.oauth.auth()}).toThrow(new Error("No redirect uri given."));
+    });
+  });
+
   describe("Generate OAuth2 providers url", function() {
         it("should create the url with the options", function() {
       expect(App.oauth.authUri()).toEqual(authorizeUri)
     });
   });
+
 });
