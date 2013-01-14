@@ -32,7 +32,9 @@
         var params = Ember.OAuth2.parseCallback(hash);
         this.onSuccess(params)
         if (params['access_token']) {
-          this.onSuccess(params)
+          this.onSuccess(params);
+        } else {
+          this.onError(params);
         }
       },
 

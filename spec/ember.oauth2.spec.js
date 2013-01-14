@@ -33,6 +33,7 @@ describe("ember-oauth2", function() {
     callbackUri += '#access_token=' + ('12345abc')
                 + '&token_type=' + 'Bearer' 
                 + '&expires_in=' + '3600';
+    callbackUriError = redirectUri;
   });
 
   afterEach(function() {
@@ -87,9 +88,15 @@ describe("ember-oauth2", function() {
     });
 
     describe("onRedirect", function() {
-      it("when authenticating was successful call onSuccess callback", function() {
+      it("should call onSuccess callback when access_token is definned in the callback", function() {
         var spy = sinon.spy(App.oauth, "onSuccess");
         App.oauth.onRedirect(callbackUri);
+        expect(spy.called).toBeTruthy();
+      });
+
+      it("should call onError callback when access_token is not in the callback", function() {
+        var spy = sinon.spy(App.oauth, "onError");
+        App.oauth.onRedirect(callbackUriError);
         expect(spy.called).toBeTruthy();
       });
     });
