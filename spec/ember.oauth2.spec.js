@@ -5,6 +5,7 @@ describe("ember-oauth2", function() {
   });
 
   var authorizeUri;
+  var callbackUri;
   beforeEach(function() {
     var authBaseUri = 'https://foobar.dev/oauth/authorize';
     var redirectUri = 'https://qux.dev/oauth/callback';
@@ -27,6 +28,11 @@ describe("ember-oauth2", function() {
                  + '&client_id=' + encodeURIComponent(clientId) 
                  + '&state=' + encodeURIComponent(state) 
                  + '&scope=' + encodeURIComponent(scope);
+
+    callbackUri = redirectUri;
+    callbackUri += '#access_token=' + ('12345abc')
+                + '&token_type=' + 'Bearer' 
+                + '&expires_in=' + '3600';
   });
 
   afterEach(function() {
@@ -69,8 +75,14 @@ describe("ember-oauth2", function() {
     });
   });
 
-  // describe("Parse the access token from the callback url", function() {
-  //   it("should parse the 
-  // }
+  describe("Parse the access token from the callback url", function() {
+    it("should define a parseCallback function", function() {
+      expect(Ember.OAuth2.parseCallback).toBeDefined();
+    });
+
+    it("should return the params from the callback url", function() {
+      expect(Ember.OAuth2.parseCallback(callbackUri)).toEqual({ access_token : '12345abc', token_type : 'Bearer', expires_in : '3600' })
+    });
+  });
 
 });
