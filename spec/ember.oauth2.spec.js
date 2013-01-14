@@ -85,4 +85,13 @@ describe("ember-oauth2", function() {
     });
   });
 
+  describe("These methods need to be implemented by the OAuth2 application", function() {
+    it("should define the onSuccess callback", function() {
+      expect(App.oauth.onSuccess).toBeDefined();
+    });
+
+    it("should define the onError callback", function() {
+      expect(App.oauth.onError).toBeDefined();
+    });
+  });
 });
