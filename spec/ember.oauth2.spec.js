@@ -75,13 +75,23 @@ describe("ember-oauth2", function() {
     });
   });
 
-  describe("Parse the access token from the callback url", function() {
-    it("should define a parseCallback function", function() {
-      expect(Ember.OAuth2.parseCallback).toBeDefined();
+  describe("Handle the OAuth2 callback method", function() {
+    describe("Parse the access token from the callback url", function() {
+      it("should define a parseCallback function", function() {
+        expect(Ember.OAuth2.parseCallback).toBeDefined();
+      });
+
+      it("should return the params from the callback url", function() {
+        expect(Ember.OAuth2.parseCallback(callbackUri)).toEqual({ access_token : '12345abc', token_type : 'Bearer', expires_in : '3600' })
+      });
     });
 
-    it("should return the params from the callback url", function() {
-      expect(Ember.OAuth2.parseCallback(callbackUri)).toEqual({ access_token : '12345abc', token_type : 'Bearer', expires_in : '3600' })
+    describe("onRedirect", function() {
+      it("when authenticating was successful call onSuccess callback", function() {
+        var spy = sinon.spy(App.oauth, "onSuccess");
+        App.oauth.onRedirect(callbackUri);
+        expect(spy.called).toBeTruthy();
+      });
     });
   });
 

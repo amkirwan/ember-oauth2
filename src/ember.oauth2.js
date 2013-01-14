@@ -29,10 +29,14 @@
       },
 
       onRedirect: function(hash) {
-        var params = parseHash(hash);
+        var params = Ember.OAuth2.parseCallback(hash);
+        this.onSuccess(params)
+        if (params['access_token']) {
+          this.onSuccess(params)
+        }
       },
 
-      onSuccess: function() {},
+      onSuccess: function(params) {},
       onError: function() {}
     });
   }
