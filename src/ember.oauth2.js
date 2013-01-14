@@ -8,10 +8,13 @@
       },
 
       authUri: function() {
-        var url = this.authBaseUri + '?response_type=token' + '&redirect_uri=' + this.redirectUri + '&client_id=' + this.clientId; 
-        if (this.state) url += '&state=' + this.state;
-        if (this.scope) url += '&scope=' + this.scope;
-        return url;
+        var uri = this.authBaseUri;
+        uri += '?response_type=token' 
+            + '&redirect_uri=' + encodeURIComponent(this.redirectUri)
+            + '&client_id=' + encodeURIComponent(this.clientId); 
+        if (this.state) uri += '&state=' + encodeURIComponent(this.state);
+        if (this.scope) uri += '&scope=' + encodeURIComponent(this.scope);
+        return uri;
       },  
 
       auth: function() {
@@ -23,7 +26,5 @@
   }
 
   Ember.OAuth2.config = {}
-
-
 
 })(this);

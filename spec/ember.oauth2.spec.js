@@ -21,7 +21,12 @@ describe("ember-oauth2", function() {
       }
     };
     App.oauth = Ember.OAuth2.create(Ember.OAuth2.config.test_auth);
-    authorizeUri = authBaseUri + '?response_type=token' + '&redirect_uri=' + redirectUri + '&client_id=' + clientId + '&state=' + state + '&scope=' + scope;
+    authorizeUri = authBaseUri;
+    authorizeUri += '?response_type=token' 
+                 + '&redirect_uri=' + encodeURIComponent(redirectUri) 
+                 + '&client_id=' + encodeURIComponent(clientId) 
+                 + '&state=' + encodeURIComponent(state) 
+                 + '&scope=' + encodeURIComponent(scope);
   });
 
   afterEach(function() {
@@ -59,9 +64,13 @@ describe("ember-oauth2", function() {
   });
 
   describe("Generate OAuth2 providers url", function() {
-        it("should create the url with the options", function() {
+    it("should create the url with the options", function() {
       expect(App.oauth.authUri()).toEqual(authorizeUri)
     });
   });
+
+  // describe("Parse the access token from the callback url", function() {
+  //   it("should parse the 
+  // }
 
 });
