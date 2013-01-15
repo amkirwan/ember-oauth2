@@ -54,19 +54,19 @@ describe("ember-oauth2", function() {
     it("should require a clientId", function() {
       Ember.OAuth2.config.test_auth.clientId = null;
       App.oauth = Ember.OAuth2.create(Ember.OAuth2.config.test_auth);
-      expect(function() {App.oauth.auth()}).toThrow(new Error("No client id given."));
+      expect(function() {App.oauth.authorize()}).toThrow(new Error("No client id given."));
     });
 
     it("should require a authorization base uri", function() {
       Ember.OAuth2.config.test_auth.authBaseUri = null;
       App.oauth = Ember.OAuth2.create(Ember.OAuth2.config.test_auth);
-      expect(function() {App.oauth.auth()}).toThrow(new Error("No auth base uri given."));
+      expect(function() {App.oauth.authorize()}).toThrow(new Error("No auth base uri given."));
     });
 
     it("should require a callback uri", function() {
       Ember.OAuth2.config.test_auth.redirectUri = null;
       App.oauth = Ember.OAuth2.create(Ember.OAuth2.config.test_auth);
-      expect(function() {App.oauth.auth()}).toThrow(new Error("No redirect uri given."));
+      expect(function() {App.oauth.authorize()}).toThrow(new Error("No redirect uri given."));
     });
   });
 
@@ -79,11 +79,11 @@ describe("ember-oauth2", function() {
   describe("Handle the OAuth2 callback method", function() {
     describe("Parse the access token from the callback url", function() {
       it("should define a parseCallback function", function() {
-        expect(Ember.OAuth2.parseCallback).toBeDefined();
+        expect(App.oauth.parseCallback).toBeDefined();
       });
 
       it("should return the params from the callback url", function() {
-        expect(Ember.OAuth2.parseCallback(callbackUri)).toEqual({ access_token : '12345abc', token_type : 'Bearer', expires_in : '3600' })
+        expect(App.oauth.parseCallback(callbackUri)).toEqual({ access_token : '12345abc', token_type : 'Bearer', expires_in : '3600' })
       });
     });
 
@@ -111,4 +111,5 @@ describe("ember-oauth2", function() {
       expect(App.oauth.onError).toBeDefined();
     });
   });
+
 });
