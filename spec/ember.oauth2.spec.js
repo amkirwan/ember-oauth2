@@ -6,6 +6,8 @@ describe("ember-oauth2", function() {
 
   var authorizeUri;
   var callbackUri;
+  var savedState;
+
   beforeEach(function() {
     var authBaseUri = 'https://foobar.dev/oauth/authorize';
     var redirectUri = 'https://qux.dev/oauth/callback';
@@ -32,8 +34,15 @@ describe("ember-oauth2", function() {
     callbackUri = redirectUri;
     callbackUri += '#access_token=' + ('12345abc')
                 + '&token_type=' + 'Bearer' 
-                + '&expires_in=' + '3600';
+                + '&expires_in=' + '3600'
+                + '&state=' + state;
     callbackUriError = redirectUri;
+    savedState = {
+      response_type: 'token',
+      state: state,
+      client_id: clientId,
+      scope: scope
+    };
   });
 
   afterEach(function() {
@@ -83,13 +92,14 @@ describe("ember-oauth2", function() {
       });
 
       it("should return the params from the callback url", function() {
-        expect(App.oauth.parseCallback(callbackUri)).toEqual({ access_token : '12345abc', token_type : 'Bearer', expires_in : '3600' })
+        expect(App.oauth.parseCallback(callbackUri)).toEqual({ access_token : '12345abc', token_type : 'Bearer', expires_in : '3600', state : '6789' })
       });
     });
 
     describe("onRedirect", function() {
       it("should call onSuccess callback when access_token is definned in the callback", function() {
         var spy = sinon.spy(App.oauth, "onSuccess");
+        var stub = sinon.stub(App.oauth, 'checkState', function() { return true });
         App.oauth.onRedirect(callbackUri);
         expect(spy.called).toBeTruthy();
       });
@@ -109,6 +119,17 @@ describe("ember-oauth2", function() {
 
     it("should define the onError callback", function() {
       expect(App.oauth.onError).toBeDefined();
+    });
+  });
+
+  describe("Check the state to make sure it is set", function() {
+    it("should throw an error when there is no state set", function() {
+      expect(function() {App.oauth.checkState(null)}).toThrow(new Error("Could not find state."));
+    });
+
+    it("should throw an Error when the states are not equal", function() {
+      savedState.state = '12345';
+      expect(function() {App.oauth.checkState(savedState)}).toThrow(new Error("State returned from the server did not match the local saved state."));
     });
   });
 

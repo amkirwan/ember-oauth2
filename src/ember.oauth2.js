@@ -44,14 +44,20 @@
 
       onRedirect: function(hash) {
         var params = this.parseCallback(hash);
-        this.onSuccess(params)
         if (params['access_token']) {
-          this.onSuccess(params);
+          stateObj = this.getState(params.state);
+          this.checkState(stateObj);
+          this.onSuccess(stateObj);
         } else {
           this.onError(params);
         }
       },
 
+      checkState: function(stateObj) {
+        if (!stateObj) throw new Error("Could not find state.");
+        if (stateObj.state != this.state) throw new Error("State returned from the server did not match the local saved state.");
+      },
+      
       parseCallback: function(locationHash) {
         var oauthParams = {}, queryString = locationHash.substring(1),
         regex = /([^#?&=]+)=([^&]*)/g, m;
