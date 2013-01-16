@@ -2,6 +2,12 @@
   if (Ember.OAuth2 == undefined) {
     Ember.OAuth2 = Ember.Object.extend({
 
+      init: function() {
+        this._super();
+        this.providerConfig = Ember.OAuth2.config[this.providerId];
+        this.setProperties(this.providerConfig);
+      },
+
       calcState: function() {
         var rand = Math.random();
         var dateTime = new Date().getTime();
@@ -10,6 +16,7 @@
 
       requestObj: function() {
         var request = { 'response_type': 'token' };
+        request.providerId = this.providerId;
         request.state = this.state;
         request.client_id = this.clientId;
         request.state = this.state;
@@ -42,11 +49,15 @@
         return params[this.access_token_name];
       },
 
+      createToken: function(stateObj) {
+      },
+
       onRedirect: function(hash) {
         var params = this.parseCallback(hash);
         if (params['access_token']) {
           stateObj = this.getState(params.state);
           this.checkState(stateObj);
+          this.saveToken(this.createToken(stateObj));
           this.onSuccess(stateObj);
         } else {
           this.onError(params);
@@ -77,10 +88,17 @@
         return obj;
       },
 
-      saveToken: function(provider, token) {
+      /*
+       * saveToken stores the token by the provider
+       * expires : time that the token expires
+       * providerId: the providerId
+       * scopes: array of scopes
+       */
+      saveToken: function(providerId, token) {
+        window.localStorage.setItem('token-' + this.providerId, JSON.stringify(token));
       },
 
-      getToken: function(provider) {
+      getToken: function(providerId) {
       },
 
       onSuccess: function(params) {},

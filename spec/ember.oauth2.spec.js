@@ -8,12 +8,14 @@ describe("ember-oauth2", function() {
   var callbackUri;
   var savedState;
 
+  var bauthBaseUri, redirectUri, clientId, scope, state;
+
   beforeEach(function() {
-    var authBaseUri = 'https://foobar.dev/oauth/authorize';
-    var redirectUri = 'https://qux.dev/oauth/callback';
-    var clientId = '12345';
-    var scope = 'public';
-    var state = '6789';
+    authBaseUri = 'https://foobar.dev/oauth/authorize';
+    redirectUri = 'https://qux.dev/oauth/callback';
+    clientId = '12345';
+    scope = 'public';
+    state = '6789';
     Ember.OAuth2.config = {
       test_auth: {
         clientId: clientId,
@@ -23,7 +25,7 @@ describe("ember-oauth2", function() {
         state: state
       }
     };
-    App.oauth = Ember.OAuth2.create(Ember.OAuth2.config.test_auth);
+    App.oauth = Ember.OAuth2.create({providerId: 'test_auth'});
     authorizeUri = authBaseUri;
     authorizeUri += '?response_type=token' 
                  + '&redirect_uri=' + encodeURIComponent(redirectUri) 
@@ -47,6 +49,17 @@ describe("ember-oauth2", function() {
 
   afterEach(function() {
     authorizeUri = null;
+  });
+
+  describe("initialize", function() {
+    it("should be initialized with the properties of provider", function() {
+      expect(App.oauth.providerId).toEqual('test_auth');
+      expect(App.oauth.clientId).toEqual(clientId);
+      expect(App.oauth.authBaseUri).toEqual(authBaseUri);
+      expect(App.oauth.redirectUri).toEqual(redirectUri);
+      expect(App.oauth.scope).toEqual(scope);
+      expect(App.oauth.state).toEqual(state);
+    });
   });
 
   describe("Create Namespaces and configure object", function() {
