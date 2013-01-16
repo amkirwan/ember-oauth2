@@ -122,12 +122,14 @@ describe("ember-oauth2", function() {
         var stub = sinon.stub(App.oauth, 'checkState', function() { return true });
         App.oauth.onRedirect(callbackUri);
         expect(spy.called).toBeTruthy();
+        spy.reset();
       });
 
       it("should call onError callback when access_token is not in the callback", function() {
         var spy = sinon.spy(App.oauth, "onError");
         App.oauth.onRedirect(callbackUriError);
         expect(spy.called).toBeTruthy();
+        spy.reset();
       });
     });
   });
@@ -147,6 +149,7 @@ describe("ember-oauth2", function() {
       var spy = sinon.spy(localStorage, 'setItem');
       App.oauth.saveState(state, savedState);
       expect(spy.called).toBeTruthy();
+      spy.reset();
     });
 
     it("should return the localStorage by state", function() {
