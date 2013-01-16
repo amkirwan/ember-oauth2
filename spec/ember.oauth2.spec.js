@@ -8,9 +8,10 @@ describe("ember-oauth2", function() {
   var callbackUri;
   var savedState;
 
-  var bauthBaseUri, redirectUri, clientId, scope, state;
+  var providerId, bauthBaseUri, redirectUri, clientId, scope, state;
 
   beforeEach(function() {
+    providerId = 'test_auth';
     authBaseUri = 'https://foobar.dev/oauth/authorize';
     redirectUri = 'https://qux.dev/oauth/callback';
     clientId = '12345';
@@ -25,7 +26,7 @@ describe("ember-oauth2", function() {
         state: state
       }
     };
-    App.oauth = Ember.OAuth2.create({providerId: 'test_auth'});
+    App.oauth = Ember.OAuth2.create({providerId: providerId});
     authorizeUri = authBaseUri;
     authorizeUri += '?response_type=token' 
                  + '&redirect_uri=' + encodeURIComponent(redirectUri) 
@@ -40,6 +41,7 @@ describe("ember-oauth2", function() {
                 + '&state=' + state;
     callbackUriError = redirectUri;
     savedState = {
+      provider_id: providerId,
       response_type: 'token',
       state: state,
       client_id: clientId,
@@ -132,6 +134,19 @@ describe("ember-oauth2", function() {
 
     it("should define the onError callback", function() {
       expect(App.oauth.onError).toBeDefined();
+    });
+  });
+
+  describe("localStorage state", function() {
+    it("should save the state", function() {
+      var spy = sinon.spy(localStorage, 'setItem');
+      App.oauth.saveState(state, savedState);
+      expect(spy.called).toBeTruthy();
+    });
+
+    it("should return the local storage by state", function() {
+      App.oauth.saveState(state, savedState);
+      expect(App.oauth.getState(state)).toEqual(savedState);
     });
   });
 
