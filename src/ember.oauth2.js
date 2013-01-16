@@ -58,7 +58,26 @@
         return params['access_token'];
       },
 
-      createToken: function(stateObj) {
+      /*
+       * Token properties
+       * providerId
+       * expiresIn
+       * scope
+       * token
+       *
+       * params returned by callback
+       */
+      generateToken: function(params) {
+        var token = {}
+        token.provider_id = this.providerId;
+        token.expires_in = this.expiresIn(params.expires_in);
+        token.scope = this.scope;
+        token.access_token = params.access_token;
+        return token;     
+      },
+
+      expiresIn: function(expires) {
+        return this.now() + expires;
       },
 
       /*
