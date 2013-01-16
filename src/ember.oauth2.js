@@ -65,7 +65,7 @@
         if (this.authSuccess(params)) {
           stateObj = this.getState(params.state);
           this.checkState(stateObj);
-          this.saveToken(this.createToken(stateObj));
+          this.saveToken(this.generateToken(params));
           this.onSuccess(stateObj);
         } else {
           this.onError(params);
@@ -117,11 +117,15 @@
        * providerId: the providerId
        * scopes: array of scopes
        */
-      saveToken: function(providerId, token) {
+      saveToken: function(token) {
         window.localStorage.setItem('token-' + this.providerId, JSON.stringify(token));
       },
 
-      getToken: function(providerId) {
+      getToken: function() {
+        var token = window.localStorage.getItem('token-' + this.providerId);
+        if (!token) return null;
+        if (!token['accessToken']) return null;
+        return token;
       },
 
       onSuccess: function(params) {},

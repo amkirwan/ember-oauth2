@@ -172,4 +172,23 @@ describe("ember-oauth2", function() {
     });
   });
 
+  describe("Handle the saving and getting the token", function() {
+    var token;
+    var spyExpires;
+    beforeEach(function() {
+      token = { provider_id: providerId, expires_in: '12345', scope: scope, access_token: '12345abc' };
+      spyExpires = sinon.stub(App.oauth, 'expiresIn', function() { return '12345' });
+    });
+
+    afterEach(function() {
+      spyExpires.reset();
+    });
+
+    it("should generate the token that will be saved to the localStorage", function() {
+      var params = App.oauth.parseCallback(callbackUri);
+      expect(App.oauth.generateToken(params, savedState)).toEqual(token);
+    });
+
+  });
+
 });
