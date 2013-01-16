@@ -15,6 +15,10 @@
         });
       },
 
+      now: function() {
+        return Math.round(new Date().getTime()/1000.0);
+      },
+
       requestObj: function() {
         var request = { 'response_type': 'token' };
         request.providerId = this.providerId;
