@@ -8,10 +8,11 @@
         this.setProperties(this.providerConfig);
       },
 
-      calcState: function() {
-        var rand = Math.random();
-        var dateTime = new Date().getTime();
-        return rand * dateTime;
+      uuid: function() {
+        'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+              var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+                  return v.toString(16);
+        });
       },
 
       requestObj: function() {
@@ -25,7 +26,7 @@
       },
 
       authUri: function() {
-        if (this.state == null) this.state = this.calcState();
+        if (this.state == null) this.state = this.uuid();
         var uri = this.authBaseUri;
         uri += '?response_type=token' 
             + '&redirect_uri=' + encodeURIComponent(this.redirectUri)
