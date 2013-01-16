@@ -75,21 +75,26 @@ describe("ember-oauth2", function() {
   });
 
   describe("Errors when configuration is incomplete", function() {
+    it("should require a providerId", function() {
+      App.oauth = Ember.OAuth2.create();
+      expect(function() {App.oauth.authorize()}).toThrow(new Error('No provider id given.'));
+    });
+
     it("should require a clientId", function() {
       Ember.OAuth2.config.test_auth.clientId = null;
-      App.oauth = Ember.OAuth2.create(Ember.OAuth2.config.test_auth);
+      App.oauth = Ember.OAuth2.create({providerId: providerId});
       expect(function() {App.oauth.authorize()}).toThrow(new Error("No client id given."));
     });
 
     it("should require a authorization base uri", function() {
       Ember.OAuth2.config.test_auth.authBaseUri = null;
-      App.oauth = Ember.OAuth2.create(Ember.OAuth2.config.test_auth);
+      App.oauth = Ember.OAuth2.create({providerId: providerId});
       expect(function() {App.oauth.authorize()}).toThrow(new Error("No auth base uri given."));
     });
 
     it("should require a callback uri", function() {
       Ember.OAuth2.config.test_auth.redirectUri = null;
-      App.oauth = Ember.OAuth2.create(Ember.OAuth2.config.test_auth);
+      App.oauth = Ember.OAuth2.create({providerId: providerId});
       expect(function() {App.oauth.authorize()}).toThrow(new Error("No redirect uri given."));
     });
   });

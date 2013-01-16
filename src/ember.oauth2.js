@@ -35,7 +35,11 @@
         return uri;
       },  
 
+      /*
+       * Open authorize window if configuration is correct
+       */
       authorize: function() {
+        if (!this.providerId) throw new Error('No provider id given.');
         if (!this.clientId) throw new Error('No client id given.');
         if (!this.authBaseUri) throw new Error('No auth base uri given.');
         if (!this.redirectUri) throw new Error('No redirect uri given.');
