@@ -35,7 +35,7 @@
         uri += '?response_type=token' 
             + '&redirect_uri=' + encodeURIComponent(this.redirectUri)
             + '&client_id=' + encodeURIComponent(this.clientId)
-            + '&state=' + encodeURIComponent(this.state);
+            + '&state=' + encodeURIComponent(this.state).replace('%20', '+');
         if (this.scope) uri += '&scope=' + encodeURIComponent(this.scope);
         return uri;
       },  
@@ -130,7 +130,7 @@
        */ 
       getState: function(state) {
         var obj = JSON.parse(window.localStorage.getItem('state-' + state));
-        window.localStorage.removeItem('state-' + state);
+        // window.localStorage.removeItem('state-' + state);
         return obj;
       },
 
