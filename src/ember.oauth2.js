@@ -46,15 +46,18 @@
       },
 
       authSuccess: function(params) {
-        return params[this.access_token_name];
+        return params['access_token'];
       },
 
       createToken: function(stateObj) {
       },
 
+      /*
+       * call on redirect from OAuth2 provider response
+       */
       onRedirect: function(hash) {
         var params = this.parseCallback(hash);
-        if (params['access_token']) {
+        if (this.authSuccess(params)) {
           stateObj = this.getState(params.state);
           this.checkState(stateObj);
           this.saveToken(this.createToken(stateObj));
@@ -64,11 +67,23 @@
         }
       },
 
+      /*
+       * Check if the state returned from the OAuth2 server matches the saved state.
+       */
       checkState: function(stateObj) {
         if (!stateObj) throw new Error("Could not find state.");
         if (stateObj.state != this.state) throw new Error("State returned from the server did not match the local saved state.");
       },
       
+      /*
+       * Parse the callback function from the OAuth2 provider
+       *
+       * callback should have the following params if authentication is successful
+       * state
+       * access_token
+       * token_type
+       * expires_in 
+       */
       parseCallback: function(locationHash) {
         var oauthParams = {}, queryString = locationHash.substring(1),
         regex = /([^#?&=]+)=([^&]*)/g, m;
@@ -82,6 +97,9 @@
         window.localStorage.setItem('state-' + this.state, JSON.stringify(requestObj));
       },
 
+      /*
+       * return the saved state and remove it from the localStoage.
+       */ 
       getState: function(state) {
         var obj = JSON.parse(window.localStorage.getItem('state-' + state));
         window.localStorage.removeItem('state-' + state);

@@ -138,15 +138,21 @@ describe("ember-oauth2", function() {
   });
 
   describe("localStorage state", function() {
-    it("should save the state", function() {
+    it("should save the state to localStorage", function() {
       var spy = sinon.spy(localStorage, 'setItem');
       App.oauth.saveState(state, savedState);
       expect(spy.called).toBeTruthy();
     });
 
-    it("should return the local storage by state", function() {
+    it("should return the localStorage by state", function() {
       App.oauth.saveState(state, savedState);
       expect(App.oauth.getState(state)).toEqual(savedState);
+    });
+
+    it("should remove the localStorage state after retreiving", function() {
+      App.oauth.saveState(state, savedState);
+      App.oauth.getState(state);
+      expect(App.oauth.getState(state)).toEqual(null);
     });
   });
 
