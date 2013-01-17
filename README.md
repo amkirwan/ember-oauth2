@@ -68,3 +68,8 @@ At the redirectURI add the following to process the params returned from the OAu
 ```
 
 This will process the returned params and save the `provider_id`, `access_token`, `scope` and `expires_in` (the time the access_token will expire) to the localStorage. This localStorage can be accessed with the key `token-the_provider_id`.
+
+### Thanks to the following projects
+
+* [backbone-oauth](http://github.com/ptnplanet/backbone-oauth)
+* [jso](http://github.com/andreassolberg/jso)
