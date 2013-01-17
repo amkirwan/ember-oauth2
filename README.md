@@ -71,7 +71,7 @@ This will process the returned params and save the `provider_id`, `access_token`
 
 ## Credits
 
-### Thanks to the following projects for ideas on how to make this work.
+#### Thanks to the following projects for ideas on how to make this work.
 
 * [backbone-oauth](http://github.com/ptnplanet/backbone-oauth)
 * [jso](http://github.com/andreassolberg/jso)
