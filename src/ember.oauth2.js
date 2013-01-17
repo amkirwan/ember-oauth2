@@ -77,7 +77,7 @@
       },
 
       expiresIn: function(expires) {
-        return this.now() + expires;
+        return this.now() + parseInt(expires);
       },
 
       /*
