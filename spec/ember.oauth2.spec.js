@@ -193,6 +193,16 @@ describe("ember-oauth2", function() {
       expect(App.oauth.generateToken(params, savedState)).toEqual(token);
     });
 
+    it("should save the token to the localStorage", function() {
+      var spy = sinon.spy(localStorage, 'getItem');
+      expect(App.oauth.getToken()).toEqual(token);
+      spy.reset();
+    });
+
+    it("should return the access_token from the localStorage", function() {
+      expect(App.oauth.getAccessToken()).toEqual('12345abc');
+    });
+
   });
 
 });
