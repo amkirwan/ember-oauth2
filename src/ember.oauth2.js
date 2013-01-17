@@ -151,6 +151,20 @@
         return token;
       },
 
+      getAccessToken: function() {
+        var token = this.getToken();
+        return token.access_token;
+      },
+
+      accessTokenIsExpired: function() {
+        var token = this.getToken();
+        if (this.now() >= token.expires_in) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+
       onSuccess: function(params) {},
       onError: function() {}
     });
