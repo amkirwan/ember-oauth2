@@ -145,9 +145,9 @@
       },
 
       getToken: function() {
-        var token = window.localStorage.getItem('token-' + this.providerId);
+        var token = JSON.parse(window.localStorage.getItem('token-' + this.providerId));
         if (!token) return null;
-        if (!token['accessToken']) return null;
+        if (!token['access_token']) return null;
         return token;
       },
 
