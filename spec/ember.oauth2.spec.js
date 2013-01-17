@@ -203,6 +203,16 @@ describe("ember-oauth2", function() {
       expect(App.oauth.getAccessToken()).toEqual('12345abc');
     });
 
+    it("access token is expired", function() {
+      expect(App.oauth.accessTokenIsExpired()).toBeTruthy();
+      spyExpires.reset();
+    });
+
+    it("access token is not expired", function() {
+      spyExpires = sinon.stub(App.oauth, 'now', function() { return 5 });
+      expect(App.oauth.accessTokenIsExpired()).toBeFalsy();
+      spyExpires.reset();
+    });
   });
 
 });
