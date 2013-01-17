@@ -181,6 +181,7 @@ describe("ember-oauth2", function() {
     beforeEach(function() {
       token = { provider_id: providerId, expires_in: '12345', scope: scope, access_token: '12345abc' };
       spyExpires = sinon.stub(App.oauth, 'expiresIn', function() { return '12345' });
+      App.oauth.saveToken(token); 
     });
 
     afterEach(function() {
