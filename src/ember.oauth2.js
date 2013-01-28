@@ -153,6 +153,7 @@
 
       getAccessToken: function() {
         var token = this.getToken();
+        if (!token) return null;
         return token.access_token;
       },
 
