@@ -213,6 +213,15 @@ describe("ember-oauth2", function() {
       expect(App.oauth.accessTokenIsExpired()).toBeFalsy();
       spyExpires.reset();
     });
+
+    it("expires the access token", function() {
+      var new_time = App.oauth.now() + 10000
+      token.expires_in = new_time
+      App.oauth.saveToken(token); 
+      expect(App.oauth.accessTokenIsExpired()).toBeFalsy();
+      App.oauth.expireAccessToken();
+      expect(App.oauth.accessTokenIsExpired()).toBeTruthy();
+    });
   });
 
 });

@@ -165,6 +165,13 @@
         }
       },
 
+      expireAccessToken: function() {
+        var token = this.getToken();
+        if (!token) return null;
+        token.expires_in = 0;
+        this.saveToken(token);
+      },
+
       onSuccess: function(params) {},
       onError: function() {}
     });
