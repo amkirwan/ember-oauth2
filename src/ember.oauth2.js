@@ -159,6 +159,7 @@
 
       accessTokenIsExpired: function() {
         var token = this.getToken();
+        if (!token) return true;
         if (this.now() >= token.expires_in) {
           return true;
         } else {
