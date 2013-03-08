@@ -83,7 +83,7 @@
       /*
        * call on redirect from OAuth2 provider response
        */
-      onRedirect: function(hash) {
+      onRedirect: function(hash, callback) {
         var params = this.parseCallback(hash);
         if (this.authSuccess(params)) {
           stateObj = this.getState(params.state);
@@ -92,6 +92,9 @@
           this.onSuccess(stateObj);
         } else {
           this.onError(params);
+        }
+        if (callback && typeof(callback) == "function") {
+          callback();
         }
       },
 

@@ -132,6 +132,12 @@ describe("ember-oauth2", function() {
         spy.reset();
       });
     });
+
+    it("should call the callback if defined", function() {
+      var callback = sinon.spy();
+      App.oauth.onRedirect(callbackUriError, callback);
+      expect(callback.called).toBeTruthy();
+    });
   });
 
   describe("These methods need to be implemented by the OAuth2 application", function() {
