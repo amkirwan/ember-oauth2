@@ -16,7 +16,7 @@ describe("ember-oauth2", function() {
     redirectUri = 'https://qux.dev/oauth/callback';
     clientId = '12345';
     scope = 'public';
-    state = '6789';
+    state = 'state-12345';
     Ember.OAuth2.config = {
       test_auth: {
         clientId: clientId,
@@ -112,7 +112,7 @@ describe("ember-oauth2", function() {
       });
 
       it("should return the params from the callback url", function() {
-        expect(App.oauth.parseCallback(callbackUri)).toEqual({ access_token : '12345abc', token_type : 'Bearer', expires_in : '3600', state : '6789' })
+        expect(App.oauth.parseCallback(callbackUri)).toEqual({ access_token : '12345abc', token_type : 'Bearer', expires_in : '3600', state : 'state-12345' })
       });
     });
 
