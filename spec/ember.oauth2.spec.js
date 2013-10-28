@@ -179,6 +179,10 @@ describe("ember-oauth2", function() {
       savedState.state = '12345';
       expect(function() {App.oauth.checkState(savedState)}).toThrow(new Error("State returned from the server did not match the local saved state."));
     });
+
+    it("should not throw an Error when the states are equal", function() {
+      expect(function() {App.oauth.checkState(savedState)}).toBeTruthy();
+    });
   });
 
   describe("Handle the saving and getting the token", function() {
