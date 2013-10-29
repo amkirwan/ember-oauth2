@@ -28,6 +28,21 @@ First you must configure your OAuth provider. For Google you would configure it 
   } 
 ```
 
+The configuration object allows you to also customize the prefix for the state and token that are stored in the browsers localStorage. The default value for the state prefix is *state* and the default for token is *token*. Using the previous example you can customize the prefixes by doing the following.
+
+```javascript
+  Ember.OAuth2.config = {
+    google: {
+      clientId: "xxxxxxxxxxxx",
+      authBaseUri: 'https://accounts.google.com/o/oauth2/auth',
+      redirectUri: 'https://oauth2-login-demo.appspot.com/oauth/callback',
+      scope: 'public write',
+      statePrefix: 'foobar',
+      tokenPrefix: 'qux'
+    } 
+  } 
+```
+
 After successful authorization and saving the access_token to the localStorage the `onSuccess` callback will be called. This will allow the user to do any cleanup necessary or to retrieve user information from the OAuth provider. To configure the callback reopen the class and and override the `onSuccess` and `onError` methods.
 
 ```javascript
