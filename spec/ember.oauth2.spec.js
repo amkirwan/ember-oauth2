@@ -24,9 +24,19 @@ describe("ember-oauth2", function() {
         redirectUri: redirectUri,
         scope: scope,
         state: state
+      },
+      test_auth_config: {
+        clientId: clientId,
+        authBaseUri: authBaseUri,
+        redirectUri: redirectUri,
+        scope: scope,
+        state: state,
+        statePrefix: 'foo',
+        tokenPrefix: 'bar'
       }
     };
     App.oauth = Ember.OAuth2.create({providerId: providerId});
+    App.oauth_auth_config = Ember.OAuth2.create({providerId: 'test_auth_config'})
     authorizeUri = authBaseUri;
     authorizeUri += '?response_type=token' 
                  + '&redirect_uri=' + encodeURIComponent(redirectUri) 
@@ -61,6 +71,16 @@ describe("ember-oauth2", function() {
       expect(App.oauth.redirectUri).toEqual(redirectUri);
       expect(App.oauth.scope).toEqual(scope);
       expect(App.oauth.state).toEqual(state);
+      expect(App.oauth.statePrefix).toEqual('state');
+      expect(App.oauth.tokenPrefix).toEqual('token');
+    });
+
+    it("should set a custom state prefix", function() {
+      expect(App.oauth_auth_config.statePrefix).toEqual('foo');
+    });
+
+    it("should set a custom token prefix", function() {
+      expect(App.oauth_auth_config.tokenPrefix).toEqual('bar');
     });
   });
 

@@ -5,6 +5,8 @@
       init: function() {
         this._super();
         this.providerConfig = Ember.OAuth2.config[this.providerId];
+        this.set('statePrefix', 'state');
+        this.set('tokenPrefix', 'token');
         this.setProperties(this.providerConfig);
       },
 
@@ -125,15 +127,16 @@
       },
 
       saveState: function(state, requestObj) {
-        window.localStorage.setItem('state-' + this.state, JSON.stringify(requestObj));
+        window.localStorage.setItem(this.statePrefix + '-' + state, JSON.stringify(requestObj));
       },
 
       /*
        * return the saved state and remove it from the localStoage.
        */ 
       getState: function(state) {
-        var obj = JSON.parse(window.localStorage.getItem('state-' + state));
-        window.localStorage.removeItem('state-' + state);
+        var obj = JSON.parse(window.localStorage.getItem(this.statePrefix + '-'  + state));
+        window.localStorage.removeItem(this.statePrefix + '-' + state);
+
         return obj;
       },
 
@@ -144,11 +147,11 @@
        * scopes: array of scopes
        */
       saveToken: function(token) {
-        window.localStorage.setItem('token-' + this.providerId, JSON.stringify(token));
+        window.localStorage.setItem(this.tokenPrefix + '-' + this.providerId, JSON.stringify(token));
       },
 
       getToken: function() {
-        var token = JSON.parse(window.localStorage.getItem('token-' + this.providerId));
+        var token = JSON.parse(window.localStorage.getItem( this.tokenPrefix + '-' + this.providerId));
         if (!token) return null;
         if (!token['access_token']) return null;
         return token;
