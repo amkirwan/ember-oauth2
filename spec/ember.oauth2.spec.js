@@ -16,7 +16,7 @@ describe("ember-oauth2", function() {
     redirectUri = 'https://qux.dev/oauth/callback';
     clientId = '12345';
     scope = 'public';
-    state = 'state-12345';
+    state = '12345';
     Ember.OAuth2.config = {
       test_auth: {
         clientId: clientId,
@@ -112,7 +112,7 @@ describe("ember-oauth2", function() {
       });
 
       it("should return the params from the callback url", function() {
-        expect(App.oauth.parseCallback(callbackUri)).toEqual({ access_token : '12345abc', token_type : 'Bearer', expires_in : '3600', state : 'state-12345' })
+        expect(App.oauth.parseCallback(callbackUri)).toEqual({ access_token : '12345abc', token_type : 'Bearer', expires_in : '3600', state : '12345' })
       });
     });
 
@@ -168,15 +168,28 @@ describe("ember-oauth2", function() {
       App.oauth.getState(state);
       expect(App.oauth.getState(state)).toEqual(null);
     });
+
+    it("should remove any extra saved states", function() {
+      App.oauth.saveState(state, savedState);
+      
+      var newState = "99999";
+      var newSavedState = $.extend(true, {}, savedState);
+      newSavedState.state = newState;
+      App.oauth.saveState(newState, newSavedState);
+
+       App.oauth.getState(state);
+      // expect(App.oauth.getState(newState)).toEqual(null);
+    });
   });
 
+  // checkState checks that the state returned by the OAuth server is the same as the one sent
   describe("Check the state to make sure it is set", function() {
     it("should throw an error when there is no state set", function() {
       expect(function() {App.oauth.checkState(null)}).toThrow(new Error("Could not find state."));
     });
 
     it("should throw an Error when the states are not equal", function() {
-      savedState.state = '12345';
+      savedState.state = 'abcdefg';
       expect(function() {App.oauth.checkState(savedState)}).toThrow(new Error("State returned from the server did not match the local saved state."));
     });
 
