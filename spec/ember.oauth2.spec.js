@@ -170,6 +170,7 @@ describe("ember-oauth2", function() {
     });
   });
 
+  // saving and removing state to localStorage
   describe("localStorage state", function() {
     it("should save the state to localStorage", function() {
       var spy = sinon.spy(localStorage, 'setItem');
