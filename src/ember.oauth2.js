@@ -51,6 +51,7 @@
         if (!this.authBaseUri) throw new Error('No auth base uri given.');
         if (!this.redirectUri) throw new Error('No redirect uri given.');
         this.authorizeUri = this.authUri();
+        this.clearStates();
         this.saveState(this.state, this.requestObj());
         this.dialog = window.open(this.authorizeUri, 'Authorize', 'height=600, width=450');
         if (window.focus) this.dialog.focus();
@@ -138,6 +139,18 @@
         window.localStorage.removeItem(this.statePrefix + '-' + state);
 
         return obj;
+      },
+
+      // remove any extra states if they exist
+      clearStates: function() {
+        var regex = new RegExp( '^' + this.statePrefix + '-.*', 'g');
+
+        for(var i = 0; i < window.localStorage.length; i++) {
+          var name = window.localStorage.key(i);
+          while (regex.exec(name)) {
+            window.localStorage.removeItem(name);
+          }
+        }
       },
 
       /*
