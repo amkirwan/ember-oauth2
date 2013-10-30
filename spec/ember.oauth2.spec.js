@@ -190,7 +190,7 @@ describe("ember-oauth2", function() {
       expect(App.oauth.getState(state)).toEqual(null);
     });
 
-    it("should remove any extra saved states", function() {
+    it("should remove any saved states", function() {
       App.oauth.saveState(state, savedState);
       
       var newState = "99999";
@@ -198,8 +198,9 @@ describe("ember-oauth2", function() {
       newSavedState.state = newState;
       App.oauth.saveState(newState, newSavedState);
 
-       App.oauth.getState(state);
-      // expect(App.oauth.getState(newState)).toEqual(null);
+      App.oauth.clearStates();
+      expect(App.oauth.getState(state)).toEqual(null);
+      expect(App.oauth.getState(newState)).toEqual(null);
     });
   });
 
