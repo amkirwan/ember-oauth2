@@ -60,7 +60,7 @@ After successful authorization and saving the access_token to the localStorage t
 To sign into the OAuth2 provider create a auth object.
 
 ```javascript
-  App.oauth = Ember.OAuth2.create(providerId: 'bwh_anes_oauth2');
+  App.oauth = Ember.OAuth2.create({providerId: 'bwh_anes_oauth2'});
   App.aouth.authorize();
 ```
 
