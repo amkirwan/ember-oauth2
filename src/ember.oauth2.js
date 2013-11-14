@@ -50,11 +50,11 @@
         if (!this.clientId) throw new Error('No client id given.');
         if (!this.authBaseUri) throw new Error('No auth base uri given.');
         if (!this.redirectUri) throw new Error('No redirect uri given.');
-        this.authorizeUri = this.authUri();
+        var authorizeUri = this.authUri();
         this.clearStates();
         this.saveState(this.state, this.requestObj());
-        this.dialog = window.open(this.authorizeUri, 'Authorize', 'height=600, width=450');
-        if (window.focus) this.dialog.focus();
+        var dialog = window.open(authorizeUri, 'Authorize', 'height=600, width=450');
+        if (window.focus) dialog.focus();
       },
 
       authSuccess: function(params) {
