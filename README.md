@@ -61,7 +61,7 @@ To sign into the OAuth2 provider create a auth object.
 
 ```javascript
   App.oauth = Ember.OAuth2.create({providerId: 'bwh_anes_oauth2'});
-  App.aouth.authorize();
+  App.oauth.authorize();
 ```
 
 Calling `authorize()` will open a new window and the OAuth provider's OAuth dialog will be displayed. If the user chooses to authenticate with your website upon authorization by OAuth provider the user will be redirected back to the redirectUri with the params access_token, token_type and state. 
