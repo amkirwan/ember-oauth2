@@ -28,6 +28,8 @@ First you must configure your OAuth provider. For Google you would configure it 
   } 
 ```
 
+The example above sets *google* as a *providerId* along with configuration information for the provider. The following params are required for configuring a valid provider *clientId*, *authBaseUri* and *redirectUri*. Depending on the provider you might need to provide additional and/or optional configuration key/values.
+
 The configuration object allows you to also customize the prefix for the state and token that are stored in the browsers localStorage. The default value for the state prefix is *state* and the default for token is *token*. Using the previous example you can customize the prefixes by doing the following.
 
 ```javascript
@@ -43,24 +45,21 @@ The configuration object allows you to also customize the prefix for the state a
   } 
 ```
 
-After successful authorization and saving the access_token to the localStorage the `onSuccess` callback will be called. This will allow the user to do any cleanup necessary or to retrieve user information from the OAuth provider. To configure the callback reopen the class and and override the `onSuccess` and `onError` methods.
-
-```javascript
-  Ember.OAuth2.reopen({ onSuccess: function() { return 'hello, onSuccess' } });
-  Ember.OAuth2.reopen({ onError: function() { return 'hello, onError' } });
-```
+The following are the options available for configuring a provider: 
 
 * `clientId`: The client identifier that is used by the provider. Ember-OAuth2 uses the Implicit Grant flow (Client-Side Flow).
 * `authBaseUri`: The authorization url for the OAuth2 provider.
 * `redirectUri`: The URI that the OAuth2 provider will redirect back to when completed. 
 * `scope`: Access your application is requesting from the OAuth2 provider.
+* `statePrefix`: the prefix name for state stored in the localStorage
+* `tokenPrefix`: the prefix name for token stored in the localStorage
 
 ## Authorization
 
-To sign into the OAuth2 provider create a auth object.
+To sign into the OAuth2 provider create an auth object using the providerId and call the authorize method. Using the previous Google configuration example you would call it like this:
 
 ```javascript
-  App.oauth = Ember.OAuth2.create({providerId: 'bwh_anes_oauth2'});
+  App.oauth = Ember.OAuth2.create({providerId: 'google'});
   App.oauth.authorize();
 ```
 
@@ -83,6 +82,16 @@ At the redirectURI add the following to process the params returned from the OAu
 ```
 
 This will process the returned params and save the `provider_id`, `access_token`, `scope` and `expires_in` (the time the access_token will expire) to the localStorage. This localStorage can be accessed with the key `token-the_provider_id`.
+
+
+After successful authorization and saving the access_token to the localStorage the `onSuccess` callback will be called. This will allow the user to do any cleanup necessary or to retrieve user information from the OAuth provider. To configure the callback reopen the class and and override the `onSuccess` and `onError` methods.
+
+```javascript
+  Ember.OAuth2.reopen({ onSuccess: function() { return 'hello, onSuccess' } });
+  Ember.OAuth2.reopen({ onError: function() { return 'hello, onError' } });
+```
+
+
 
 ## Credits
 
