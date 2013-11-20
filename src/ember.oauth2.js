@@ -4,7 +4,7 @@
 
       init: function() {
         this._super();
-        this.providerConfig = Ember.OAuth2.config[this.providerId];
+        this.providerConfig = Ember.OAuth2.config[this.get('providerId')];
         this.set('statePrefix', 'state');
         this.set('tokenPrefix', 'token');
         this.setProperties(this.providerConfig);
