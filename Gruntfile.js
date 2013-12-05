@@ -36,7 +36,7 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          '<%= packages.dist %>/<%= pkg.name %>.min.js': ['<%= packages.lib %>/*.js']
+          '<%= packages.dist %>/ember.oauth2.min.js': ['<%= packages.lib %>/*.js']
         }
       }
     },
