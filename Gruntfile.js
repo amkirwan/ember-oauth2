@@ -36,7 +36,17 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          '<%= packages.dist %>/<%= pkg.name %>.min.js': ['<%= packages.lib %>']
+          '<%= packages.dist %>/<%= pkg.name %>.min.js': ['<%= packages.lib %>/*.js']
+        }
+      }
+    },
+    jshint: {
+      files: ['gruntfile.js', '<%= packages.lib %>/*.js', '<%= packages.spec %>/*.spec.js'],
+      options: {
+        globals: {
+          jQuery: true,
+          console: true,
+          module: true
         }
       }
     }
