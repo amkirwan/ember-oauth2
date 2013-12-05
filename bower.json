@@ -26,7 +26,6 @@
   ],
   "devDependencies": {
     "ember": "~1.2.0",
-    "jasmine": "*",
     "sinonjs": "*"
   }
 }
