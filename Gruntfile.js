@@ -40,6 +40,13 @@ module.exports = function(grunt) {
         }
       }
     },
+    copy: {
+      main: {
+        files: [
+          { expand: true, flatten: true, src: ['./packages/ember-oauth2/lib/*.js'], dest: 'dist/' }
+        ]
+      }
+    },
     jshint: {
       files: ['gruntfile.js', '<%= packages.lib %>/*.js', '<%= packages.spec %>/*.spec.js'],
       options: {
@@ -53,4 +60,5 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('default', ['jshint', 'jasmine', 'uglify']);
+  grunt.registerTask('build', ['uglify', 'copy']);
 };
