@@ -6,7 +6,8 @@ module.exports = function(grunt) {
 
   var packages = {
     dir: 'packages/ember-oauth2',
-    lib: 'packages/ember-oauth2/lib/*.js',
+    lib: 'packages/ember-oauth2/lib',
+    spec: 'packages/ember-oauth2/spec',
     dist: 'dist'
   };
 
@@ -14,11 +15,16 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     packages: packages,
     jasmine: {
-      pivotal: {
-        src: '<%= packages.lib %>',
+      all: {
+        src: '<%= packages.lib %>/*.js',
         options: {
-          specs: '<%= packages.dir %>/spec/*.spec.js',
-          template: '<%= packages.dir %>/spec/SpecRunner.html'
+          specs: '<%= packages.spec %>/*.spec.js',
+          vendor: [
+            './bower_components/jquery/jquery.min.js',
+            './bower_components/handlebars/handlebars.min.js',
+            './bower_components/ember/ember.min.js',
+            './bower_components/sinonjs/sinon.js'
+          ]
         }
       }
     },
