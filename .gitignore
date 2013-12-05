@@ -6,6 +6,8 @@
 *.swp
 *.swo
 .DS_Store
+.grunt
+dist
 Gemfile.lock
 InstalledFiles
 _yardoc
