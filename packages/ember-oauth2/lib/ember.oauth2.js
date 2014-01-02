@@ -1,5 +1,5 @@
 (function() {
-  if (Ember.OAuth2 == undefined) {
+  if (Ember.OAuth2 === undefined) {
     Ember.OAuth2 = Ember.Object.extend({
 
       init: function() {
@@ -32,12 +32,12 @@
       },
 
       authUri: function() {
-        if (this.state == null) this.state = this.uuid();
+        if (this.state === null) this.state = this.uuid();
         var uri = this.authBaseUri;
-        uri += '?response_type=token' 
-            + '&redirect_uri=' + encodeURIComponent(this.redirectUri)
-            + '&client_id=' + encodeURIComponent(this.clientId)
-            + '&state=' + encodeURIComponent(this.state);
+        uri += '?response_type=token' + 
+            '&redirect_uri=' + encodeURIComponent(this.redirectUri) +
+            '&client_id=' + encodeURIComponent(this.clientId) +
+            '&state=' + encodeURIComponent(this.state);
         if (this.scope) uri += '&scope=' + encodeURIComponent(this.scope).replace('%20', '+');
         return uri;
       },  
@@ -58,7 +58,7 @@
       },
 
       authSuccess: function(params) {
-        return params['access_token'];
+        return params.access_token;
       },
 
       /*
@@ -71,7 +71,7 @@
        * params returned by callback
        */
       generateToken: function(params) {
-        var token = {}
+        var token = {};
         token.provider_id = this.providerId;
         token.expires_in = this.expiresIn(params.expires_in);
         token.scope = this.scope;
@@ -80,7 +80,7 @@
       },
 
       expiresIn: function(expires) {
-        return this.now() + parseInt(expires);
+        return this.now() + parseInt(expires, 10);
       },
 
       /*
@@ -119,10 +119,12 @@
        * expires_in 
        */
       parseCallback: function(locationHash) {
-        var oauthParams = {}, queryString = locationHash.substring(1),
-        regex = /([^#?&=]+)=([^&]*)/g, m;
-        while (m = regex.exec(queryString)) {
-          oauthParams[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+        var oauthParams = {};
+        var queryString = locationHash.substring(1);
+        var regex = /([^#?&=]+)=([^&]*)/g;
+        var match;
+        while ((match = regex.exec(queryString)) !== null) {
+          oauthParams[decodeURIComponent(match[1])] = decodeURIComponent(match[2]);
         }
         return oauthParams;
       },
@@ -166,7 +168,7 @@
       getToken: function() {
         var token = JSON.parse(window.localStorage.getItem( this.tokenPrefix + '-' + this.providerId));
         if (!token) return null;
-        if (!token['access_token']) return null;
+        if (!token.access_token) return null;
         return token;
       },
 
@@ -198,6 +200,6 @@
     });
   }
 
-  Ember.OAuth2.config = {}
+  Ember.OAuth2.config = {};
 
 })(this);

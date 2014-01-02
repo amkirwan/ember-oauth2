@@ -59,6 +59,6 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', ['jshint', 'jasmine', 'uglify']);
-  grunt.registerTask('build', ['uglify', 'copy']);
+  grunt.registerTask('default', ['jshint', 'jasmine', 'uglify', 'copy']);
+  grunt.registerTask('test', ['jasmine']);
 };

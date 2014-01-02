@@ -36,19 +36,19 @@ describe("ember-oauth2", function() {
       }
     };
     App.oauth = Ember.OAuth2.create({providerId: providerId});
-    App.oauth_auth_config = Ember.OAuth2.create({providerId: 'test_auth_config'})
+    App.oauth_auth_config = Ember.OAuth2.create({providerId: 'test_auth_config'});
     authorizeUri = authBaseUri;
-    authorizeUri += '?response_type=token' 
-                 + '&redirect_uri=' + encodeURIComponent(redirectUri) 
-                 + '&client_id=' + encodeURIComponent(clientId) 
-                 + '&state=' + encodeURIComponent(state) 
-                 + '&scope=' + encodeURIComponent(scope);
+    authorizeUri += '?response_type=token' +
+                 '&redirect_uri=' + encodeURIComponent(redirectUri) +
+                 '&client_id=' + encodeURIComponent(clientId) +
+                 '&state=' + encodeURIComponent(state) +
+                 '&scope=' + encodeURIComponent(scope);
 
     callbackUri = redirectUri;
-    callbackUri += '#access_token=' + ('12345abc')
-                + '&token_type=' + 'Bearer' 
-                + '&expires_in=' + '3600'
-                + '&state=' + state;
+    callbackUri += '#access_token=' + ('12345abc') +
+                '&token_type=' + 'Bearer' +
+                '&expires_in=' + '3600' +
+                '&state=' + state;
     callbackUriError = redirectUri;
     savedState = {
       provider_id: providerId,
@@ -97,31 +97,31 @@ describe("ember-oauth2", function() {
   describe("Errors when configuration is incomplete", function() {
     it("should require a providerId", function() {
       App.oauth = Ember.OAuth2.create();
-      expect(function() {App.oauth.authorize()}).toThrow(new Error('No provider id given.'));
+      expect(function() {App.oauth.authorize();}).toThrow(new Error('No provider id given.'));
     });
 
     it("should require a clientId", function() {
       Ember.OAuth2.config.test_auth.clientId = null;
       App.oauth = Ember.OAuth2.create({providerId: providerId});
-      expect(function() {App.oauth.authorize()}).toThrow(new Error("No client id given."));
+      expect(function() {App.oauth.authorize();}).toThrow(new Error("No client id given."));
     });
 
     it("should require a authorization base uri", function() {
       Ember.OAuth2.config.test_auth.authBaseUri = null;
       App.oauth = Ember.OAuth2.create({providerId: providerId});
-      expect(function() {App.oauth.authorize()}).toThrow(new Error("No auth base uri given."));
+      expect(function() {App.oauth.authorize();}).toThrow(new Error("No auth base uri given."));
     });
 
     it("should require a callback uri", function() {
       Ember.OAuth2.config.test_auth.redirectUri = null;
       App.oauth = Ember.OAuth2.create({providerId: providerId});
-      expect(function() {App.oauth.authorize()}).toThrow(new Error("No redirect uri given."));
+      expect(function() {App.oauth.authorize();}).toThrow(new Error("No redirect uri given."));
     });
   });
 
   describe("Generate OAuth2 providers url", function() {
     it("should create the url with the options", function() {
-      expect(App.oauth.authUri()).toEqual(authorizeUri)
+      expect(App.oauth.authUri()).toEqual(authorizeUri);
     });
   });
 
@@ -132,14 +132,14 @@ describe("ember-oauth2", function() {
       });
 
       it("should return the params from the callback url", function() {
-        expect(App.oauth.parseCallback(callbackUri)).toEqual({ access_token : '12345abc', token_type : 'Bearer', expires_in : '3600', state : '12345' })
+        expect(App.oauth.parseCallback(callbackUri)).toEqual({ access_token : '12345abc', token_type : 'Bearer', expires_in : '3600', state : '12345' });
       });
     });
 
     describe("onRedirect", function() {
       it("should call onSuccess callback when access_token is definned in the callback", function() {
         var spy = sinon.spy(App.oauth, "onSuccess");
-        var stub = sinon.stub(App.oauth, 'checkState', function() { return true });
+        var stub = sinon.stub(App.oauth, 'checkState', function() { return true; });
         App.oauth.onRedirect(callbackUri);
         expect(spy.called).toBeTruthy();
         spy.reset();
@@ -207,16 +207,16 @@ describe("ember-oauth2", function() {
   // checkState checks that the state returned by the OAuth server is the same as the one sent
   describe("Check the state to make sure it is set", function() {
     it("should throw an error when there is no state set", function() {
-      expect(function() {App.oauth.checkState(null)}).toThrow(new Error("Could not find state."));
+      expect(function() {App.oauth.checkState(null);}).toThrow(new Error("Could not find state."));
     });
 
     it("should throw an Error when the states are not equal", function() {
       savedState.state = 'abcdefg';
-      expect(function() {App.oauth.checkState(savedState)}).toThrow(new Error("State returned from the server did not match the local saved state."));
+      expect(function() {App.oauth.checkState(savedState);}).toThrow(new Error("State returned from the server did not match the local saved state."));
     });
 
     it("should not throw an Error when the states are equal", function() {
-      expect(function() {App.oauth.checkState(savedState)}).toBeTruthy();
+      expect(function() {App.oauth.checkState(savedState);}).toBeTruthy();
     });
   });
 
@@ -225,7 +225,7 @@ describe("ember-oauth2", function() {
     var spyExpires;
     beforeEach(function() {
       token = { provider_id: providerId, expires_in: '12345', scope: scope, access_token: '12345abc' };
-      spyExpires = sinon.stub(App.oauth, 'expiresIn', function() { return '12345' });
+      spyExpires = sinon.stub(App.oauth, 'expiresIn', function() { return '12345'; });
       App.oauth.saveToken(token); 
     });
 
@@ -254,14 +254,14 @@ describe("ember-oauth2", function() {
     });
 
     it("access token is not expired", function() {
-      spyExpires = sinon.stub(App.oauth, 'now', function() { return 5 });
+      spyExpires = sinon.stub(App.oauth, 'now', function() { return 5; });
       expect(App.oauth.accessTokenIsExpired()).toBeFalsy();
       spyExpires.reset();
     });
 
     it("expires the access token", function() {
-      var new_time = App.oauth.now() + 10000
-      token.expires_in = new_time
+      var new_time = App.oauth.now() + 10000;
+      token.expires_in = new_time;
       App.oauth.saveToken(token); 
       expect(App.oauth.accessTokenIsExpired()).toBeFalsy();
       App.oauth.expireAccessToken();
