@@ -118,7 +118,7 @@ node install
 bower install
 ```
 
-Once the dependencies are installed for Ember.OAuth2.js the you can run the following [grunt](http://gruntjs.com/getting-started) tasks.
+Once the dependencies are installed for Ember.OAuth2 the you can run the following [grunt](http://gruntjs.com/getting-started) tasks.
 
 - The default grunt task, checks the files for errors with jshint, runs the jasmine, creates a minified version of ember.oauth2.js with uglify and copies a non-minified version of ember.oauth2.js and places them in the dist directory.
 
