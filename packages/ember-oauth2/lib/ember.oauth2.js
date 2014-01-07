@@ -89,7 +89,7 @@
       onRedirect: function(hash, callback) {
         var params = this.parseCallback(hash);
         if (this.authSuccess(params)) {
-          stateObj = this.getState(params.state);
+          var stateObj = this.getState(params.state);
           this.checkState(stateObj);
           this.saveToken(this.generateToken(params));
           this.onSuccess(stateObj);
