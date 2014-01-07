@@ -12,7 +12,7 @@
 
       uuid: function() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-              var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+              var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
                   return v.toString(16);
         });
       },
@@ -96,7 +96,7 @@
         } else {
           this.onError(params);
         }
-        if (callback && typeof(callback) == "function") {
+        if (callback && typeof(callback) === "function") {
           callback();
         }
       },
@@ -106,7 +106,7 @@
        */
       checkState: function(stateObj) {
         if (!stateObj) throw new Error("Could not find state.");
-        if (stateObj.state != this.state) throw new Error("State returned from the server did not match the local saved state.");
+        if (stateObj.state !== this.state) throw new Error("State returned from the server did not match the local saved state.");
       },
       
       /*
