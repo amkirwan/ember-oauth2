@@ -106,6 +106,7 @@ To install Ember.OAuth2 in your Ember.js application there are several options l
   }
 }
 ```
+
 - Download a prebuilt version from the [releases page](https://github.com/amkirwan/ember-oauth2/releases)
 - [Build](/amkirwan/ember-oauth2#building) the project on your system
 
