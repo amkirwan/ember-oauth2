@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/amkirwan/ember-oauth2.png)](https://travis-ci.org/amkirwan/ember-oauth2)
+
 ember-oauth2
 ============
 
