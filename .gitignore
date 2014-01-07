@@ -21,3 +21,4 @@ test/version_tmp
 tmp
 bower_components
 node_modules
+dist/*
