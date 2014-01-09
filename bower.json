@@ -24,8 +24,10 @@
     "tests",
     "specs"
   ],
+  "dependencies": {
+    "ember": "~1.2.0"
+  },
   "devDependencies": {
-    "ember": "~1.2.0",
     "jasmine": "*",
     "sinonjs": "*"
   }
