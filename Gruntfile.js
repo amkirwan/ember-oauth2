@@ -4,21 +4,21 @@ module.exports = function(grunt) {
   // load all grunt tasks
   require('load-grunt-tasks')(grunt);
 
-  var packages = {
-    dir: 'packages/ember-oauth2',
-    lib: 'packages/ember-oauth2/lib',
-    spec: 'packages/ember-oauth2/spec',
+  var src = {
+    dir: 'src/',
+    lib: 'src/lib',
+    spec: 'src/spec',
     dist: 'dist'
   };
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    packages: packages,
+    src: src,
     jasmine: {
       all: {
-        src: '<%= packages.lib %>/*.js',
+        src: '<%= src.lib %>/*.js',
         options: {
-          specs: '<%= packages.spec %>/*.spec.js',
+          specs: '<%= src.spec %>/*.spec.js',
           vendor: [
             './bower_components/jquery/jquery.min.js',
             './bower_components/handlebars/handlebars.min.js',
@@ -36,19 +36,19 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          '<%= packages.dist %>/ember.oauth2.min.js': ['<%= packages.lib %>/*.js']
+          '<%= src.dist %>/ember.oauth2.min.js': ['<%= src.lib %>/*.js']
         }
       }
     },
     copy: {
       main: {
         files: [
-          { expand: true, flatten: true, src: ['./packages/ember-oauth2/lib/*.js'], dest: 'dist/' }
+          { expand: true, flatten: true, src: ['<%= src.lib %>/*.js'], dest: 'dist/' }
         ]
       }
     },
     jshint: {
-      files: ['gruntfile.js', '<%= packages.lib %>/*.js', '<%= packages.spec %>/*.spec.js'],
+      files: ['gruntfile.js', '<%= src.lib %>/*.js', '<%= src.spec %>/*.spec.js'],
       options: {
         globals: {
           jQuery: true,
