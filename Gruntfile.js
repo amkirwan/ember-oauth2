@@ -56,10 +56,36 @@ module.exports = function(grunt) {
           module: true
         }
       }
+    },
+    bump: {
+      options: {
+        files: ['package.json', 'bower.json'],
+        commit: false,
+        commitFiles: ['package.json', 'bower.json', 'dist/*'],
+        createTag: false,
+        push: false
+      }
     }
   });
 
   grunt.registerTask('default', ['jshint', 'jasmine', 'uglify', 'copy']);
   grunt.registerTask('test', ['jasmine']);
   grunt.registerTask('build', ['uglify', 'copy']);
+  grunt.registerTask('bumpReadme', function() {
+    var package_version_reg = /([\'|\"]?version[\'|\"]?[ ]*:[ ]*[\'|\"]?)([\d||A-a|.|-]*)([\'|\"]?)/i;
+    var packageJson = grunt.file.read('./package.json');
+    var parsedVersion = package_version_reg.exec(packageJson)[2];
+
+    var version_reg = /(Current Version: .*\[)([\d|.|-|a-z]+)(\].*\/v)([\d|.|-|a-z]+)(\).*)/i;
+
+    var readme = grunt.file.read('./README.md');
+    var content = readme.replace(version_reg, function(match, p1, p2, p3, p4, p5,  offset, string) {
+      return  p1 + parsedVersion + p3 + parsedVersion + p5; 
+    });
+    grunt.file.write('./README.md', content);
+  });
+  grunt.registerTask('bumpPatch', ['bump-only:patch', 'bumpReadme', 'jshint', 'build']); 
+  grunt.registerTask('bumpMinor', ['bump-only:minor', 'bumpReadme', 'jshint', 'build']); 
+  grunt.registerTask('bumpMajor', ['bump-only:major', 'bumpReadme', 'jshint', 'build']); 
+
 };
