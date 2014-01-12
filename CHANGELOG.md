@@ -1,6 +1,6 @@
 # Changelog Ember-OAuth2
 
-## v0.2.2 (Jan 9, 2014)
+## v0.2.2 (Jan 11, 2014)
   - [a132c65](https://github.com/amkirwan/ember-oauth2/commit/a132c657ae0a5173fc78ab192c6db11e4074232c) updated patch version to v0.2.2
   - [ffd5069](https://github.com/amkirwan/ember-oauth2/commit/ffd50691721e96091e3642c1ecc871d66c2f48f8) grunt-bump commit changes
   - [a051d44](https://github.com/amkirwan/ember-oauth2/commit/a051d44a15c3e27fbcafe07e5fee43695e4fd68c) config bump, added custom task to update readme version
