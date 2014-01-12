@@ -1,19 +1,25 @@
 # Changelog Ember-OAuth2
 
+## v0.2.2 (Jan 9, 2014)
+  - [a132c65](https://github.com/amkirwan/ember-oauth2/commit/a132c657ae0a5173fc78ab192c6db11e4074232c) updated patch version to v0.2.2
+  - [ffd5069](https://github.com/amkirwan/ember-oauth2/commit/ffd50691721e96091e3642c1ecc871d66c2f48f8) grunt-bump commit changes
+  - [a051d44](https://github.com/amkirwan/ember-oauth2/commit/a051d44a15c3e27fbcafe07e5fee43695e4fd68c) config bump, added custom task to update readme version
+  - [aabf4e0](https://github.com/amkirwan/ember-oauth2/commit/aabf4e055d1cec84a904033fdb4889283544f32d) added grunt bump
+  
 ## v0.2.1 (Jan 9, 2014)
-  - [b925f2e](https://github.com/amkirwan/ember-oauth2/commit/b925f2ea303930785227c424ecba5f7c772275a8) tag: v0.2.1 version bump. added dist dir for bower and node
+  - [b925f2e](https://github.com/amkirwan/ember-oauth2/commit/b925f2ea303930785227c424ecba5f7c772275a8) version bump to v0.2.1 added dist dir for bower and node
   - [0d5e7ed](https://github.com/amkirwan/ember-oauth2/commit/0d5e7eddfe5483853476def213caa999354a09dc) do not ignore dist dir
   - [ea17257](https://github.com/amkirwan/ember-oauth2/commit/ea172578b6dbb6ab13b22583de3368fd7a5aae95) moved ember to dependencies
   - [7d5e752](https://github.com/amkirwan/ember-oauth2/commit/7d5e75227aa304c77385f24ff4e66408c58d1498) Update README.md
 
 ## v0.2.0 (Jan 9, 2014)
-  - [9769bf1](https://github.com/amkirwan/ember-oauth2/commit/9769bf1daae3c9035b03a27b7ceabda4e53b6874) tag: v0.2.0 version bump
+  - [9769bf1](https://github.com/amkirwan/ember-oauth2/commit/9769bf1daae3c9035b03a27b7ceabda4e53b6874) version bump v0.2.0
   - [1305ae8](https://github.com/amkirwan/ember-oauth2/commit/1305ae8504eff1961e4c09d10611e9ce2dbdf4a2) updated Gruntfile to new directory layout structure
   - [c00930f](https://github.com/amkirwan/ember-oauth2/commit/c00930f58ed8e384071320a04b1fb87091b1a041) moved lib and spec to src
   - [114d85d](https://github.com/amkirwan/ember-oauth2/commit/114d85d729bb28056d624b2df94cc88013ec3973) renamed packages dir to src
 
 ## v.0.1.0 (Jan 7, 2014)
-  - [8914512]((https://github.com/amkirwan/ember-oauth2/commit/8914512d4cffb9c0de8f1a2455948569846d291a)) tag: v0.1.0 version bump
+  - [8914512](https://github.com/amkirwan/ember-oauth2/commit/8914512d4cffb9c0de8f1a2455948569846d291a) version bump
   - [a3cb3e2](https://github.com/amkirwan/ember-oauth2/commit/a3cb3e289a9fda3930e6f90c103aa010af41a1c0) fixed jshint warnings
   - [b2c4aea](https://github.com/amkirwan/ember-oauth2/commit/b2c4aea31e4f80153d7a7217a50fd1a1caf244ee) added missing var
   - [f1befdf](https://github.com/amkirwan/ember-oauth2/commit/f1befdfb5040c757090e48826bbf0c936dc34b5c) removed dist directory
