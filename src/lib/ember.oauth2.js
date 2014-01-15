@@ -11,7 +11,7 @@
       },
 
       version: function() {
-        return '0.2.2';
+        return Ember.OAuth2.version;
       },
 
       uuid: function() {
@@ -204,6 +204,8 @@
     });
   }
 
+  var VERSION = "0.2.2";
+  Ember.OAuth2.version = VERSION;
   Ember.OAuth2.config = {};
 
 })(this);
