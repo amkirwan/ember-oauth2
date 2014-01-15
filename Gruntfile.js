@@ -61,6 +61,8 @@ module.exports = function(grunt) {
       options: {
         files: ['package.json', 'bower.json'],
         commit: true,
+        bumpReadme: true,
+        readmeText: 'Current Version:',
         commitFiles: ['package.json', 'bower.json', 'dist/*'],
         createTag: false,
         push: false
