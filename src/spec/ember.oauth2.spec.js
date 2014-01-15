@@ -92,6 +92,10 @@ describe("ember-oauth2", function() {
     it("should create a configuration object for Ember.OAuth2", function() {
       expect(Ember.OAuth2.config).toBeDefined();
     });
+
+    it("should return the version", function() {
+      expect(Ember.OAuth2.version).toEqual("0.2.2");
+    });
   });
 
   describe("Errors when configuration is incomplete", function() {
@@ -162,8 +166,7 @@ describe("ember-oauth2", function() {
 
   describe("version method", function() {
     it("should return the current version", function() {
-      expect(App.oauth.version()).toBeDefined();
-      expect(App.oauth.version()).toEqual(jasmine.any(String));
+      expect(Ember.OAuth2.version).toEqual("0.2.2");
     });
   });
 
