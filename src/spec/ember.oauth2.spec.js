@@ -160,6 +160,13 @@ describe("ember-oauth2", function() {
     });
   });
 
+  describe("version method", function() {
+    it("should return the current version", function() {
+      expect(App.oauth.version()).toBeDefined();
+      expect(App.oauth.version()).toEqual(jasmine.any(String));
+    });
+  });
+
   describe("These methods need to be implemented by the OAuth2 application", function() {
     it("should define the onSuccess callback", function() {
       expect(App.oauth.onSuccess).toBeDefined();
