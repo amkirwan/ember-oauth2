@@ -73,8 +73,5 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['jshint', 'jasmine', 'uglify', 'copy']);
   grunt.registerTask('test', ['jasmine']);
   grunt.registerTask('build', ['uglify', 'copy']);
-  grunt.registerTask('bumpPatch', ['bump-only:patch', 'jshint', 'build']); 
-  grunt.registerTask('bumpMinor', ['bump-only:minor', 'jshint', 'build']); 
-  grunt.registerTask('bumpMajor', ['bump-only:major', 'jshint', 'build']); 
 
 };
