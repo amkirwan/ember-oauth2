@@ -27,6 +27,6 @@
     "grunt-contrib-jshint": "~0.6.3",
     "grunt-contrib-uglify": "~0.2.2",
     "grunt-contrib-jasmine": "~0.5.2",
-    "grunt-versioner": "0.1.0-beta.3"
+    "grunt-versioner": "0.1.0-beta.5"
   }
 }
