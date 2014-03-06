@@ -59,7 +59,7 @@ module.exports = function(grunt) {
     },
 
     versioner: {
-      options: { branch: 'versioner' },
+      options: { branch: 'master' },
       default: {
         files: {
           './package.json': [ './package.json'], 
