@@ -94,7 +94,7 @@ describe("ember-oauth2", function() {
     });
 
     it("should return the version", function() {
-      expect(Ember.OAuth2.version).toEqual("0.2.2");
+      expect(Ember.OAuth2.version).toEqual("0.2.3");
     });
   });
 
@@ -166,7 +166,7 @@ describe("ember-oauth2", function() {
 
   describe("version method", function() {
     it("should return the current version", function() {
-      expect(Ember.OAuth2.version).toEqual("0.2.2");
+      expect(Ember.OAuth2.version).toEqual("0.2.3");
     });
   });
 
