@@ -57,10 +57,25 @@ module.exports = function(grunt) {
         }
       }
     },
+
+    versioner: {
+      options: { branch: 'versioner' },
+      default: {
+        files: {
+          './package.json': [ './package.json'], 
+          './bower.json': ['./bower.json'], 
+          './README.md': ['./README.md'], 
+          './src/lib/ember.oauth2.js': ['./src/lib/ember.oauth2.js']
+        }
+      }
+    }
   });
 
   grunt.registerTask('default', ['jshint', 'jasmine', 'uglify', 'copy']);
   grunt.registerTask('test', ['jasmine']);
   grunt.registerTask('build', ['uglify', 'copy']);
+  grunt.registerTask('release:patch', ['jshint', 'versioner:bumpOnly:default:patch', 'build', 'versioner:commitOnly:default']);
+  grunt.registerTask('release:minor', ['jshint', 'versioner:bumpOnly:default:minor', 'build', 'versioner:commitOnly:default']);
+  grunt.registerTask('release:major', ['jshint', 'versioner:bumpOnly:default:major', 'build', 'versioner:commitOnly:default']);
 
 };
