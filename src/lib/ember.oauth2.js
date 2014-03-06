@@ -204,7 +204,7 @@
     });
   }
 
-  var VERSION = "0.2.2";
+  var VERSION = "0.2.3";
   Ember.OAuth2.version = VERSION;
   Ember.OAuth2.config = {};
 
