@@ -57,17 +57,6 @@ module.exports = function(grunt) {
         }
       }
     },
-    bump: {
-      options: {
-        files: ['package.json', 'bower.json'],
-        commit: true,
-        bumpReadme: true,
-        readmeText: 'Current Version:',
-        commitFiles: ['package.json', 'bower.json', 'dist/*'],
-        createTag: false,
-        push: false
-      }
-    }
   });
 
   grunt.registerTask('default', ['jshint', 'jasmine', 'uglify', 'copy']);
