@@ -119,7 +119,7 @@ To build Ember.Oauth2 you need to have [Node.js](http://nodejs.org), and [npm](h
 ```bash
 git clone https://github.com/amkirwan/ember-oauth2
 cd ember-oauth2
-node install
+npm install
 bower install
 ```
 
