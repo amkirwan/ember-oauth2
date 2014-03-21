@@ -1,6 +1,6 @@
 (function() {
   if (Ember.OAuth2 === undefined) {
-    Ember.OAuth2 = Ember.Object.extend({
+    Ember.OAuth2 = Ember.Object.extend(Ember.Evented, {
 
       init: function() {
         this._super();
@@ -8,6 +8,11 @@
         this.set('statePrefix', 'state');
         this.set('tokenPrefix', 'token');
         this.setProperties(this.providerConfig);
+
+        // Bind deprecated event handlers
+        this.on('redirect', this.handleRedirect);
+        this.on('success', this._onSuccess);
+        this.on('error', this._onError);
       },
 
       version: function() {
@@ -91,18 +96,42 @@
        * call on redirect from OAuth2 provider response
        */
       onRedirect: function(hash, callback) {
+        Ember.Logger.warn("Ember.OAuth2.onRedirect is deprecated. Please use .trigger('redirect') instead.");
+        this.trigger('redirect', hash, callback);
+      },
+
+      /*
+       * proxy functions for old event handlers
+       */
+      handleRedirect: function(hash, callback) {
         var params = this.parseCallback(hash);
         if (this.authSuccess(params)) {
           var stateObj = this.getState(params.state);
           this.checkState(stateObj);
           this.saveToken(this.generateToken(params));
-          this.onSuccess(stateObj);
+          this.trigger('success', stateObj);
         } else {
-          this.onError(params);
+          this.trigger('error', params);
         }
         if (callback && typeof(callback) === "function") {
           callback();
         }
+      },
+
+      _onSuccess: function(stateObj) {
+        if (typeof(this.onSuccess) != 'function')
+          return;
+
+        Ember.Logger.warn("Ember.OAuth2.onSuccess is deprecated. Bind your callbacks using .on('success', fn) instead.");
+        this.onSuccess(stateObj);
+      },
+
+      _onError: function(err) {
+        if (typeof(this.onError) != 'function')
+          return;
+
+        Ember.Logger.warn("Ember.OAuth2.onError is deprecated. Bind your callbacks using .on('error', fn) instead.");
+        this.onError(err);
       },
 
       /*
