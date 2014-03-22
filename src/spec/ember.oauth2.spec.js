@@ -153,6 +153,7 @@ describe("ember-oauth2", function() {
 
     describe("onRedirect", function() {
       it("should call onSuccess callback when access_token is definned in the callback", function() {
+        App.oauth.onSuccess = function(){};
         var spy = sinon.spy(App.oauth, "onSuccess");
         var stub = sinon.stub(App.oauth, 'checkState', function() { return true; });
         App.oauth.onRedirect(callbackUri);
@@ -161,6 +162,7 @@ describe("ember-oauth2", function() {
       });
 
       it("should call onError callback when access_token is not in the callback", function() {
+        App.oauth.onError = function(){};
         var spy = sinon.spy(App.oauth, "onError");
         App.oauth.onRedirect(callbackUriError);
         expect(spy.called).toBeTruthy();
@@ -198,16 +200,6 @@ describe("ember-oauth2", function() {
   describe("version method", function() {
     it("should return the current version", function() {
       expect(Ember.OAuth2.version).toEqual("0.2.3");
-    });
-  });
-
-  describe("These methods need to be implemented by the OAuth2 application", function() {
-    it("should define the onSuccess callback", function() {
-      expect(App.oauth.onSuccess).toBeDefined();
-    });
-
-    it("should define the onError callback", function() {
-      expect(App.oauth.onError).toBeDefined();
     });
   });
 

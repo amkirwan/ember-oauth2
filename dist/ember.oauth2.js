@@ -227,9 +227,6 @@
         token.expires_in = 0;
         this.saveToken(token);
       },
-
-      onSuccess: function(params) {},
-      onError: function() {}
     });
   }
 
