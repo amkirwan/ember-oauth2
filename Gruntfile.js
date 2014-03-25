@@ -48,7 +48,6 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      files: ['gruntfile.js', '<%= src.lib %>/*.js', '<%= src.spec %>/*.spec.js'],
       options: {
         node: true,
         browser: true,
@@ -66,15 +65,42 @@ module.exports = function(grunt) {
         trailing: false,
         smarttabs: true,
         globals: {
-          Webapp: true,
-          jQuery: true,
-          Ember: true,
-          Handlebars: true,
-          DS: true,
-          jQuery: true,
-          console: true,
-          module: true,
-          Ember: true
+          module: true
+        }
+      },
+      gruntfile: ['gruntfile.js'],
+      lib: {
+        options: {
+          globals: {
+            Webapp: true,
+            jQuery: true,
+            Ember: true,
+            Handlebars: true,
+            DS: true,
+            console: true,
+            module: true
+          }
+        },
+        files: {
+          src: ['<%= src.lib %>/*.js']
+        }
+      },
+      spec: {
+        options: {
+          globals: {
+            describe: true,
+            beforeEach: true,
+            afterEach: true,
+            App: true,
+            it: true,
+            expect: true,
+            sinon: true,
+            Ember: true,
+            $: true
+          }
+        },
+        files: {
+          src: ['<%= src.spec %>/*.spec.js']
         }
       }
     },
