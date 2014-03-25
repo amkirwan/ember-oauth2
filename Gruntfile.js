@@ -99,7 +99,6 @@ module.exports = function(grunt) {
         }
       }
     },
-
     versioner: {
       options: { branch: 'master' },
       default: {
