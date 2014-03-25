@@ -78,7 +78,7 @@ At the redirectURI add the following to process the params returned from the OAu
     <title>Authorize</title> 
     <script>
       var hash = window.location.hash;
-      window.opener.App.oauth.onRedirect(hash);
+      window.opener.App.oauth.trigger('redirect', hash);
       window.close();
     </script>
   </head>
@@ -88,11 +88,11 @@ At the redirectURI add the following to process the params returned from the OAu
 This will process the returned params and save the `provider_id`, `access_token`, `scope` and `expires_in` (the time the access_token will expire) to the localStorage. This localStorage can be accessed with the key `token-the_provider_id`.
 
 
-After successful authorization and saving the access_token to the localStorage the `onSuccess` callback will be called. This will allow the user to do any cleanup necessary or to retrieve user information from the OAuth provider. To configure the callback reopen the class and and override the `onSuccess` and `onError` methods.
+After successful authorization and saving the access_token to the localStorage the `success` event will be called. This will allow the user to do any cleanup necessary or to retrieve user information from the OAuth provider. To configure the callback bind event handlers to the `success` and `error` events.
 
 ```javascript
-  Ember.OAuth2.reopen({ onSuccess: function() { return 'hello, onSuccess' } });
-  Ember.OAuth2.reopen({ onError: function() { return 'hello, onError' } });
+  App.oauth.on('success', function(stateObj) { return 'hello, success' } });
+  App.oauth.on('error', function(err) { return 'hello, error' } });
 ```
 
 ## Installation
