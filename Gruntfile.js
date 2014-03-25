@@ -50,10 +50,31 @@ module.exports = function(grunt) {
     jshint: {
       files: ['gruntfile.js', '<%= src.lib %>/*.js', '<%= src.spec %>/*.spec.js'],
       options: {
+        node: true,
+        browser: true,
+        esnext: true,
+        bitwise: false,
+        curly: false,
+        eqeqeq: true,
+        eqnull: true,
+        immed: true,
+        latedef: true,
+        newcap: true,
+        noarg: true,
+        undef: true,
+        strict: false,
+        trailing: false,
+        smarttabs: true,
         globals: {
+          Webapp: true,
+          jQuery: true,
+          Ember: true,
+          Handlebars: true,
+          DS: true,
           jQuery: true,
           console: true,
-          module: true
+          module: true,
+          Ember: true
         }
       }
     },
