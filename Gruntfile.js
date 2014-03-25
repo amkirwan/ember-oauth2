@@ -72,13 +72,8 @@ module.exports = function(grunt) {
       lib: {
         options: {
           globals: {
-            Webapp: true,
             jQuery: true,
-            Ember: true,
-            Handlebars: true,
-            DS: true,
-            console: true,
-            module: true
+            Ember: true
           }
         },
         files: {
