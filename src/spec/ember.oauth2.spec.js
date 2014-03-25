@@ -8,7 +8,7 @@ describe("ember-oauth2", function() {
   var callbackUri;
   var savedState;
 
-  var providerId, bauthBaseUri, redirectUri, clientId, scope, state;
+  var providerId, authBaseUri, callbackUriError, redirectUri, clientId, scope, state;
 
   beforeEach(function() {
     providerId = 'test_auth';

@@ -119,7 +119,7 @@
       },
 
       _onSuccess: function(stateObj) {
-        if (typeof(this.onSuccess) != 'function')
+        if (typeof(this.onSuccess) !== 'function')
           return;
 
         Ember.Logger.warn("Ember.OAuth2.onSuccess is deprecated. Bind your callbacks using .on('success', fn) instead.");
@@ -127,7 +127,7 @@
       },
 
       _onError: function(err) {
-        if (typeof(this.onError) != 'function')
+        if (typeof(this.onError) !== 'function')
           return;
 
         Ember.Logger.warn("Ember.OAuth2.onError is deprecated. Bind your callbacks using .on('error', fn) instead.");
