@@ -114,8 +114,8 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('default', ['jshint', 'jasmine', 'uglify', 'copy']);
-  grunt.registerTask('test', ['jasmine']);
-  grunt.registerTask('build', ['uglify', 'copy']);
+  grunt.registerTask('test', ['jshint', 'jasmine']);
+  grunt.registerTask('build', ['jshint', 'uglify', 'copy']);
   grunt.registerTask('release:patch', ['jshint', 'versioner:bumpOnly:default:patch', 'build', 'versioner:commitOnly:default']);
   grunt.registerTask('release:minor', ['jshint', 'versioner:bumpOnly:default:minor', 'build', 'versioner:commitOnly:default']);
   grunt.registerTask('release:major', ['jshint', 'versioner:bumpOnly:default:major', 'build', 'versioner:commitOnly:default']);
