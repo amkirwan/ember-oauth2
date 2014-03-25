@@ -8,7 +8,7 @@ describe("ember-oauth2", function() {
   var callbackUri;
   var savedState;
 
-  var providerId, bauthBaseUri, redirectUri, clientId, scope, state;
+  var providerId, authBaseUri, callbackUriError, redirectUri, clientId, scope, state;
 
   beforeEach(function() {
     providerId = 'test_auth';
@@ -62,6 +62,17 @@ describe("ember-oauth2", function() {
   afterEach(function() {
     authorizeUri = null;
   });
+
+  var once = function(fn) {
+    var returnValue, called = false;
+    return function () {
+      if (!called) {
+          called = true;
+          returnValue = fn.apply(this, arguments);
+      }
+      return returnValue;
+    };
+  };
 
   describe("initialize", function() {
     it("should be initialized with the properties of provider", function() {
@@ -142,6 +153,7 @@ describe("ember-oauth2", function() {
 
     describe("onRedirect", function() {
       it("should call onSuccess callback when access_token is definned in the callback", function() {
+        App.oauth.onSuccess = function(){};
         var spy = sinon.spy(App.oauth, "onSuccess");
         var stub = sinon.stub(App.oauth, 'checkState', function() { return true; });
         App.oauth.onRedirect(callbackUri);
@@ -150,12 +162,33 @@ describe("ember-oauth2", function() {
       });
 
       it("should call onError callback when access_token is not in the callback", function() {
+        App.oauth.onError = function(){};
         var spy = sinon.spy(App.oauth, "onError");
         App.oauth.onRedirect(callbackUriError);
         expect(spy.called).toBeTruthy();
         spy.reset();
       });
     });
+
+    describe("trigger('redirect')", function() {
+      it("should trigger success event when access_token is defined in the callback", function() {
+        var spy = sinon.spy();
+        App.oauth.on('success', once(spy));
+        var stub = sinon.stub(App.oauth, 'checkState', function() { return true; });
+        App.oauth.trigger('redirect', callbackUri);
+        expect(spy.called).toBeTruthy();
+        spy.reset();
+      });
+
+      it("should trigger error event when access_token is not in the callback", function() {
+        var spy = sinon.spy();
+        App.oauth.on('error', once(spy));
+        App.oauth.trigger('redirect', callbackUriError);
+        expect(spy.called).toBeTruthy();
+        spy.reset();
+      });
+    });
+
 
     it("should call the callback if defined", function() {
       var callback = sinon.spy();
@@ -167,16 +200,6 @@ describe("ember-oauth2", function() {
   describe("version method", function() {
     it("should return the current version", function() {
       expect(Ember.OAuth2.version).toEqual("0.2.3");
-    });
-  });
-
-  describe("These methods need to be implemented by the OAuth2 application", function() {
-    it("should define the onSuccess callback", function() {
-      expect(App.oauth.onSuccess).toBeDefined();
-    });
-
-    it("should define the onError callback", function() {
-      expect(App.oauth.onError).toBeDefined();
     });
   });
 
