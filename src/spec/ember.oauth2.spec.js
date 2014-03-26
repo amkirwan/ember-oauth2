@@ -103,10 +103,6 @@ describe("ember-oauth2", function() {
     it("should create a configuration object for Ember.OAuth2", function() {
       expect(Ember.OAuth2.config).toBeDefined();
     });
-
-    it("should return the version", function() {
-      expect(Ember.OAuth2.version).toEqual("0.2.3");
-    });
   });
 
   describe("Errors when configuration is incomplete", function() {
@@ -194,12 +190,6 @@ describe("ember-oauth2", function() {
       var callback = sinon.spy();
       App.oauth.onRedirect(callbackUriError, callback);
       expect(callback.called).toBeTruthy();
-    });
-  });
-
-  describe("version method", function() {
-    it("should return the current version", function() {
-      expect(Ember.OAuth2.version).toEqual("0.2.3");
     });
   });
 

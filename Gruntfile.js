@@ -106,8 +106,7 @@ module.exports = function(grunt) {
           './package.json': [ './package.json'], 
           './bower.json': ['./bower.json'], 
           './README.md': ['./README.md'], 
-          './src/lib/ember.oauth2.js': ['./src/lib/ember.oauth2.js'],
-          './src/spec/ember.oauth2.spec.js': ['./src/spec/ember.oauth2.spec.js']
+          './src/lib/ember.oauth2.js': ['./src/lib/ember.oauth2.js']
         }
       }
     }
