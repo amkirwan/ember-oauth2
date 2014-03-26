@@ -118,5 +118,6 @@ module.exports = function(grunt) {
   grunt.registerTask('release:patch', ['jshint', 'versioner:bumpOnly:default:patch', 'build', 'jasmine', 'versioner:commitOnly:default']);
   grunt.registerTask('release:minor', ['jshint', 'versioner:bumpOnly:default:minor', 'build', 'jasmine', 'versioner:commitOnly:default']);
   grunt.registerTask('release:major', ['jshint', 'versioner:bumpOnly:default:major', 'build', 'jasmine', 'versioner:commitOnly:default']);
+  grunt.registerTask('latest-build:git', ['jshint', 'versioner:bumpOnly:default:git', 'build', 'jasmine']);
 
 };
