@@ -69,11 +69,11 @@ To sign into the OAuth2 provider create an auth object using the providerId and 
 
 Calling `authorize()` will open a new window and the OAuth provider's OAuth dialog will be displayed. If the user chooses to authenticate with your website upon authorization by OAuth provider the user will be redirected back to the redirectUri with the params access_token, token_type and state. 
 
-**Note:** The API changes in the examples below. The latest version of the library use Ember.Evented class to subsribe and emit events. The old API is used in versions <= 2.3. While the old methods still work in the current version they are depricated and will be removed in future versions. 
+**Note:** The API changes in the examples below. The latest version of the library use Ember.Evented class to subsribe and emit events. The old API is used in versions <= 0.2.3. While the old methods still work in the current version they are depricated and will be removed in future versions. 
 
 At the redirectURI add the following to process the params returned from the OAuth provider
 
-New API for handling the redirect in versions >= 2.4
+New API for handling the redirect in versions >= 0.2.4
 
 ```html
 <!DOCTYPE html>
@@ -89,7 +89,7 @@ New API for handling the redirect in versions >= 2.4
 </html>
 ```
 
-Old API for handling the redirect in version <= 2.3 that does not use Ember.Evented for binding events.
+Old API for handling the redirect in version <= 0.2.3 that does not use Ember.Evented for binding events.
 
 ```html
 <!DOCTYPE html>
@@ -110,14 +110,14 @@ This will process the returned params and save the `provider_id`, `access_token`
 
 After successful authorization and saving the access_token to the localStorage the `success` event will be called. This will allow the user to do any cleanup necessary or to retrieve user information from the OAuth provider. To configure the callback bind event handlers to the `success` and `error` events.
 
-New API for the callbacks in versions >= 2.4
+New API for the callbacks in versions >= 0.2.4
 
 ```javascript
 App.oauth.on('success', function(stateObj) { return 'hello, success' } });
 App.oauth.on('error', function(err) { return 'hello, error' } });
 ```
 
-Old API for the callbacks version <= 2.3 that does not use Ember.Evented for binding events.
+Old API for the callbacks version <= 0.2.3 that does not use Ember.Evented for binding events.
 
 ```javascript
 Ember.OAuth2.reopen({ onSuccess: function() { return 'hello, onSuccess' } });
