@@ -25,7 +25,7 @@
     "specs"
   ],
   "dependencies": {
-    "ember": "~1.2.0"
+    "ember": "~1.4"
   },
   "devDependencies": {
     "jasmine": "*",
