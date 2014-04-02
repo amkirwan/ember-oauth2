@@ -51,12 +51,12 @@ The configuration object allows you to also customize the prefix for the state a
 
 The following are the options available for configuring a provider: 
 
-* `clientId`: The client identifier that is used by the provider. Ember-OAuth2 uses the Implicit Grant flow (Client-Side Flow).
-* `authBaseUri`: The authorization url for the OAuth2 provider.
-* `redirectUri`: The URI that the OAuth2 provider will redirect back to when completed. 
+* `clientId`: (required) The client identifier that is used by the provider. Ember-OAuth2 uses the Implicit Grant flow (Client-Side Flow).
+* `authBaseUri`: (required) The authorization url for the OAuth2 provider.
+* `redirectUri`: (required) The URI that the OAuth2 provider will redirect back to when completed. 
 * `scope`: Access your application is requesting from the OAuth2 provider.
-* `statePrefix`: the prefix name for state stored in the localStorage
-* `tokenPrefix`: the prefix name for token stored in the localStorage
+* `statePrefix`: the prefix name for state key stored in the localStorage. The default value is `state` and the key would be `state-the_state_number`   
+* `tokenPrefix`: the prefix name for token key stored in the localStorage. The default value is `token` and the key would be `token-the_provider_id`
 
 ## Authorization
 
