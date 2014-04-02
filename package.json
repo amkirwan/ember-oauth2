@@ -34,7 +34,7 @@
     "grunt-versioner": "0.1.0-beta.6",
     "yuidocjs": "~0.3"
   },
-"scripts": {
-  "postinstall": "node ./scripts/install.js"
+  "scripts": {
+    "postinstall": "node ./scripts/install.js"
   }
 }
