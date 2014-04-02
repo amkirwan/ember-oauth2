@@ -408,7 +408,7 @@
    * @property {String} VERSION
    * @final
   */
-  var VERSION = "0.2.4";
+  var VERSION = "0.3.0";
   /**
    * @method version
    * @static

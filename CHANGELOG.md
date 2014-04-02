@@ -1,5 +1,15 @@
 # Changelog Ember-OAuth2
 
+## v0.3.0
+  - Added YUIDoc to src.
+  - Published to NPM.
+  - Using get and set for properties on the instances.
+## v0.2.4
+  - Change to using Ember.Evented class for handling 'redirct', 'success' and 'error' callback.
+  - Depricated old callback methods.
+## v0.2.3
+  - Using grunt-versioner for updating and building project
+  - Fixed incorrect path to jQuery when build from source
 ## v0.2.2 (Jan 11, 2014)
   - [a132c65](https://github.com/amkirwan/ember-oauth2/commit/a132c657ae0a5173fc78ab192c6db11e4074232c) updated patch version to v0.2.2
   - [ffd5069](https://github.com/amkirwan/ember-oauth2/commit/ffd50691721e96091e3642c1ecc871d66c2f48f8) grunt-bump commit changes
