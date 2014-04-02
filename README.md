@@ -147,10 +147,10 @@ To install Ember.OAuth2 in your Ember.js application there are several options l
 To build Ember.Oauth2 you need to have [Node.js](http://nodejs.org), and [npm](https://npmjs.org) installed on your system. Once those are installed you need to install the projects dependencies by running:
 
 ```bash
-git clone https://github.com/amkirwan/ember-oauth2
-cd ember-oauth2
-npm install
-bower install
+$ git clone https://github.com/amkirwan/ember-oauth2
+$ cd ember-oauth2
+$ npm install
+$ bower install
 ```
 
 Once the dependencies are installed for Ember.OAuth2 the you can run the following [grunt](http://gruntjs.com/getting-started) tasks.
@@ -158,17 +158,27 @@ Once the dependencies are installed for Ember.OAuth2 the you can run the followi
 - The default grunt task, checks the files for errors with jshint, runs the jasmine, creates a minified version of ember.oauth2.js with uglify and copies a non-minified version of ember.oauth2.js and places them in the dist directory.
 
 ```bash
-grunt         
+$ grunt         
 ```
 - The grunt test task runs the jasmine tests against ember.oauth2.js
 
 ```bash
-grunt test        
+$ grunt test        
 ```
 - The grunt build task runs creates a minified version of ember.oauth2.js with uglify and copies a non-minified version of ember.oauth2.js and places them in the dist directory. 
 
 ```bash
-grunt build
+$ grunt build
+```
+
+## Building API Docs
+
+The API Docs provide a detailed collection of methods and properties for Ember.OAuth2. To build the documentation for the project from the project directory run the following command.
+
+Requires node.js and yuidocjs to build. Follow the steps in [build](https://github.com/amkirwan/ember-oauth2#building) to install the dependencies before buiding the docs.
+
+```bash
+$ yuidoc .
 ```
 
 ## Credits
