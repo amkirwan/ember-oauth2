@@ -181,6 +181,10 @@ Requires node.js and yuidocjs to build. Follow the steps in [build](https://gith
 $ yuidoc .
 ```
 
+## Contributors
+
+Our [contributors](https://github.com/amkirwan/ember-oauth2/graphs/contributors)
+
 ## Credits
 
 #### Thanks to the following projects for ideas on how to make this work.
