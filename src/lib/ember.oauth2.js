@@ -33,20 +33,20 @@
       requestObj: function() {
         var request = { 'response_type': 'token' };
         request.providerId = this.providerId;
-        request.state = this.state;
+        request.state = this.get('state');
         request.client_id = this.clientId;
-        request.state = this.state;
+        request.state = this.get('state');
         if (this.scope) request.scope = this.scope;
         return request;
       },
 
       authUri: function() {
-        if (this.state === null) this.state = this.uuid();
+        if (this.get('state') === null) this.set('state', this.uuid());
         var uri = this.authBaseUri;
         uri += '?response_type=token' + 
             '&redirect_uri=' + encodeURIComponent(this.redirectUri) +
             '&client_id=' + encodeURIComponent(this.clientId) +
-            '&state=' + encodeURIComponent(this.state);
+            '&state=' + encodeURIComponent(this.get('state'));
         if (this.scope) uri += '&scope=' + encodeURIComponent(this.scope).replace('%20', '+');
         return uri;
       },  
@@ -139,7 +139,7 @@
        */
       checkState: function(stateObj) {
         if (!stateObj) throw new Error("Could not find state.");
-        if (stateObj.state !== this.state) throw new Error("State returned from the server did not match the local saved state.");
+        if (stateObj.state !== this.get('state')) throw new Error("State returned from the server did not match the local saved state.");
       },
       
       /*
