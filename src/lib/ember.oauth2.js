@@ -29,12 +29,13 @@
         /** 
          * The configuration object for the given provider id. 
          *  @property {Object} providerConfig 
-         *  @property {String} providerConfig.clientId 
-         *  @property {String} providerConfig.authBaseUri 
-         *  @property {String} providerConfig.redirectUri 
-         *  @property {String} providerConfig.scope
-         *  @property {String} providerConfig.statePrefix
-         *  @property {String} providerConfig.tokenPrefix
+         *  @property {Object} providerConfig.providerId **Required**
+         *  @property {String} providerConfig.providerId.clientId **Required**
+         *  @property {String} providerConfig.providerId.authBaseUri **Required**
+         *  @property {String} providerConfig.providerId.redirectUri **Required**
+         *  @property {String} providerConfig.providerId.scope **Optional**
+         *  @property {String} providerConfig.providerId.statePrefix **Default:** "state", **Optional**
+         *  @property {String} providerConfig.providerId.tokenPrefix **Default:** "prefix", **Optional**
          *  @example 
          *    App.oauth = Ember.OAuth2.create({providerId: 'google'});
          */
@@ -341,16 +342,24 @@
         }
       },
 
-      /*
-       * saveToken stores the token by the provider
+      /**
+       * saveToken stores the token by the tokenPrefix and the providerId
+       * access_token
        * expires : time that the token expires
        * providerId: the providerId
        * scopes: array of scopes
+       *
+       * @method saveToken
+       * @param {Object} token Saves the params in the response from the OAuth2 server to localStorage with the key 'tokenPrefix-providerId
        */
       saveToken: function(token) {
         window.localStorage.setItem(this.tokenPrefix + '-' + this.providerId, JSON.stringify(token));
       },
 
+      /**
+       * @method getToken
+       * @return {Object} The params from the OAuth2 response from localStorage with the key 'tokenPrefix-providerId'.
+       */
       getToken: function() {
         var token = JSON.parse(window.localStorage.getItem( this.tokenPrefix + '-' + this.providerId));
         if (!token) return null;
@@ -358,12 +367,20 @@
         return token;
       },
 
+      /**
+       * @method getAccessToken
+       * @return {Object} The access_token param from the OAuth2 response from localStorage with the key 'tokenPrefix-providerId'.
+       */
       getAccessToken: function() {
         var token = this.getToken();
         if (!token) return null;
         return token.access_token;
       },
 
+      /**
+       * @method accessTokenIsExpired
+       * @return {Boolean} Check if the access_token is expired.
+       */
       accessTokenIsExpired: function() {
         var token = this.getToken();
         if (!token) return true;
@@ -374,6 +391,10 @@
         }
       },
 
+      /**
+       * Sets the access token expires_in time to 0 and saves the token to localStorage
+       * @method expireAccessToken
+       */
       expireAccessToken: function() {
         var token = this.getToken();
         if (!token) return null;
@@ -383,8 +404,20 @@
     });
   }
 
+  /**
+   * @property {String} VERSION
+   * @final
+  */
   var VERSION = "0.2.4";
+  /**
+   * @method version
+   * @static
+   */
   Ember.OAuth2.version = VERSION;
+  /**
+   * @method config
+   * @static
+  */
   Ember.OAuth2.config = {};
 
 })(this);
