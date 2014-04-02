@@ -127,11 +127,11 @@
        */
       requestObj: function() {
         var request = { 'response_type': 'token' };
-        request.providerId = this.providerId;
+        request.providerId = this.get('providerId');
         request.state = this.get('state');
-        request.client_id = this.clientId;
+        request.client_id = this.get('clientId');
         request.state = this.get('state');
-        if (this.scope) request.scope = this.scope;
+        if (this.get('scope')) request.scope = this.get('scope');
         return request;
       },
 
@@ -141,12 +141,12 @@
        */
       authUri: function() {
         if (this.get('state') === null) this.set('state', this.uuid());
-        var uri = this.authBaseUri;
+        var uri = this.get('authBaseUri');
         uri += '?response_type=token' + 
-            '&redirect_uri=' + encodeURIComponent(this.redirectUri) +
-            '&client_id=' + encodeURIComponent(this.clientId) +
+            '&redirect_uri=' + encodeURIComponent(this.get('redirectUri')) +
+            '&client_id=' + encodeURIComponent(this.get('clientId')) +
             '&state=' + encodeURIComponent(this.get('state'));
-        if (this.scope) uri += '&scope=' + encodeURIComponent(this.scope).replace('%20', '+');
+        if (this.get('scope')) uri += '&scope=' + encodeURIComponent(this.get('.scope')).replace('%20', '+');
         return uri;
       },  
 
@@ -156,10 +156,10 @@
        * @method authorize
        */
       authorize: function() {
-        if (!this.providerId) throw new Error('No provider id given.');
-        if (!this.clientId) throw new Error('No client id given.');
-        if (!this.authBaseUri) throw new Error('No auth base uri given.');
-        if (!this.redirectUri) throw new Error('No redirect uri given.');
+        if (!this.get('providerId')) throw new Error('No provider id given.');
+        if (!this.get('clientId')) throw new Error('No client id given.');
+        if (!this.get('authBaseUri')) throw new Error('No auth base uri given.');
+        if (!this.get('redirectUri')) throw new Error('No redirect uri given.');
         var authorizeUri = this.authUri();
         this.clearStates();
         this.saveState(this.get('state'), this.requestObj());
@@ -188,9 +188,9 @@
        */
       generateToken: function(params) {
         var token = {};
-        token.provider_id = this.providerId;
+        token.provider_id = this.get('providerId');
         token.expires_in = this.expiresIn(params.expires_in);
-        token.scope = this.scope;
+        token.scope = this.get('scope');
         token.access_token = params.access_token;
         return token;     
       },
@@ -310,7 +310,7 @@
        * @param {Object} requestObj Properties of the request state to save in localStorage
        */
       saveState: function(state, requestObj) {
-        window.localStorage.setItem(this.statePrefix + '-' + state, JSON.stringify(requestObj));
+        window.localStorage.setItem(this.get('statePrefix') + '-' + state, JSON.stringify(requestObj));
       },
 
       /**
@@ -321,8 +321,8 @@
        * @return {Object} Properties of the request state  
        */ 
       getState: function(state) {
-        var obj = JSON.parse(window.localStorage.getItem(this.statePrefix + '-'  + state));
-        window.localStorage.removeItem(this.statePrefix + '-' + state);
+        var obj = JSON.parse(window.localStorage.getItem(this.get('statePrefix') + '-'  + state));
+        window.localStorage.removeItem(this.get('statePrefix') + '-' + state);
 
         return obj;
       },
@@ -332,7 +332,7 @@
         * @method clearStates 
         */
       clearStates: function() {
-        var regex = new RegExp( '^' + this.statePrefix + '-.*', 'g');
+        var regex = new RegExp( '^' + this.get('statePrefix') + '-.*', 'g');
 
         for(var i = 0; i < window.localStorage.length; i++) {
           var name = window.localStorage.key(i);
@@ -353,7 +353,7 @@
        * @param {Object} token Saves the params in the response from the OAuth2 server to localStorage with the key 'tokenPrefix-providerId
        */
       saveToken: function(token) {
-        window.localStorage.setItem(this.tokenPrefix + '-' + this.providerId, JSON.stringify(token));
+        window.localStorage.setItem(this.get('tokenPrefix') + '-' + this.get('providerId'), JSON.stringify(token));
       },
 
       /**
@@ -361,7 +361,7 @@
        * @return {Object} The params from the OAuth2 response from localStorage with the key 'tokenPrefix-providerId'.
        */
       getToken: function() {
-        var token = JSON.parse(window.localStorage.getItem( this.tokenPrefix + '-' + this.providerId));
+        var token = JSON.parse(window.localStorage.getItem( this.get('tokenPrefix') + '-' + this.get('providerId')));
         if (!token) return null;
         if (!token.access_token) return null;
         return token;
