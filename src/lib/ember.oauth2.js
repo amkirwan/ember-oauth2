@@ -2,7 +2,7 @@
   * @overview OAuth2 library for Emberjs that stores tokens in the browsers localStorage   
   * @license   Licensed under MIT license
   *            See https://raw.github.com/amkirwan/ember-oauth2/master/LICENSE
-  * @version   0.3.0
+  * @version   0.3.1
   */
 (function() {
 /**
