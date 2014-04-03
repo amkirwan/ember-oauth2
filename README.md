@@ -183,7 +183,7 @@ $ yuidoc .
 
 ## Contributors
 
-Our [contributors](https://github.com/amkirwan/ember-oauth2/graphs/contributors)
+[Contributors](https://github.com/amkirwan/ember-oauth2/graphs/contributors) to this project.
 
 ## Credits
 
