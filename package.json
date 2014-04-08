@@ -21,9 +21,7 @@
   "bugs": {
     "url": "https://github.com/amkirwan/ember-oauth2/issues"
   },
-  "dependencies": {
-    "uglify-js": "*"
-  },
+  "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.2",
     "load-grunt-tasks": "*",
@@ -33,8 +31,5 @@
     "grunt-contrib-jasmine": "~0.5.2",
     "grunt-versioner": "0.1.0-beta.6",
     "yuidocjs": "~0.3"
-  },
-  "scripts": {
-    "postinstall": "node ./scripts/install.js"
   }
 }
