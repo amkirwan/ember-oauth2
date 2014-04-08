@@ -18,7 +18,8 @@ rdoc
 spec/reports
 test/tmp
 test/version_tmp
-tmp
-bower_components
-node_modules
-dist/*
+tmp/
+
+bower_components/
+node_modules/
+dist/
