@@ -22,7 +22,19 @@
     "bower_components",
     "test",
     "tests",
-    "specs"
+    "specs",
+    ".bowerrc",
+    ".gitignore",
+    ".npmignore",
+    ".travis.yml",
+    "src",
+    "doc",
+    "yuidoc.json",
+    "Gruntfile.js",
+    "package.json",
+    "bower.json",
+    "README.md",
+    "CHANGELOG.md"
   ],
   "dependencies": {
     "ember": "~1.4"
