@@ -1,8 +1,6 @@
 module.exports = function(grunt) {
   'use strict';
 
-  var shell = require('shelljs');
-
   // load all grunt tasks
   require('load-grunt-tasks')(grunt);
 
@@ -127,5 +125,6 @@ module.exports = function(grunt) {
   grunt.registerTask('release:minor', ['jshint', 'versioner:bumpOnly:default:minor', 'build', 'jasmine', 'shell:addDist', 'versioner:commitOnly:default']);
   grunt.registerTask('release:major', ['jshint', 'versioner:bumpOnly:default:major', 'build', 'jasmine', 'shell:addDist', 'versioner:commitOnly:default']);
   grunt.registerTask('latest-build:git', ['jshint', 'versioner:bumpOnly:default:git', 'build', 'jasmine']);
+  grunt.registerTask('release:npm', ['versioner:npmOnly:default']);
 
 };
