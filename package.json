@@ -30,6 +30,7 @@
     "grunt-contrib-uglify": "~0.2.2",
     "grunt-contrib-jasmine": "~0.5.2",
     "grunt-versioner": "~0.1.3",
-    "yuidocjs": "~0.3"
+    "yuidocjs": "~0.3",
+    "grunt-shell": "~0.6.4"
   }
 }
