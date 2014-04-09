@@ -27,3 +27,4 @@ yuidoc.json
 src/
 .travis.yml
 CHANGELOG.md
+bower.json
