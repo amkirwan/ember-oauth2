@@ -1,5 +1,11 @@
 # Changelog Ember-OAuth2
 
+
+## v0.3.2
+  - Remove files not needed in package.
+  - Add build files to dist dir for package manaagers. 
+## v0.3.1
+  - Initial relase to Bower
 ## v0.3.0
   - Added YUIDoc to src.
   - Published to NPM.
