@@ -15,7 +15,7 @@ Ember-OAuth2 requires jQuery.
 
 ## Browser Support
 
-Ember-OAuth2 uses localStorae for saving the tokens, localStorage is supported in Firefox 3.5+, Safari 4+, IE8+, and Chrome.
+Ember-OAuth2 uses localStorage for saving the tokens, localStorage is supported in Firefox 3.5+, Safari 4+, IE8+, and Chrome.
 
 ## Configure
 
