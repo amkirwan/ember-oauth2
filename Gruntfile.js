@@ -20,7 +20,7 @@ module.exports = function(grunt) {
         options: {
           specs: '<%= src.spec %>/*.spec.js',
           vendor: [
-            './bower_components/jquery/jquery.min.js',
+            './bower_components/jquery/dist/jquery.min.js',
             './bower_components/handlebars/handlebars.min.js',
             './bower_components/ember/ember.min.js',
             './bower_components/sinonjs/sinon.js'
