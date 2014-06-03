@@ -6,7 +6,7 @@
     "Anthony Kirwan <amkirwan@gmail.com>"
   ],
   "description": "OAuth2 library for Emberjs that stores tokens in the browsers localStorage",
-  "main": "dist/ember-oauth2.js",
+  "main": "dist/ember.oauth2.js",
   "keywords": [
     "ember-oauth2",
     "oauth2",
