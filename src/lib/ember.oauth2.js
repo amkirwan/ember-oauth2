@@ -166,6 +166,11 @@
         this.saveState(this.get('state'), this.requestObj());
         var dialog = window.open(authorizeUri, 'Authorize', 'height=600, width=450');
         if (window.focus) dialog.focus();
+        var _this = this;
+        return new Ember.RSVP.Promise(function(resolve, reject) {
+          _this.one('success', resolve);
+          _this.one('error', reject);
+        });
       },
 
       /**

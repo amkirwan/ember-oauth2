@@ -130,6 +130,26 @@ describe("ember-oauth2", function() {
     });
   });
 
+  describe("Promise returned from authorize method", function() {
+    it("should resolve on success event", function(done) {
+      App.oauth = Ember.OAuth2.create({providerId: providerId});
+
+      var promise = App.oauth.authorize();
+      promise.then(done);
+      App.oauth.trigger('success');
+    });
+
+    it("should reject on error event", function(done) {
+      App.oauth = Ember.OAuth2.create({providerId: providerId});
+
+      var promise = App.oauth.authorize();
+      promise.fail(function(){
+        done();
+      });
+      App.oauth.trigger('error');
+    });
+  });
+
   describe("Generate OAuth2 providers url", function() {
     it("should create the url with the options", function() {
       expect(App.oauth.authUri()).toEqual(authorizeUri);
