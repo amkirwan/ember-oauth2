@@ -164,8 +164,20 @@
         var authorizeUri = this.authUri();
         this.clearStates();
         this.saveState(this.get('state'), this.requestObj());
-        var dialog = window.open(authorizeUri, 'Authorize', 'height=600, width=450');
+        this.openWindow(authorizeUri);
+      },
+
+      /**
+       * Isolated function responsible for opening windows, to make it
+       * easier to override this part in some environments (e.g. Phonegap)
+
+        @param {String} url
+        @return {Object} reference to the opened window
+       */
+      openWindow: function(url) {
+        var dialog = window.open(url, 'Authorize', 'height=600, width=450');
         if (window.focus) dialog.focus();
+        return dialog;
       },
 
       /**
