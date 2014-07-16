@@ -1,5 +1,5 @@
 /**
-  * @overview OAuth2 library for Emberjs that stores tokens in the browsers localStorage   
+  * @overview OAuth2 library for Emberjs that stores tokens in the browsers localStorage
   * @license   Licensed under MIT license
   *            See https://raw.github.com/amkirwan/ember-oauth2/master/LICENSE
   * @version   0.3.3
@@ -26,9 +26,9 @@
        */
       init: function() {
         this._super();
-        /** 
-         * The configuration object for the given provider id. 
-         *  @property {Object} providerConfig 
+        /**
+         * The configuration object for the given provider id.
+         *  @property {Object} providerConfig
          *  @property {Object} providerConfig.providerId **Required**
          *  @property {String} providerConfig.providerId.clientId **Required**
          *  @property {String} providerConfig.providerId.authBaseUri **Required**
@@ -36,7 +36,7 @@
          *  @property {String} providerConfig.providerId.scope **Optional**
          *  @property {String} providerConfig.providerId.statePrefix **Default:** "state", **Optional**
          *  @property {String} providerConfig.providerId.tokenPrefix **Default:** "prefix", **Optional**
-         *  @example 
+         *  @example
          *    App.oauth = Ember.OAuth2.create({providerId: 'google'});
          */
         this.providerConfig = Ember.OAuth2.config[this.get('providerId')];
@@ -50,23 +50,23 @@
         this.set('statePrefix', 'state');
         /**
          * The prefix name for the token key stored in the localStorage.
-         * 
+         *
          * @property tokenPrefix
          * @type String
          * @default "token"
          */
         this.set('tokenPrefix', 'token');
 
-        /** 
-         * @property {String} clientId 
+        /**
+         * @property {String} clientId
          */
-        /** 
-         * @property {String} authBaseUri 
+        /**
+         * @property {String} authBaseUri
          */
-        /** 
-         * @property {String} redirectUri 
+        /**
+         * @property {String} redirectUri
          */
-        /** 
+        /**
          * @property {String} scope
          */
         // sets the properties from the providerConfig and overrides any default settings.
@@ -121,7 +121,7 @@
 
       /**
        * Creates and returns the request object.
-       * 
+       *
        * @method requestObj
        * @return {Object} request object
        */
@@ -142,18 +142,19 @@
       authUri: function() {
         if (this.get('state') === null) this.set('state', this.uuid());
         var uri = this.get('authBaseUri');
-        uri += '?response_type=token' + 
+        uri += '?response_type=token' +
             '&redirect_uri=' + encodeURIComponent(this.get('redirectUri')) +
             '&client_id=' + encodeURIComponent(this.get('clientId')) +
             '&state=' + encodeURIComponent(this.get('state'));
         if (this.get('scope')) uri += '&scope=' + encodeURIComponent(this.get('.scope')).replace('%20', '+');
         return uri;
-      },  
+      },
 
       /**
-       * Open authorize window if the configuration object is valid. 
-       * 
+       * Open authorize window if the configuration object is valid.
+       *
        * @method authorize
+       * @return {Promise}
        */
       authorize: function() {
         if (!this.get('providerId')) throw new Error('No provider id given.');
@@ -192,7 +193,7 @@
         token.expires_in = this.expiresIn(params.expires_in);
         token.scope = this.get('scope');
         token.access_token = params.access_token;
-        return token;     
+        return token;
       },
 
       /**
@@ -215,7 +216,7 @@
 
       /*
        * proxy functions for old event handlers
-       * 
+       *
        * Check if the token returned is valid and if so trigger `success` event else trigger `error`
        *
        * @method handleRedirect
@@ -235,7 +236,7 @@
         }
       },
 
-      /** 
+      /**
        * This method will call the old onSuccess callback when using the old API: Ember.OAuth2.reopen({ onSuccess: function() { return 'hello, onSuccess' } });
        *
        * The old onSuccess method will only be called when onSuccess is defined as a function on the Ember.OAuth2 instance
@@ -279,7 +280,7 @@
         if (!stateObj) throw new Error("Could not find state.");
         if (stateObj.state !== this.get('state')) throw new Error("State returned from the server did not match the local saved state.");
       },
-      
+
       /**
        * Parse the callback function from the OAuth2 provider
        *
@@ -287,11 +288,11 @@
        * state
        * access_token
        * token_type
-       * expires_in 
-       * 
+       * expires_in
+       *
        * @method parseCalback
-       * @param {String} locationHash 
-       * @return {Object} The params returned from the OAuth2 provider 
+       * @param {String} locationHash
+       * @return {Object} The params returned from the OAuth2 provider
        */
       parseCallback: function(locationHash) {
         var oauthParams = {};
@@ -318,8 +319,8 @@
        *
        * @method getState
        * @param {String} state The state uuid to retreive from localStorage
-       * @return {Object} Properties of the request state  
-       */ 
+       * @return {Object} Properties of the request state
+       */
       getState: function(state) {
         var obj = JSON.parse(window.localStorage.getItem(this.get('statePrefix') + '-'  + state));
         window.localStorage.removeItem(this.get('statePrefix') + '-' + state);
@@ -329,7 +330,7 @@
 
       /**
         * Remove any states from localStorage if they exist
-        * @method clearStates 
+        * @method clearStates
         */
       clearStates: function() {
         var regex = new RegExp( '^' + this.get('statePrefix') + '-.*', 'g');

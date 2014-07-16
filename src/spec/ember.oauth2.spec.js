@@ -1,7 +1,7 @@
 describe("ember-oauth2", function() {
 
   window.App = Ember.Application.create({
-    NAME: 'test-app'    
+    NAME: 'test-app'
   });
 
   var authorizeUri;
@@ -215,7 +215,7 @@ describe("ember-oauth2", function() {
 
     it("should remove any saved states", function() {
       App.oauth.saveState(state, savedState);
-      
+
       var newState = "99999";
       var newSavedState = $.extend(true, {}, savedState);
       newSavedState.state = newState;
@@ -249,7 +249,7 @@ describe("ember-oauth2", function() {
     beforeEach(function() {
       token = { provider_id: providerId, expires_in: '12345', scope: scope, access_token: '12345abc' };
       spyExpires = sinon.stub(App.oauth, 'expiresIn', function() { return '12345'; });
-      App.oauth.saveToken(token); 
+      App.oauth.saveToken(token);
     });
 
     afterEach(function() {
@@ -285,7 +285,7 @@ describe("ember-oauth2", function() {
     it("expires the access token", function() {
       var new_time = App.oauth.now() + 10000;
       token.expires_in = new_time;
-      App.oauth.saveToken(token); 
+      App.oauth.saveToken(token);
       expect(App.oauth.accessTokenIsExpired()).toBeFalsy();
       App.oauth.expireAccessToken();
       expect(App.oauth.accessTokenIsExpired()).toBeTruthy();
