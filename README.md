@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/amkirwan/ember-oauth2.png)](https://travis-ci.org/amkirwan/ember-oauth2) [![Code Climate](https://codeclimate.com/github/amkirwan/ember-oauth2.png)](https://codeclimate.com/github/amkirwan/ember-oauth2)
+[![Build Status](https://travis-ci.org/amkirwan/ember-oauth2.png)](https://travis-ci.org/amkirwan/ember-oauth2) 
 
 ember-oauth2
 ============
