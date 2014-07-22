@@ -143,7 +143,7 @@ describe("ember-oauth2", function() {
       promise.then(function(value) {
         expect(value).toBeDefined();
       }, function(error) {
-        expect(error.message).not.toEqual('Dialog failed with error.');
+        expect(error.message).not.toEqual('Dialog failed with ' + errorMessage);
       }).finally(done);
 
       App.oauth.trigger('success');
