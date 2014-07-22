@@ -1,6 +1,8 @@
 # Changelog Ember-OAuth2
 
-
+## v0.4.0
+  - Isolates function for opening window so that it can be overridden
+  - Login dialog window returns a promise, it resolves on success and reject on error
 ## v0.3.2
   - Remove files not needed in package.
   - Add build files to dist dir for package manaagers. 
