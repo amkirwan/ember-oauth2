@@ -1,6 +1,6 @@
 {
   "name": "ember-oauth2",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "OAuth2 library for Emberjs that stores tokens in the browsers localStorage",
   "homepage": "https://github.com/amkirwan/ember-ouath2",
   "main": "dist/ember.oauth2.js",
