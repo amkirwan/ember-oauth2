@@ -3,9 +3,9 @@
 ember-oauth2
 ============
 
-JavaScript library for using OAuth 2.0 Implicit Grant flow (Client-Side Flow) for Ember.js 
+JavaScript library for using OAuth 2.0 Implicit Grant flow (Client-Side Flow) for Ember.js
 
-This creates an OAuth 2.0 Ember object class for handling authentication with OAuth 2.0 providers. 
+This creates an OAuth 2.0 Ember object class for handling authentication with OAuth 2.0 providers.
 
 Current Version: **[0.3.3](https://github.com/amkirwan/ember-oauth2/releases/tag/v0.3.3)**
 
@@ -28,8 +28,8 @@ First you must configure your OAuth provider. For Google you would configure it 
       authBaseUri: 'https://accounts.google.com/o/oauth2/auth',
       redirectUri: 'https://oauth2-login-demo.appspot.com/oauth/callback',
       scope: 'public write'
-    } 
-  } 
+    }
+  }
 ```
 
 The example above sets *google* as a *providerId* along with configuration information for the provider. The following params are required for configuring a valid provider *clientId*, *authBaseUri* and *redirectUri*. Depending on the provider you might need to provide additional and/or optional configuration key/values.
@@ -45,17 +45,17 @@ The configuration object allows you to also customize the prefix for the state a
       scope: 'public write',
       statePrefix: 'foobar',
       tokenPrefix: 'qux'
-    } 
-  } 
+    }
+  }
 ```
 
-The following are the options available for configuring a provider: 
+The following are the options available for configuring a provider:
 
 * `clientId`: (required) The client identifier that is used by the provider. Ember-OAuth2 uses the Implicit Grant flow (Client-Side Flow).
 * `authBaseUri`: (required) The authorization url for the OAuth2 provider.
-* `redirectUri`: (required) The URI that the OAuth2 provider will redirect back to when completed. 
+* `redirectUri`: (required) The URI that the OAuth2 provider will redirect back to when completed.
 * `scope`: Access your application is requesting from the OAuth2 provider.
-* `statePrefix`: the prefix name for state key stored in the localStorage. The default value is `state` and the key would be `state-the_state_number`   
+* `statePrefix`: the prefix name for state key stored in the localStorage. The default value is `state` and the key would be `state-the_state_number`
 * `tokenPrefix`: the prefix name for token key stored in the localStorage. The default value is `token` and the key would be `token-the_provider_id`
 
 ## Authorization
@@ -67,9 +67,9 @@ To sign into the OAuth2 provider create an auth object using the providerId and 
   App.oauth.authorize();
 ```
 
-Calling `authorize()` will open a new window and the OAuth provider's OAuth dialog will be displayed. If the user chooses to authenticate with your website upon authorization by OAuth provider the user will be redirected back to the redirectUri with the params access_token, token_type and state. 
+Calling `authorize()` will open a new window and the OAuth provider's OAuth dialog will be displayed. If the user chooses to authenticate with your website upon authorization by OAuth provider the user will be redirected back to the redirectUri with the params access_token, token_type and state.
 
-**Note:** The API changes in the examples below. The latest version of the library use Ember.Evented class to subsribe and emit events. The old API is used in versions <= 0.2.3. While the old methods still work in the current version they are depricated and will be removed in future versions. 
+**Note:** The API changes in the examples below. The latest version of the library use Ember.Evented class to subsribe and emit events. The old API is used in versions <= 0.2.3. While the old methods still work in the current version they are depricated and will be removed in future versions.
 
 At the redirectURI add the following to process the params returned from the OAuth provider
 
@@ -79,7 +79,7 @@ New API for handling the redirect in versions >= 0.2.4
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Authorize</title> 
+    <title>Authorize</title>
     <script>
       var hash = window.location.hash;
       window.opener.App.oauth.trigger('redirect', hash);
@@ -95,7 +95,7 @@ Old API for handling the redirect in version <= 0.2.3 that does not use Ember.Ev
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Authorize</title> 
+    <title>Authorize</title>
     <script>
       var hash = window.location.hash;
       window.opener.App.oauth.onRedirect(hash);
@@ -109,6 +109,18 @@ This will process the returned params and save the `provider_id`, `access_token`
 
 
 After successful authorization and saving the access_token to the localStorage the `success` event will be called. This will allow the user to do any cleanup necessary or to retrieve user information from the OAuth provider. To configure the callback bind event handlers to the `success` and `error` events.
+
+As of version 0.4.0 the `authorize` call will return a `Ember.RSVP.Promise`. This will make it easier to handle callbacks
+
+```javascript
+App.oauth.authorize().then(function(stateObj){
+  // Handle the successful authorization here
+  console.log('hello, success');
+}).fail(function(err){
+  // Handle any errors within this block
+  console.error(err)
+});
+```
 
 New API for the callbacks in versions >= 0.2.4
 
@@ -158,14 +170,14 @@ Once the dependencies are installed for Ember.OAuth2 the you can run the followi
 - The default grunt task, checks the files for errors with jshint, runs the jasmine, creates a minified version of ember.oauth2.js with uglify and copies a non-minified version of ember.oauth2.js and places them in the dist directory.
 
 ```bash
-$ grunt         
+$ grunt
 ```
 - The grunt test task runs the jasmine tests against ember.oauth2.js
 
 ```bash
-$ grunt test        
+$ grunt test
 ```
-- The grunt build task runs creates a minified version of ember.oauth2.js with uglify and copies a non-minified version of ember.oauth2.js and places them in the dist directory. 
+- The grunt build task runs creates a minified version of ember.oauth2.js with uglify and copies a non-minified version of ember.oauth2.js and places them in the dist directory.
 
 ```bash
 $ grunt build

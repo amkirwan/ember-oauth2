@@ -130,6 +130,36 @@ describe("ember-oauth2", function() {
     });
   });
 
+  describe("Dialog window returns an Ember.RSVP.Promise", function() {
+    var promise;
+    var errorMessage;
+    beforeEach(function() {
+      errorMessage = 'error message.';
+      App.oauth = Ember.OAuth2.create({providerId: providerId});
+      promise = App.oauth.openWindow();
+    });
+
+    it("should resolve on success", function(done){
+      promise.then(function(value) {
+        expect(value).toBeDefined();
+      }, function(error) {
+        expect(error.message).not.toEqual('Dialog failed with error.');
+      }).finally(done);
+
+      App.oauth.trigger('success');
+    });
+
+    it("should error on error", function(done) {
+      promise.then(function(value) {
+        expect(value).not.toBeDefined();
+      }, function(error) {
+        expect(error.message).toEqual('Dialog failed with ' + errorMessage);
+      }).finally(done);
+      
+      App.oauth.trigger('error', errorMessage);
+    });
+  });
+
   describe("Generate OAuth2 providers url", function() {
     it("should create the url with the options", function() {
       expect(App.oauth.authUri()).toEqual(authorizeUri);

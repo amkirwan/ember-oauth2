@@ -177,7 +177,11 @@
       openWindow: function(url) {
         var dialog = window.open(url, 'Authorize', 'height=600, width=450');
         if (window.focus) dialog.focus();
-        return dialog;
+        var self = this;
+        return new Ember.RSVP.Promise(function(resolve, reject) {
+          self.on('success', function() { resolve(self); });
+          self.on('error', function(error) { reject( new Error('Dialog failed with ' + error)); });
+        });
       },
 
       /**
