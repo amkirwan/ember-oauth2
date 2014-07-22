@@ -121,9 +121,9 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['jshint', 'jasmine', 'uglify', 'copy']);
   grunt.registerTask('test', ['jshint', 'jasmine']);
   grunt.registerTask('build', ['jshint', 'uglify', 'copy']);
-  grunt.registerTask('release:patch', ['jshint', 'versioner:bumpOnly:default:patch', 'build', 'jasmine', 'shell:addDist', 'versioner:commitOnly:default']);
-  grunt.registerTask('release:minor', ['jshint', 'versioner:bumpOnly:default:minor', 'build', 'jasmine', 'shell:addDist', 'versioner:commitOnly:default']);
-  grunt.registerTask('release:major', ['jshint', 'versioner:bumpOnly:default:major', 'build', 'jasmine', 'shell:addDist', 'versioner:commitOnly:default']);
+  grunt.registerTask('release:patch', ['jshint', 'versioner:bumpOnly:default:patch', 'build', 'jasmine', 'versioner:commitOnly:default']);
+  grunt.registerTask('release:minor', ['jshint', 'versioner:bumpOnly:default:minor', 'build', 'jasmine', 'versioner:commitOnly:default']);
+  grunt.registerTask('release:major', ['jshint', 'versioner:bumpOnly:default:major', 'build', 'jasmine', 'versioner:commitOnly:default']);
   grunt.registerTask('latest-build:git', ['jshint', 'versioner:bumpOnly:default:git', 'build', 'jasmine']);
   grunt.registerTask('release:npm', ['versioner:npmOnly:default']);
 
