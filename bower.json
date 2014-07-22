@@ -39,7 +39,7 @@
     "ember": ">=1.0.0 <2.0.0"
   },
   "devDependencies": {
-    "jasmine": "*",
+    "jasmine": ">= 2.0",
     "sinonjs": "*"
   }
 }
