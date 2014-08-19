@@ -164,7 +164,7 @@
         var authorizeUri = this.authUri();
         this.clearStates();
         this.saveState(this.get('state'), this.requestObj());
-        this.openWindow(authorizeUri);
+        return this.openWindow(authorizeUri);
       },
 
       /**
