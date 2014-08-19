@@ -39,8 +39,12 @@
          *  @example
          *    App.oauth = Ember.OAuth2.create({providerId: 'google'});
          */
-        // this.providerConfig = Ember.OAuth2.config[this.get('providerId')];
-        this.providerConfig = window.ENV['ember-oauth2'][this.get('providerId')];
+        if (typeof Ember.OAuth2.config === 'object') {
+          Ember.Logger.warn("Ember.OAuth2.config is deprecated and will be removed in version 0.5.0. Set the config using window.ENV['ember-oauth2']");
+          this.providerConfig = Ember.OAuth2.config[this.get('providerId')];
+        } else {
+          this.providerConfig = window.ENV['ember-oauth2'][this.get('providerId')];
+        }
         /**
          * The prefix name for the state key stored in the localStorage.
          *
@@ -439,6 +443,7 @@
    * @method config
    * @static
   */
+  Ember.OAuth2.config = {};
   window.ENV = window.ENV || {};
 
 })(this);
