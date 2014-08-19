@@ -17,7 +17,8 @@ describe("ember-oauth2", function() {
     clientId = '12345';
     scope = 'public';
     state = '12345';
-    Ember.OAuth2.config = {
+    
+    window.ENV['ember-oauth2'] = {
       test_auth: {
         clientId: clientId,
         authBaseUri: authBaseUri,
@@ -95,13 +96,13 @@ describe("ember-oauth2", function() {
     });
   });
 
-  describe("Create Namespaces and configure object", function() {
-    it("should create a OAuth2 object", function() {
+  describe("Create namespaces and configure object", function() {
+    it("should create a object", function() {
       expect(Ember.OAuth2).toBeDefined();
     });
 
-    it("should create a configuration object for Ember.OAuth2", function() {
-      expect(Ember.OAuth2.config).toBeDefined();
+    it("should create a ENV object", function() {
+      expect(window.ENV).toBeDefined();
     });
   });
 
@@ -112,19 +113,19 @@ describe("ember-oauth2", function() {
     });
 
     it("should require a clientId", function() {
-      Ember.OAuth2.config.test_auth.clientId = null;
+      window.ENV['ember-oauth2'].test_auth.clientId = null;
       App.oauth = Ember.OAuth2.create({providerId: providerId});
       expect(function() {App.oauth.authorize();}).toThrow(new Error("No client id given."));
     });
 
     it("should require a authorization base uri", function() {
-      Ember.OAuth2.config.test_auth.authBaseUri = null;
+      window.ENV['ember-oauth2'].test_auth.authBaseUri = null;
       App.oauth = Ember.OAuth2.create({providerId: providerId});
       expect(function() {App.oauth.authorize();}).toThrow(new Error("No auth base uri given."));
     });
 
     it("should require a callback uri", function() {
-      Ember.OAuth2.config.test_auth.redirectUri = null;
+      window.ENV['ember-oauth2'].test_auth.redirectUri = null;
       App.oauth = Ember.OAuth2.create({providerId: providerId});
       expect(function() {App.oauth.authorize();}).toThrow(new Error("No redirect uri given."));
     });

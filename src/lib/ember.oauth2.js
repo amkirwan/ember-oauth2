@@ -39,7 +39,8 @@
          *  @example
          *    App.oauth = Ember.OAuth2.create({providerId: 'google'});
          */
-        this.providerConfig = Ember.OAuth2.config[this.get('providerId')];
+        // this.providerConfig = Ember.OAuth2.config[this.get('providerId')];
+        this.providerConfig = window.ENV['ember-oauth2'][this.get('providerId')];
         /**
          * The prefix name for the state key stored in the localStorage.
          *
@@ -438,6 +439,6 @@
    * @method config
    * @static
   */
-  Ember.OAuth2.config = {};
+  window.ENV = window.ENV || {};
 
 })(this);
