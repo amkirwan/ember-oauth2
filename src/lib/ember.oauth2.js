@@ -234,7 +234,7 @@
         @deprecated Use `.trigger('redirect')` instead.
        */
       onRedirect: function(hash, callback) {
-        Ember.Logger.warn("Ember.OAuth2.onRedirect is deprecated. Please use .trigger('redirect') instead.");
+        Ember.Logger.warn("Ember.OAuth2.onRedirect is deprecated and will be removed in future version 0.5.0. Please use .trigger('redirect') instead.");
         this.trigger('redirect', hash, callback);
       },
 
@@ -273,7 +273,7 @@
         if (typeof(this.onSuccess) !== 'function')
           return;
 
-        Ember.Logger.warn("Ember.OAuth2.onSuccess is deprecated. Bind your callbacks using .on('success', fn) instead.");
+        Ember.Logger.warn("Ember.OAuth2.onSuccess is deprecated and will be removed in version 0.5.0. Bind your callbacks using .on('success', fn) instead.");
         this.onSuccess(stateObj);
       },
 
@@ -290,7 +290,7 @@
         if (typeof(this.onError) !== 'function')
           return;
 
-        Ember.Logger.warn("Ember.OAuth2.onError is deprecated. Bind your callbacks using .on('error', fn) instead.");
+        Ember.Logger.warn("Ember.OAuth2.onError is deprecated and will be removed in version 0.5.0. Bind your callbacks using .on('error', fn) instead.");
         this.onError(err);
       },
 
