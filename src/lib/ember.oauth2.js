@@ -179,8 +179,11 @@
         if (window.focus) dialog.focus();
         var self = this;
         return new Ember.RSVP.Promise(function(resolve, reject) {
-          self.on('success', function() { resolve(self); });
-          self.on('error', function(error) { reject( new Error('Dialog failed with ' + error)); });
+          self.one('success', function() { resolve(dialog); });
+          self.one('error', function(error) { 
+            new Error('Dialog failed with ' + error);
+            reject(dialog);
+          });
         });
       },
 
