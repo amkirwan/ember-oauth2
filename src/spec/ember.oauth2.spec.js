@@ -104,6 +104,10 @@ describe("ember-oauth2", function() {
     it("should create a ENV object", function() {
       expect(window.ENV).toBeDefined();
     });
+
+    it("should define Ember.OAuth2.config object", function() {
+      expect(Ember.OAuth2.config).toBeDefined();
+    });
   });
 
   describe("Errors when configuration is incomplete", function() {
@@ -117,6 +121,7 @@ describe("ember-oauth2", function() {
       App.oauth = Ember.OAuth2.create({providerId: providerId});
       expect(function() {App.oauth.authorize();}).toThrow(new Error("No client id given."));
     });
+
 
     it("should require a authorization base uri", function() {
       window.ENV['ember-oauth2'].test_auth.authBaseUri = null;
