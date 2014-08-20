@@ -39,7 +39,9 @@
          *  @example
          *    App.oauth = Ember.OAuth2.create({providerId: 'google'});
          */
-        if (typeof Ember.OAuth2.config === 'object') {
+
+        // if Ember.OAuth2.config has keys use it instead of window.ENV
+        if (Object.keys(Ember.OAuth2.config).length) {
           Ember.Logger.warn("Ember.OAuth2.config is deprecated and will be removed in version 0.5.0. Set the config using window.ENV['ember-oauth2']");
           this.providerConfig = Ember.OAuth2.config[this.get('providerId')];
         } else {
