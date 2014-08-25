@@ -18,6 +18,7 @@ describe("ember-oauth2", function() {
     scope = 'public';
     state = '12345';
     
+    window.ENV = window.ENV || {};
     window.ENV['ember-oauth2'] = {
       test_auth: {
         clientId: clientId,
@@ -36,7 +37,9 @@ describe("ember-oauth2", function() {
         tokenPrefix: 'bar'
       }
     };
-    App.oauth = Ember.OAuth2.create({providerId: providerId});
+
+    window.Ember.OAuth2 = require('ember-oauth2')['default'];
+    App.oauth = window.Ember.OAuth2.create({providerId: providerId});
     App.oauth_auth_config = Ember.OAuth2.create({providerId: 'test_auth_config'});
     authorizeUri = authBaseUri;
     authorizeUri += '?response_type=token' +
@@ -75,6 +78,17 @@ describe("ember-oauth2", function() {
     };
   };
 
+  describe("ENV['ember-oauth2']  namespace should exist", function() {
+    it("should create a ENV object", function() {
+      expect(window.ENV).toBeDefined();
+    });
+
+    it("should create a ENV['ember-oauth2] ", function() {
+      expect(window.ENV['ember-oauth2']).toBeDefined();
+    });
+  });
+
+
   describe("initialize", function() {
     it("should be initialized with the properties of provider", function() {
       expect(App.oauth.providerId).toEqual('test_auth');
@@ -93,20 +107,6 @@ describe("ember-oauth2", function() {
 
     it("should set a custom token prefix", function() {
       expect(App.oauth_auth_config.tokenPrefix).toEqual('bar');
-    });
-  });
-
-  describe("Create namespaces and configure object", function() {
-    it("should create a object", function() {
-      expect(Ember.OAuth2).toBeDefined();
-    });
-
-    it("should create a ENV object", function() {
-      expect(window.ENV).toBeDefined();
-    });
-
-    it("should define Ember.OAuth2.config object", function() {
-      expect(Ember.OAuth2.config).toBeDefined();
     });
   });
 
