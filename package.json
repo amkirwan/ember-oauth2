@@ -31,6 +31,13 @@
     "grunt-contrib-jasmine": "~0.6.5",
     "grunt-versioner": "~0.1.x",
     "yuidocjs": "~0.3",
-    "grunt-shell": "~0.6.4"
+    "grunt-es6-module-transpiler": "~0.6.0",
+    "grunt-contrib-concat": "~0.5.0",
+    "grunt-contrib-clean": "~0.6.0",
+    "load-grunt-config": "~0.13.0",
+    "testem": "~0.6.18",
+    "grunt-contrib-testem": "~0.5.16",
+    "install": "~0.1.7",
+    "npm": "~1.4.24"
   }
 }
