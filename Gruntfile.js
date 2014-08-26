@@ -1,6 +1,6 @@
-'use strict';
-
 module.exports = function(grunt) {
+  'use strict';
+
   var config = require('load-grunt-config')(grunt, {
     pattern: ['grunt-template-*', '!grunt-template-jasmine-requirejs']
   });
@@ -25,4 +25,4 @@ module.exports = function(grunt) {
 
 
   grunt.initConfig(config);
-}
+};
