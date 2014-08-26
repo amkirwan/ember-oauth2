@@ -12,25 +12,43 @@ Current Version: **[0.4.0](https://github.com/amkirwan/ember-oauth2/releases/tag
 
 ## Dependencies
 
-Ember-OAuth2 requires jQuery.
+Ember-OAuth2 requires Ember and jQuery.
 
 ## Browser Support
 
 Ember-OAuth2 uses localStorage for saving the tokens, localStorage is supported in Firefox 3.5+, Safari 4+, IE8+, and Chrome.
 
+The latest version of Ember-OAuth2 supports ES6 modules and supports both AMD and a global version. This allows Ember-OAuth2 to be used in projects like [EmberCLI](https://github.com/stefanpenner/ember-cli) easier. The AMD version exports an 'ember-oauth2' module and the global distribution exports the library to the window.Ember.OAuth2 namespace.
+
 ## Configure
 
 First you must configure your OAuth provider. For Google you would configure it like this.
 
-```javascript
-  Ember.OAuth2.config = {
-    google: {
-      clientId: "xxxxxxxxxxxx",
-      authBaseUri: 'https://accounts.google.com/o/oauth2/auth',
-      redirectUri: 'https://oauth2-login-demo.appspot.com/oauth/callback',
-      scope: 'public write'
-    }
+New API for configuration >= 0.5.0 for AMD distribution `ember-oauth2.amd.js`. 
+
+```json
+window.ENV = window.ENV || {};
+window.ENV['ember-oauth2'] = {
+  google: {
+    clientId: "xxxxxxxxxxxx",
+    authBaseUri: 'https://accounts.google.com/o/oauth2/auth',
+    redirectUri: 'https://oauth2-login-demo.appspot.com/oauth/callback',
+    scope: 'public write'
   }
+}
+```
+
+The old API which is still supported using the global distribution `ember-oauth2.js`.
+
+```javascript
+Ember.OAuth2.config = {
+  google: {
+    clientId: "xxxxxxxxxxxx",
+    authBaseUri: 'https://accounts.google.com/o/oauth2/auth',
+    redirectUri: 'https://oauth2-login-demo.appspot.com/oauth/callback',
+    scope: 'public write'
+  }
+}
 ```
 
 The example above sets *google* as a *providerId* along with configuration information for the provider. The following params are required for configuring a valid provider *clientId*, *authBaseUri* and *redirectUri*. Depending on the provider you might need to provide additional and/or optional configuration key/values.
@@ -38,16 +56,17 @@ The example above sets *google* as a *providerId* along with configuration infor
 The configuration object allows you to also customize the prefix for the state and token that are stored in the browsers localStorage. The default value for the state prefix is *state* and the default for token is *token*. Using the previous example you can customize the prefixes by doing the following.
 
 ```javascript
-  Ember.OAuth2.config = {
-    google: {
-      clientId: "xxxxxxxxxxxx",
-      authBaseUri: 'https://accounts.google.com/o/oauth2/auth',
-      redirectUri: 'https://oauth2-login-demo.appspot.com/oauth/callback',
-      scope: 'public write',
-      statePrefix: 'foobar',
-      tokenPrefix: 'qux'
-    }
+window.ENV = window.ENV || {};
+window.ENV['ember-oauth2'] = {
+  google: {
+    clientId: "xxxxxxxxxxxx",
+    authBaseUri: 'https://accounts.google.com/o/oauth2/auth',
+    redirectUri: 'https://oauth2-login-demo.appspot.com/oauth/callback',
+    scope: 'public write',
+    statePrefix: 'foobar',
+    tokenPrefix: 'qux'
   }
+}
 ```
 
 The following are the options available for configuring a provider:
@@ -63,9 +82,19 @@ The following are the options available for configuring a provider:
 
 To sign into the OAuth2 provider create an auth object using the providerId and call the authorize method. Using the previous Google configuration example you would call it like this:
 
+Using the amd module `ember-oauth.amd.js`.
+
 ```javascript
-  App.oauth = Ember.OAuth2.create({providerId: 'google'});
-  App.oauth.authorize();
+var OAuth2 = require('ember-oauth2')['default'];
+App.oauth = OAuth2.create({providerId: 'google'});
+App.oauth.authorize();
+```
+
+Using the global distribution `ember-aouth2.js`.
+
+```javascript
+App.oauth = Ember.OAuth2.create({providerId: 'google'});
+App.oauth.authorize();
 ```
 
 Calling `authorize()` will open a new window and the OAuth provider's OAuth dialog will be displayed. If the user chooses to authenticate with your website upon authorization by OAuth provider the user will be redirected back to the redirectUri with the params access_token, token_type and state.
@@ -168,17 +197,18 @@ $ bower install
 
 Once the dependencies are installed for Ember.OAuth2 the you can run the following [grunt](http://gruntjs.com/getting-started) tasks.
 
-- The default grunt task, checks the files for errors with jshint, runs the jasmine, creates a minified version of ember.oauth2.js with uglify and copies a non-minified version of ember.oauth2.js and places them in the dist directory.
+- The default grunt task, checks the files for errors with jshint, runs testem, creates the amd and global transpiled version of the ES6 module in the dist folder 
 
 ```bash
 $ grunt
 ```
-- The grunt test task runs the jasmine tests against ember.oauth2.js
+- The grunt test task-amd and test-global tasks build the project and then run test against the given distribution.
 
 ```bash
-$ grunt test
+$ grunt test-amd
+$ grunt test-global
 ```
-- The grunt build task runs creates a minified version of ember.oauth2.js with uglify and copies a non-minified version of ember.oauth2.js and places them in the dist directory.
+- The grunt build task builds the project but skips running the tests.
 
 ```bash
 $ grunt build
