@@ -1,5 +1,10 @@
 # Changelog Ember-OAuth2
 
+## v0.5.0
+  - Update library to use ES6 module
+  - Export to both Global and AMD module
+  - Use window.ENV['ember-oauth2'] for config
+  - OpenWindow now returns reference to dialog on resolve, on reject object with reference to dialog and error.
 ## v0.4.0
   - Isolates function for opening window so that it can be overridden
   - Login dialog window returns a promise, it resolves on success and reject on error
