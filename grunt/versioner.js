@@ -9,7 +9,7 @@ module.exports = {
       './bower.json': ['./bower.json'], 
       './README.md': ['./README.md'], 
       './yuidoc.json': ['./yuidoc.json'],
-      './src/lib/ember.oauth2.js': ['./src/lib/ember.oauth2.js']
+      './lib/ember.oauth2.js': ['./src/lib/ember.oauth2.js']
     }
   }
 }
