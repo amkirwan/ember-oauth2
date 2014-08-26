@@ -10,6 +10,8 @@ describe("ember-oauth2", function() {
 
   var providerId, authBaseUri, callbackUriError, redirectUri, clientId, scope, state;
 
+  var OAuth2;
+
   beforeEach(function() {
     providerId = 'test_auth';
     authBaseUri = 'https://foobar.dev/oauth/authorize';
@@ -38,9 +40,9 @@ describe("ember-oauth2", function() {
       }
     };
 
-    window.Ember.OAuth2 = require('ember-oauth2')['default'];
-    App.oauth = window.Ember.OAuth2.create({providerId: providerId});
-    App.oauth_auth_config = Ember.OAuth2.create({providerId: 'test_auth_config'});
+    OAuth2 = require('ember-oauth2')['default'];
+    App.oauth = OAuth2.create({providerId: providerId});
+    App.oauth_auth_config = OAuth2.create({providerId: 'test_auth_config'});
     authorizeUri = authBaseUri;
     authorizeUri += '?response_type=token' +
                  '&redirect_uri=' + encodeURIComponent(redirectUri) +
@@ -112,26 +114,26 @@ describe("ember-oauth2", function() {
 
   describe("Errors when configuration is incomplete", function() {
     it("should require a providerId", function() {
-      App.oauth = Ember.OAuth2.create();
+      App.oauth = OAuth2.create();
       expect(function() {App.oauth.authorize();}).toThrow(new Error('No provider id given.'));
     });
 
     it("should require a clientId", function() {
       window.ENV['ember-oauth2'].test_auth.clientId = null;
-      App.oauth = Ember.OAuth2.create({providerId: providerId});
+      App.oauth = OAuth2.create({providerId: providerId});
       expect(function() {App.oauth.authorize();}).toThrow(new Error("No client id given."));
     });
 
 
     it("should require a authorization base uri", function() {
       window.ENV['ember-oauth2'].test_auth.authBaseUri = null;
-      App.oauth = Ember.OAuth2.create({providerId: providerId});
+      App.oauth = OAuth2.create({providerId: providerId});
       expect(function() {App.oauth.authorize();}).toThrow(new Error("No auth base uri given."));
     });
 
     it("should require a callback uri", function() {
       window.ENV['ember-oauth2'].test_auth.redirectUri = null;
-      App.oauth = Ember.OAuth2.create({providerId: providerId});
+      App.oauth = OAuth2.create({providerId: providerId});
       expect(function() {App.oauth.authorize();}).toThrow(new Error("No redirect uri given."));
     });
   });
@@ -141,7 +143,7 @@ describe("ember-oauth2", function() {
     var errorMessage;
     beforeEach(function() {
       errorMessage = 'error message.';
-      App.oauth = Ember.OAuth2.create({providerId: providerId});
+      App.oauth = OAuth2.create({providerId: providerId});
       promise = App.oauth.openWindow();
     });
 
