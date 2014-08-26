@@ -38,6 +38,7 @@
     "testem": "~0.6.18",
     "grunt-contrib-testem": "~0.5.16",
     "install": "~0.1.7",
-    "npm": "~1.4.24"
+    "npm": "~1.4.24",
+    "grunt-preprocess": "~4.0.0"
   }
 }

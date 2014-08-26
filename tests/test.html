@@ -13,18 +13,18 @@
     <script src="/vendor/handlebars/handlebars.runtime.js"></script>
     <script src="/vendor/sinonjs/sinon.js"></script>
     
-  <!-- endbuild -->
     <script src="/vendor/loader/loader.js"></script>
 
     <script src="/vendor/ember-resolver/dist/ember-resolver.js"></script>
     <script src="/vendor/ember-cli-shims/app-shims.js"></script>
 
+  <!-- @if amd=true -->
     <script src="/dist/ember-oauth2.amd.js"></script>
-
-  <!-- endbuild -->
-
   <!-- @endif -->
-  <!-- @if tests=true -->
+  <!-- @if global=true -->
+    <script src="/dist/ember-oauth2.js"></script>
+  <!-- @endif -->
+
   <link rel="stylesheet" href="/vendor/jasmine/lib/jasmine-core/jasmine.css">
   <script src="/vendor/jasmine/lib/jasmine-core/jasmine.js"></script>
   <script src="/vendor/jasmine/lib/jasmine-core/jasmine-html.js"></script>
@@ -57,15 +57,15 @@
     </p>
   <![endif]-->
 
-  <script src="/tests/ember-oauth2.spec.js"></script>
-  <script src="/testem.js"></script>
+  <!-- @if amd=true -->
+    <script src="/tests/ember-oauth2-amd.spec.js"></script>
   <!-- @endif -->
 
-  <!-- @if tests=false >
-  <script>
-    window.App = require('appkit/app')['default'].create(ENV.APP);
-  </script>
-  <!@endif -->
+  <!-- @if global=true -->
+  <script src="/tests/ember-oauth2-global.spec.js"></script>
+  <!-- @endif -->
+  
+  <script src="/testem.js"></script>
 
 </body>
 </html>
