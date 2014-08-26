@@ -5,7 +5,7 @@
   "url": "https://github.com/amkirwan/ember-oauth2",
   "options": {
     "exclude": "node_modules,bower_components,scripts",
-    "paths": "./src/lib/",
+    "paths": "./lib/ember-oauth2.js",
     "outdir": "./doc"
   }
 }
