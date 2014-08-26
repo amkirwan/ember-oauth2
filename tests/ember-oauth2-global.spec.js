@@ -18,29 +18,9 @@ describe("ember-oauth2", function() {
     scope = 'public';
     state = '12345';
     
-    // Old config using Ember.OAuth2 global instead of ENV
-    //
-    // Ember.OAuth2.config = {
-    //   test_auth: {
-    //     clientId: clientId,
-    //     authBaseUri: authBaseUri,
-    //     redirectUri: redirectUri,
-    //     scope: scope,
-    //     state: state
-    //   },
-    //   test_auth_config: {
-    //     clientId: clientId,
-    //     authBaseUri: authBaseUri,
-    //     redirectUri: redirectUri,
-    //     scope: scope,
-    //     state: state,
-    //     statePrefix: 'foo',
-    //     tokenPrefix: 'bar'
-    //   }
-    // };
+    // Using old config using Ember.OAuth2 global instead of ENV
     
-    window.ENV = window.ENV || {};
-    window.ENV['ember-oauth2'] = {
+    Ember.OAuth2.config = {
       test_auth: {
         clientId: clientId,
         authBaseUri: authBaseUri,
@@ -58,7 +38,7 @@ describe("ember-oauth2", function() {
         tokenPrefix: 'bar'
       }
     };
-
+    
     App.oauth = window.Ember.OAuth2.create({providerId: providerId});
     App.oauth_auth_config = Ember.OAuth2.create({providerId: 'test_auth_config'});
     authorizeUri = authBaseUri;
