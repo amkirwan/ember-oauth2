@@ -1,5 +1,9 @@
 # Changelog Ember-OAuth2
 
+## v0.5.1
+  - Fixed bug where the random UUID for the state was not being set.
+  - openWindow resolves with a reference to the dialog window and rejects
+    with an error if the dialog window fails to open.
 ## v0.5.0
   - Update library to use ES6 module
   - Export to both Global and AMD module
