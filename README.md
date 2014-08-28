@@ -140,7 +140,7 @@ This will process the returned params and save the `provider_id`, `access_token`
 
 After successful authorization and saving the access_token to the localStorage the `success` event will be called. This will allow the user to do any cleanup necessary or to retrieve user information from the OAuth provider. To configure the callback bind event handlers to the `success` and `error` events.
 
-As of version 0.4.0 the `authorize` call will return a `Ember.RSVP.Promise`. This will make it easier to handle callbacks
+As of version 0.4.0 the `authorize` call will return a `Ember.RSVP.Promise`. This will make it easier to handle callbacks. Authorize will `resolve` with a reference to the dialog window when it opens successfully and `rejects` with an error when the window fails to open.
 
 ```javascript
 App.oauth.authorize().then(function(stateObj){
