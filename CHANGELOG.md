@@ -1,5 +1,9 @@
 # Changelog Ember-OAuth2
 
+## v0.5.2
+  - Update Ember dependeny to 1.7
+  - Moved bower install dependences from vendor to bower_components
+  - Add dist dir to repo for bower installs 
 ## v0.5.1
   - Fixed bug where the random UUID for the state was not being set.
   - openWindow resolves with a reference to the dialog window and rejects
