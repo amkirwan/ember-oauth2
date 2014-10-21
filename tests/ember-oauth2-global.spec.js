@@ -141,27 +141,27 @@ describe("initialize", function() {
     beforeEach(function() {
       errorMessage = 'error message.';
       App.oauth = Ember.OAuth2.create({providerId: providerId});
-      promise = App.oauth.openWindow();
     });
 
     it("should resolve on success", function(done){
-      promise.then(function(value) {
-        expect(value).toBeDefined();
+      promise = App.oauth.openWindow();
+      promise.then(function(dialog) {
+        expect(dialog).toBeDefined();
+        dialog.close();
       }, function(error) {
-        expect(error.message).not.toEqual('Dialog failed with ' + errorMessage);
+        expect(error.message).not.toBeDefined();
       }).finally(done);
-
-      App.oauth.trigger('success');
     });
 
-    it("should error on error", function(done) {
-      promise.then(function(value) {
-        expect(value).not.toBeDefined();
-      }, function(value) {
-        expect(value).toBeDefined();
+    it("should error when the dialog does not open", function(done) {
+      var stub = sinon.stub(window, 'open').returns(false);
+      promise = App.oauth.openWindow();
+      promise.then(function(dialog) {
+        expect(dialog).not.toBeDefined();
+      }, function(error) {
+        expect(error.message).toEqual('Opening dialog login window failed.');
       }).finally(done);
-      
-      App.oauth.trigger('error', errorMessage);
+      stub.reset();
     });
   });
 
