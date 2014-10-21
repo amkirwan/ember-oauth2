@@ -120,7 +120,7 @@ define("ember-oauth2",
       * @overview OAuth2 library for Emberjs that stores tokens in the browsers localStorage
       * @license   Licensed under MIT license
       *            See https://raw.github.com/amkirwan/ember-oauth2/master/LICENSE
-      * @version   0.5.1
+      * @version   0.5.2
       *
       * @module ember-oauth2
       * @class ember-oauth2
@@ -548,7 +548,7 @@ define("ember-oauth2",
      * @property {String} VERSION
      * @final
     */
-    var VERSION = "0.5.1";
+    var VERSION = "0.5.2";
 
     /**
      * @method version
