@@ -1,5 +1,9 @@
 # Changelog Ember-OAuth2
 
+## v0.5.3
+  - Can now use window.EmberENV for config along with window.ENV.
+  - Fixed issue where mini files had wrong version header.
+  - Better error reporting when configuration file is not formatted correctly.
 ## v0.5.2
   - Update Ember dependeny to 1.7
   - Moved bower install dependences from vendor to bower_components
