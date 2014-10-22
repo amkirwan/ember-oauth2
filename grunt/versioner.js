@@ -1,7 +1,8 @@
 module.exports = {
   options: { 
     branch: 'master',
-    mode: 'production'
+    mode: 'test',
+    configs: ['pkg']
   },
   default: {
     files: {
