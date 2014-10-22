@@ -150,10 +150,21 @@ define("ember-oauth2",
         // if Ember.OAuth2.config has keys use it instead of window.ENV
         if (Ember.OAuth2 && Ember.OAuth2.config && Object.keys(Ember.OAuth2.config).length) {
           Ember.Logger.warn("Ember.OAuth2.config is deprecated and will be removed in future versions. Set the config using window.ENV['ember-oauth2']");
-          this.providerConfig = Ember.OAuth2.config[this.get('providerId')];
+          this.set('config', Ember.OAuth2.config);
+        } else if (window.EmberENV && window.EmberENV['ember-oauth2']) {
+          this.set('config', window.EmberENV['ember-oauth2']);
+        } else if (window.ENV && window.ENV['ember-oauth2']) {
+          this.set('config', window.ENV['ember-oauth2']);
         } else {
-          this.providerConfig = window.ENV['ember-oauth2'][this.get('providerId')];
+          throw new Error('Cannot find the ember-oauth2 config.');
         }
+
+        if (this.get('config')[this.get('providerId')] === undefined) {
+          throw new Error("Cannot find the providerId: '" + this.get('providerId') + "' in the config.");
+        }
+
+        this.set('providerConfig', this.get('config')[this.get('providerId')]);
+
         /**
          * The prefix name for the state key stored in the localStorage.
          *

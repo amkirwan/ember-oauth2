@@ -116,9 +116,13 @@ describe("ember-oauth2", function() {
   });
 
   describe("Errors when configuration is incomplete", function() {
-    it("should require a providerId", function() {
-      App.oauth = OAuth2.create();
-      expect(function() {App.oauth.authorize();}).toThrow(new Error('No provider id given.'));
+    it("throws an error when there is no configuration", function() {
+      window.ENV = undefined;
+      expect(function() {OAuth2.create();}).toThrow(new Error('Cannot find the ember-oauth2 config.'));
+    });
+
+    it("should require a providerId in the config", function() {
+      expect(function() {OAuth2.create({providerId: 'noProviderIdWithName'});}).toThrow(new Error("Cannot find the providerId: 'noProviderIdWithName' in the config."));
     });
 
     it("should require a clientId", function() {
@@ -126,7 +130,6 @@ describe("ember-oauth2", function() {
       App.oauth = OAuth2.create({providerId: providerId});
       expect(function() {App.oauth.authorize();}).toThrow(new Error("No client id given."));
     });
-
 
     it("should require a authorization base uri", function() {
       window.ENV['ember-oauth2'].test_auth.authBaseUri = null;
