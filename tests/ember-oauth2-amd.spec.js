@@ -102,6 +102,8 @@ describe("ember-oauth2", function() {
       expect(App.oauth.state).toEqual(state);
       expect(App.oauth.statePrefix).toEqual('state');
       expect(App.oauth.tokenPrefix).toEqual('token');
+      expect(App.oauth.config).toEqual(window.ENV['ember-oauth2']);
+      expect(App.oauth.providerConfig).toEqual(window.ENV['ember-oauth2']['test_auth']);
     });
 
     it("should set a custom state prefix", function() {
