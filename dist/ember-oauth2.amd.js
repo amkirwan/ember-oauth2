@@ -47,7 +47,7 @@ define("ember-oauth2",
           throw new Error('Cannot find the ember-oauth2 config.');
         }
 
-        if (this.get('config')[this.get('providerId')] === undefined) {
+        if (!this.get('config')[this.get('providerId')]) {
           throw new Error("Cannot find the providerId: '" + this.get('providerId') + "' in the config.");
         }
 
