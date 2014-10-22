@@ -20,6 +20,7 @@ describe("ember-oauth2", function() {
     scope = 'public';
     state = '12345';
     
+    window.EmberENV = {};
     window.ENV = window.ENV || {};
     window.ENV['ember-oauth2'] = {
       test_auth: {
