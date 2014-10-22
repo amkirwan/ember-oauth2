@@ -38,7 +38,7 @@ window.ENV['ember-oauth2'] = {
 }
 ```
 
-If using ember-cli, add the configuration to `config/environment.js`:
+If using ember-cli, you can add the configuration to `config/environment.js`:
 
 ```
 EmberENV: {
