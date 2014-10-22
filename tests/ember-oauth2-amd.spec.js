@@ -81,7 +81,7 @@ describe("ember-oauth2", function() {
     };
   };
 
-  describe("ENV['ember-oauth2']  namespace should exist", function() {
+  describe("ENV['ember-oauth2'] namespace should exist", function() {
     it("should create a ENV object", function() {
       expect(window.ENV).toBeDefined();
     });
@@ -90,7 +90,6 @@ describe("ember-oauth2", function() {
       expect(window.ENV['ember-oauth2']).toBeDefined();
     });
   });
-
 
   describe("initialize", function() {
     it("should be initialized with the properties of provider", function() {
