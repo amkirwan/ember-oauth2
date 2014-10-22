@@ -38,6 +38,25 @@ window.ENV['ember-oauth2'] = {
 }
 ```
 
+If using ember-cli, add the configuration to `config/environment.js`:
+
+```
+EmberENV: {
+  FEATURES: {
+    // Here you can enable experimental features on an ember canary build
+    // e.g. 'with-controller': true
+  },
+  'ember-oauth2': {
+    google: {
+      clientId: "xxxxxxxxxxxx",
+      authBaseUri: 'https://accounts.google.com/o/oauth2/auth',
+      redirectUri: 'https://oauth2-login-demo.appspot.com/oauth/callback',
+      scope: 'public write'
+    }
+  }
+}
+```
+
 The old API which is still supported using the global distribution `ember-oauth2.js`.
 
 ```javascript
