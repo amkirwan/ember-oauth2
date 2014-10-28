@@ -10,6 +10,8 @@ This creates an OAuth 2.0 Ember object class for handling authentication with OA
 
 Current Version: **[0.5.3](https://github.com/amkirwan/ember-oauth2/releases/tag/v0.5.3)**
 
+The EmberCli addon [EmberTokenAuth](https://github.com/amkirwan/ember-token-auth) demonstrates how to use Ember-OAuth2 library for authentication. 
+
 ## Dependencies
 
 Ember-OAuth2 requires Ember and jQuery.
