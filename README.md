@@ -28,7 +28,7 @@ First you must configure your OAuth provider. For Google you would configure it 
 
 New API for configuration >= 0.5.0 for AMD distribution `ember-oauth2.amd.js`. 
 
-```json
+```
 window.ENV = window.ENV || {};
 window.ENV['ember-oauth2'] = {
   google: {
