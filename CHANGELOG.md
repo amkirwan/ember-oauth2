@@ -1,5 +1,7 @@
 # Changelog Ember-OAuth2
 
+## v0.5.4
+  - Added support for versions of Ember >= 1.7
 ## v0.5.3
   - Can now use window.EmberENV for config along with window.ENV.
   - Fixed issue where mini files had wrong version header.
