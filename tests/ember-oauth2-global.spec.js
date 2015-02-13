@@ -340,6 +340,17 @@ describe("initialize", function() {
     });
   });
 
+  describe("Remove the state from localstorage", function() {
+    beforeEach(function() {
+      App.oauth.saveState(state, savedState);
+    });
+
+    it("removes the state", function() {
+      App.oauth.removeState();
+      expect(App.oauth.getState(state)).toEqual(null);
+    });
+  });
+
   describe("Remove the token from localstorage", function() {
     var token;
     beforeEach(function() {
