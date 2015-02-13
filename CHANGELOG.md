@@ -1,5 +1,9 @@
 # Changelog Ember-OAuth2
 
+## v0.5.5
+  - Provide funtion to remove the token from localstorage
+  - Provide funtion to remove the state from localstorage
+  - Funtion to get the stateKeyName and tokenKeyName
 ## v0.5.4
   - Added support for versions of Ember >= 1.7
 ## v0.5.3
