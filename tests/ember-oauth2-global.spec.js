@@ -109,6 +109,12 @@ describe("initialize", function() {
     });
   });
 
+  describe("get the localstorage token name", function() {
+    it('returns the providerId', function() {
+      expect(App.oauth.tokenKeyName()).toEqual('token-test_auth');
+    });
+  });
+
   describe("Errors when configuration is incomplete", function() {
     it("throws an error when there is no configuration", function() {
       Ember.OAuth2.config = undefined;
