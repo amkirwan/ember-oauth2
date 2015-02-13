@@ -340,4 +340,19 @@ describe("initialize", function() {
     });
   });
 
+  describe("Remove the token from localstorage", function() {
+    var token;
+    beforeEach(function() {
+      token = { provider_id: providerId, expires_in: '12345', scope: scope, access_token: '12345abc' };
+      App.oauth.saveToken(token);
+    });
+
+    it('removes the toke from localstorage', function() {
+      expect(App.oauth.getToken()).toEqual(token);
+      App.oauth.removeToken();
+      expect(App.oauth.getToken()).toEqual(null);
+    });
+
+
+  });
 });
