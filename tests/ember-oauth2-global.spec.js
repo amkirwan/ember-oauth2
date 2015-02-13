@@ -109,8 +109,12 @@ describe("initialize", function() {
     });
   });
 
-  describe("get the localstorage token name", function() {
-    it('returns the providerId', function() {
+  describe("get the localstorage items", function() {
+    it('returns the state', function() {
+      expect(App.oauth.stateKeyName()).toEqual('state-12345');
+    });
+
+    it('returns the provider', function() {
       expect(App.oauth.tokenKeyName()).toEqual('token-test_auth');
     });
   });
