@@ -120,7 +120,7 @@ define("ember-oauth2",
       * @overview OAuth2 library for Emberjs that stores tokens in the browsers localStorage
       * @license   Licensed under MIT license
       *            See https://raw.github.com/amkirwan/ember-oauth2/master/LICENSE
-      * @version   0.5.4
+      * @version   0.5.5
       *
       * @module ember-oauth2
       * @class ember-oauth2
@@ -453,7 +453,7 @@ define("ember-oauth2",
        * @param {Object} requestObj Properties of the request state to save in localStorage
        */
       saveState: function(state, requestObj) {
-        window.localStorage.setItem(this.get('statePrefix') + '-' + state, JSON.stringify(requestObj));
+        window.localStorage.setItem(this.stateKeyName(), JSON.stringify(requestObj));
       },
 
       /**
@@ -464,8 +464,9 @@ define("ember-oauth2",
        * @return {Object} Properties of the request state
        */
       getState: function(state) {
-        var obj = JSON.parse(window.localStorage.getItem(this.get('statePrefix') + '-'  + state));
-        window.localStorage.removeItem(this.get('statePrefix') + '-' + state);
+        var keyName = this.stateKeyName();
+        var obj = JSON.parse(window.localStorage.getItem(keyName));
+        this.removeState();
 
         return obj;
       },
@@ -489,9 +490,28 @@ define("ember-oauth2",
 
         for(var j = 0, len = toRemove.length; j < len; j++) {
           name = toRemove[j];
-          window.localStorage.removeItem(name);
+          this.removeState(name);
         }
         return toRemove;
+      },
+
+      /**
+       * The key name to use for saving state to localstorage
+       *
+       * @method stateKeyName
+       */
+      stateKeyName: function() {
+        return this.get('statePrefix') + '-' + this.get('state');
+      },
+
+
+      /**
+       * The key name to use for saving the token to localstorage
+       *
+       * @method tokenKeyName
+       */
+      tokenKeyName: function() {
+        return this.get('tokenPrefix') + '-' + this.get('providerId');
       },
 
       /**
@@ -505,7 +525,25 @@ define("ember-oauth2",
        * @param {Object} token Saves the params in the response from the OAuth2 server to localStorage with the key 'tokenPrefix-providerId
        */
       saveToken: function(token) {
-        window.localStorage.setItem(this.get('tokenPrefix') + '-' + this.get('providerId'), JSON.stringify(token));
+        window.localStorage.setItem(this.tokenKeyName(), JSON.stringify(token));
+      },
+
+      /**
+       * remove the state from localstorage
+       */
+      removeState: function(stateName) {
+        if (stateName) {
+          return window.localStorage.removeItem(stateName);
+        } else {
+          return window.localStorage.removeItem(this.stateKeyName());
+        }
+      },
+
+      /**
+       * remove the token from localstorage
+       */
+      removeToken: function() {
+        return window.localStorage.removeItem(this.tokenKeyName());
       },
 
       /**
@@ -513,7 +551,7 @@ define("ember-oauth2",
        * @return {Object} The params from the OAuth2 response from localStorage with the key 'tokenPrefix-providerId'.
        */
       getToken: function() {
-        var token = JSON.parse(window.localStorage.getItem( this.get('tokenPrefix') + '-' + this.get('providerId')));
+        var token = JSON.parse(window.localStorage.getItem(this.tokenKeyName())); 
         if (!token) return null;
         if (!token.access_token) return null;
         return token;
@@ -559,7 +597,7 @@ define("ember-oauth2",
      * @property {String} VERSION
      * @final
     */
-    var VERSION = "0.5.4";
+    var VERSION = "0.5.5";
 
     /**
      * @method version
