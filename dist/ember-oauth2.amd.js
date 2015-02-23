@@ -21,7 +21,7 @@ define("ember-oauth2",
        */
       init: function() {
         var providerConfig;
-        
+
         this._super();
 
         /**
@@ -117,7 +117,6 @@ define("ember-oauth2",
         
         this.set('providerConfig', providerConfig);
 
-        if (!providerConfig.providerId)  throw new Error('No provider id given.');
         if (!providerConfig.clientId)    throw new Error('No client id given.');
         if (!providerConfig.authBaseUri) throw new Error('No auth base uri given.');
         if (!providerConfig.redirectUri) throw new Error('No redirect uri given.');
