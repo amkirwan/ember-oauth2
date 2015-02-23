@@ -20,9 +20,10 @@ define("ember-oauth2",
        * @method init
        */
       init: function() {
-        var providerConfig = this.get('config')[this.get('providerId')];
-
+        var providerConfig;
+        
         this._super();
+
         /**
          * The configuration object for the given provider id.
          *  @property {Object} providerConfig
@@ -48,6 +49,8 @@ define("ember-oauth2",
         } else {
           throw new Error('Cannot find the ember-oauth2 config.');
         }
+
+        providerConfig = this.get('config')[this.get('providerId')];
 
         if (!providerConfig) {
           throw new Error("Cannot find the providerId: '" + this.get('providerId') + "' in the config.");
