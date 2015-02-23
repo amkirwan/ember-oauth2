@@ -21,6 +21,8 @@ define("ember-oauth2",
        * @method init
        */
       init: function() {
+        var providerConfig = this.get('config')[this.get('providerId')];
+
         this._super();
         /**
          * The configuration object for the given provider id.
@@ -48,43 +50,12 @@ define("ember-oauth2",
           throw new Error('Cannot find the ember-oauth2 config.');
         }
 
-        if (!this.get('config')[this.get('providerId')]) {
+        if (!providerConfig) {
           throw new Error("Cannot find the providerId: '" + this.get('providerId') + "' in the config.");
         }
 
-        this.set('providerConfig', this.get('config')[this.get('providerId')]);
 
-        /**
-         * The prefix name for the state key stored in the localStorage.
-         *
-         * @property statePrefix
-         * @type String
-         * @default "state"
-         */
-        this.set('statePrefix', 'state');
-        /**
-         * The prefix name for the token key stored in the localStorage.
-         *
-         * @property tokenPrefix
-         * @type String
-         * @default "token"
-         */
-        this.set('tokenPrefix', 'token');
-
-        /**
-         * @property {String} clientId
-         */
-        /**
-         * @property {String} authBaseUri
-         */
-        /**
-         * @property {String} redirectUri
-         */
-        /**
-         * @property {String} scope
-         */
-        // sets the properties from the providerConfig and overrides any default settings.
-        this.setProperties(this.providerConfig);
+        this.setupProviderConfig(providerConfig);
 
         // Bind deprecated event handlers
         /**
@@ -120,8 +91,8 @@ define("ember-oauth2",
        */
       uuid: function() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-              var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
-                  return v.toString(16);
+          var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
+          return v.toString(16);
         });
       },
 
@@ -139,14 +110,60 @@ define("ember-oauth2",
        * @method requestObj
        * @return {Object} request object
        */
-      requestObj: function() {
-        var request = {};
-        request.response_type = this.get('response_type') || 'token';
-        request.providerId = this.get('providerId');
-        request.state = this.get('state');
-        request.client_id = this.get('clientId');
-        if (this.get('scope')) request.scope = this.get('scope');
-        return request;
+      setupProviderConfig: function(providerConfig) {
+        var request = Ember.copy(providerConfig);
+        
+        this.set('providerConfig', providerConfig);
+
+        if (!providerConfig.providerId)  throw new Error('No provider id given.');
+        if (!providerConfig.clientId)    throw new Error('No client id given.');
+        if (!providerConfig.authBaseUri) throw new Error('No auth base uri given.');
+        if (!providerConfig.redirectUri) throw new Error('No redirect uri given.');
+
+        // remove the authBaseUri from the request
+        this.set('authBaseUri', request.authUri);
+        delete request.authUri;
+
+        // remove the statePrefix from the request
+        var statePrefix = request.statePrefix || 'state';
+        delete request.statePrefix;
+        this.set('statePrefix', statePrefix);
+
+        // remove the tokenPrefix from the request
+        var tokenPrefix = request.tokenPrefix || 'token';
+        delete request.tokenPrefix;
+        this.set('tokenPrefix', tokenPrefix);
+
+        // merge with default values
+        request.response_type = request.response_type || 'token';
+        request.state         = request.state || this.uuid();
+        
+        this.set('requestObj', request);
+        this.setProperties(request);
+      },
+
+      /**
+       * Transform the request object into a uri string
+       *
+       * @method requestObj
+       * @return {Object} request object
+       */
+      requestObjectToURI: function() {
+        var request = this.get('providerConfig');
+        var segments = [];
+
+        for (var key in request) {
+          if (request.hasOwnProperty(key)) {
+            if (key === 'scope') {
+              segments.push( key + '=' + encodeURIComponent(request[key]).replace('%20', '+') );
+            }
+            else {
+              segments.push( key + '=' + encodeURIComponent(request[key]) );
+            }
+          }
+        }
+
+        return '?' + segments.join('&');
       },
 
       /**
@@ -154,15 +171,7 @@ define("ember-oauth2",
        * @return {String} Authorization uri for generating an OAuth2 token
        */
       authUri: function() {
-        if (!this.get('state')) { this.set('state', this.uuid()); }
-        var uri = this.get('authBaseUri');
-        var response_type = this.get('response_type') || 'token';
-        uri += '?response_type=' + encodeURIComponent(response_type) +
-            '&redirect_uri=' + encodeURIComponent(this.get('redirectUri')) +
-            '&client_id=' + encodeURIComponent(this.get('clientId')) +
-            '&state=' + encodeURIComponent(this.get('state'));
-        if (this.get('scope')) uri += '&scope=' + encodeURIComponent(this.get('.scope')).replace('%20', '+');
-        return uri;
+        return this.get('authBaseUri') + this.requestObjectToURI();
       },
 
       /**
@@ -172,13 +181,9 @@ define("ember-oauth2",
        * @return {Promise}
        */
       authorize: function() {
-        if (!this.get('providerId')) throw new Error('No provider id given.');
-        if (!this.get('clientId')) throw new Error('No client id given.');
-        if (!this.get('authBaseUri')) throw new Error('No auth base uri given.');
-        if (!this.get('redirectUri')) throw new Error('No redirect uri given.');
         var authorizeUri = this.authUri();
         this.clearStates();
-        this.saveState(this.get('state'), this.requestObj());
+        this.saveState(this.get('requestObj'));
         return this.openWindow(authorizeUri);
       },
 
@@ -339,10 +344,9 @@ define("ember-oauth2",
 
       /**
        * @method saveState
-       * @param {String} state The state uuid
        * @param {Object} requestObj Properties of the request state to save in localStorage
        */
-      saveState: function(state, requestObj) {
+      saveState: function(requestObj) {
         window.localStorage.setItem(this.stateKeyName(), JSON.stringify(requestObj));
       },
 
