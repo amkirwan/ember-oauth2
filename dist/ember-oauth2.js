@@ -120,7 +120,7 @@ define("ember-oauth2",
 
         if (!providerConfig.authBaseUri)  throw new Error('No auth base uri given.');
         if (!providerConfig.client_id)    throw new Error('No client id given.');
-        if (!providerConfig.redirect_uri) throw new Error('No redirect uri given.');
+        if (!providerConfig.redirect_uri && !this.get('redirect_uri')) throw new Error('No redirect uri given.');
 
         // remove the authBaseUri from the request
         this.set('authBaseUri', request.authUri);
@@ -137,6 +137,7 @@ define("ember-oauth2",
         this.set('tokenPrefix', tokenPrefix);
 
         // merge with default values
+        request.redirect_uri  = request.redirect_uri || this.get('redirect_uri');
         request.response_type = request.response_type || 'token';
         request.state         = request.state || this.uuid();
         
