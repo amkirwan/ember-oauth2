@@ -139,11 +139,11 @@ define("ember-oauth2",
        * @return {Object} request object
        */
       requestObj: function() {
-        var request = { 'response_type': 'token' };
+        var request = {};
+        request.response_type = this.get('response_type') || 'token';
         request.providerId = this.get('providerId');
         request.state = this.get('state');
         request.client_id = this.get('clientId');
-        request.state = this.get('state');
         if (this.get('scope')) request.scope = this.get('scope');
         return request;
       },
@@ -155,7 +155,8 @@ define("ember-oauth2",
       authUri: function() {
         if (!this.get('state')) { this.set('state', this.uuid()); }
         var uri = this.get('authBaseUri');
-        uri += '?response_type=token' +
+        var response_type = this.get('response_type') || 'token';
+        uri += '?response_type=' + encodeURIComponent(response_type) +
             '&redirect_uri=' + encodeURIComponent(this.get('redirectUri')) +
             '&client_id=' + encodeURIComponent(this.get('clientId')) +
             '&state=' + encodeURIComponent(this.get('state'));
