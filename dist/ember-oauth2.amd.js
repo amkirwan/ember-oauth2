@@ -15,7 +15,7 @@ define("ember-oauth2",
       */
     __exports__["default"] = Ember.Object.extend(Ember.Evented, {
       /**
-       * Initializes the Ember.OAuth2 object when using Ember.OAuth2.create({providerId: 'providerId'}). The following options are available for the configuring a provider: clientId, authBaseUri, redirectUri, scope, statePrefix and tokenPrefix. The clientId, authBaseUri and redirectUri are required. The statePrefix has a default value of 'state' and the tokenPrefix has a default value of 'token'.
+       * Initializes the Ember.OAuth2 object when using Ember.OAuth2.create({providerId: 'providerId'}). The following options are available for the configuring a provider: client_id, authBaseUri, redirect_uri, scope, statePrefix and tokenPrefix. The client_id, authBaseUri and redirect_uri are required. The statePrefix has a default value of 'state' and the tokenPrefix has a default value of 'token'.
        *
        * @method init
        */
@@ -28,9 +28,9 @@ define("ember-oauth2",
          * The configuration object for the given provider id.
          *  @property {Object} providerConfig
          *  @property {Object} providerConfig.providerId **Required**
-         *  @property {String} providerConfig.providerId.clientId **Required**
+         *  @property {String} providerConfig.providerId.client_id **Required**
          *  @property {String} providerConfig.providerId.authBaseUri **Required**
-         *  @property {String} providerConfig.providerId.redirectUri **Required**
+         *  @property {String} providerConfig.providerId.redirect_uri **Required**
          *  @property {String} providerConfig.providerId.scope **Optional**
          *  @property {String} providerConfig.providerId.statePrefix **Default:** "state", **Optional**
          *  @property {String} providerConfig.providerId.tokenPrefix **Default:** "prefix", **Optional**
@@ -117,9 +117,9 @@ define("ember-oauth2",
         
         this.set('providerConfig', providerConfig);
 
-        if (!providerConfig.clientId)    throw new Error('No client id given.');
-        if (!providerConfig.authBaseUri) throw new Error('No auth base uri given.');
-        if (!providerConfig.redirectUri) throw new Error('No redirect uri given.');
+        if (!providerConfig.authBaseUri)  throw new Error('No auth base uri given.');
+        if (!providerConfig.client_id)    throw new Error('No client id given.');
+        if (!providerConfig.redirect_uri) throw new Error('No redirect uri given.');
 
         // remove the authBaseUri from the request
         this.set('authBaseUri', request.authUri);
