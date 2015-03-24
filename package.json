@@ -39,5 +39,8 @@
     "grunt-contrib-testem": "~0.5.16",
     "install": "~0.1.7",
     "grunt-preprocess": "~4.0.0"
+  },
+  "scripts": {
+    "test": "grunt test-travis"
   }
 }

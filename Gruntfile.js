@@ -15,6 +15,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build', ['clean', 'jshint:lib', 'transpile:lib', 'concat', 'browser', 'uglify', 'jshint:dist']);
 
   grunt.registerTask('test-amd', ['default']);
+  grunt.registerTask('test-travis', ['default']);
   grunt.registerTask('test-global', ['build', 'jshint:tests', 'preprocess:global', 'testem']);
 
   grunt.registerTask('norelease:patch', ['versioner:bumpOnly:default:patch', 'default']);
