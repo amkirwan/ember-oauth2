@@ -41,6 +41,6 @@
     "grunt-preprocess": "~4.0.0"
   },
   "scripts": {
-    "test": "grunt test-travis"
+    "test": "grunt --verbose test-travis"
   }
 }
