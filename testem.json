@@ -2,5 +2,5 @@
   "framework": "jasmine2",
   "test_page": "tmp/result/test.html",
   "launch_in_dev": ["PhantomJS", "Chrome"],
-  "launch_in_ci": ["PhantomJs"]
+  "launch_in_ci": ["PhantomJS"]
 }
