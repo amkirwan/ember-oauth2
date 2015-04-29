@@ -69,6 +69,14 @@ define("ember-oauth2",
          * @default "token"
          */
         this.set('tokenPrefix', 'token');
+        /**
+         * The response type for the authorization request.
+         *
+         * @property responseType
+         * @type String
+         * @default "token"
+         */
+        this.set('responseType', 'token');
 
         /**
          * @property {String} clientId
@@ -139,7 +147,8 @@ define("ember-oauth2",
        * @return {Object} request object
        */
       requestObj: function() {
-        var request = { 'response_type': 'token' };
+        var request = {};
+        request.response_type = this.get('responseType');
         request.providerId = this.get('providerId');
         request.state = this.get('state');
         request.client_id = this.get('clientId');
@@ -155,7 +164,7 @@ define("ember-oauth2",
       authUri: function() {
         if (!this.get('state')) { this.set('state', this.uuid()); }
         var uri = this.get('authBaseUri');
-        uri += '?response_type=token' +
+        uri += '?response_type=' + encodeURIComponent(this.get('responseType')) +
             '&redirect_uri=' + encodeURIComponent(this.get('redirectUri')) +
             '&client_id=' + encodeURIComponent(this.get('clientId')) +
             '&state=' + encodeURIComponent(this.get('state'));
@@ -204,7 +213,8 @@ define("ember-oauth2",
         @return {String} the access_token from the params
       */
       authSuccess: function(params) {
-        return params.access_token;
+        return (this.get('responseType') === 'token' && params.access_token) ||
+                (this.get('responseType') === 'code' && params.code);
       },
 
       /**
@@ -256,8 +266,14 @@ define("ember-oauth2",
         if (this.authSuccess(params)) {
           var stateObj = this.getState(params.state);
           this.checkState(stateObj);
-          this.saveToken(this.generateToken(params));
-          this.trigger('success', stateObj);
+          
+          if (this.get('responseType') === "code") {
+            this.trigger('success', params.code);
+          }
+          else {
+            this.saveToken(this.generateToken(params));
+            this.trigger('success', stateObj);  
+          }  
         } else {
           this.trigger('error', params);
         }
