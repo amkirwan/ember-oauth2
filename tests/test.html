@@ -18,12 +18,7 @@
     <script src="/bower_components/ember-resolver/dist/ember-resolver.js"></script>
     <script src="/bower_components/ember-cli-shims/app-shims.js"></script>
 
-  <!-- @if amd=true -->
     <script src="/dist/ember-oauth2.amd.js"></script>
-  <!-- @endif -->
-  <!-- @if global=true -->
-    <script src="/dist/ember-oauth2.js"></script>
-  <!-- @endif -->
 
   <link rel="stylesheet" href="/bower_components/jasmine/lib/jasmine-core/jasmine.css">
   <script src="/bower_components/jasmine/lib/jasmine-core/jasmine.js"></script>
@@ -49,22 +44,8 @@
 
 </head>
 <body>
-  <!--[if lt IE 8]>
-    <p class="browsehappy">
-      You are using an <strong>outdated</strong> browser. Please
-      <a href="http://browsehappy.com/">upgrade your browser</a>
-      to improve your experience.
-    </p>
-  <![endif]-->
+  <script src="/tests/ember-oauth2-amd.spec.js"></script>
 
-  <!-- @if amd=true -->
-    <script src="/tests/ember-oauth2-amd.spec.js"></script>
-  <!-- @endif -->
-
-  <!-- @if global=true -->
-  <script src="/tests/ember-oauth2-global.spec.js"></script>
-  <!-- @endif -->
-  
   <script src="/testem.js"></script>
 
 </body>

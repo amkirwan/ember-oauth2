@@ -6,8 +6,7 @@ module.exports = {
   },
   dist: {
     files: {
-      './dist/ember-oauth2.min.js': ['dist/ember-oauth2.js'],
-      './dist/ember-oauth2.amd.min.js': ['dist/ember-oauth2.js']
+      './dist/ember-oauth2.amd.min.js': ['dist/ember-oauth2.amd.js']
     }
   }
 }
