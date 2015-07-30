@@ -25,20 +25,20 @@
   "devDependencies": {
     "grunt": "~0.4.2",
     "load-grunt-tasks": "*",
-    "grunt-contrib-copy": "~0.4.1",
-    "grunt-contrib-jshint": "~0.10.0",
-    "grunt-contrib-uglify": "~0.2.2",
-    "grunt-contrib-jasmine": "~0.6.5",
-    "grunt-versioner": "~0.1.x",
-    "yuidocjs": "~0.3.46",
+    "grunt-contrib-copy": "~0.8.0",
+    "grunt-contrib-jshint": "~0.11.2",
+    "grunt-contrib-uglify": "~0.9.1",
+    "grunt-contrib-jasmine": "~0.9.0",
+    "grunt-versioner": "~0.1.10",
+    "yuidocjs": "~0.8.1",
     "grunt-es6-module-transpiler": "~0.6.0",
     "grunt-contrib-concat": "~0.5.0",
     "grunt-contrib-clean": "~0.6.0",
-    "load-grunt-config": "~0.13.0",
-    "testem": "~0.7.6",
+    "load-grunt-config": "~0.17.2",
+    "testem": "~0.9.1",
     "grunt-contrib-testem": "~0.5.16",
     "install": "~0.1.7",
-    "grunt-preprocess": "~4.0.0"
+    "grunt-preprocess": "~5.0.0"
   },
   "scripts": {
     "test": "grunt --verbose test-travis"
