@@ -245,9 +245,14 @@ describe("ember-oauth2", function() {
       spy.reset();
     });
 
-    it("should return the localStorage by state", function() {
+    it("returns the localStorage by state", function() {
       App.oauth.saveState(state, savedState);
-      expect(App.oauth.getState(state)).toEqual(savedState);
+      expect(App.oauth.getState()).toEqual(savedState);
+    });
+
+    it("returns the state by the given localStorage key name", function() {
+      App.oauth.saveState(state, savedState);
+      expect(App.oauth.getState('state-' + state)).toEqual(savedState);
     });
 
     it("should remove the localStorage state after retreiving", function() {
