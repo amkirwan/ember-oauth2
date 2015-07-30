@@ -8,7 +8,7 @@ define("ember-oauth2",
       * @overview OAuth2 library for Emberjs that stores tokens in the browsers localStorage
       * @license   Licensed under MIT license
       *            See https://raw.github.com/amkirwan/ember-oauth2/master/LICENSE
-      * @version   0.5.5
+      * @version   0.6.0
       *
       * @module ember-oauth2
       * @class ember-oauth2
@@ -191,7 +191,6 @@ define("ember-oauth2",
       openWindow: function(url) {
         var dialog = window.open(url, 'Authorize', 'height=600, width=450');
         if (window.focus && dialog) { dialog.focus(); }
-        var self = this;
         return new Ember.RSVP.Promise(function(resolve, reject) {
           if (dialog) { resolve(dialog); } 
           else { reject(new Error('Opening dialog login window failed.')); } 
@@ -326,7 +325,7 @@ define("ember-oauth2",
        */
       parseCallback: function(locationHash) {
         var oauthParams = {};
-        var queryString = locationHash.substring(1);
+        var queryString = locationHash.substring(locationHash.indexOf('?'));
         var regex = /([^#?&=]+)=([^&]*)/g;
         var match;
         while ((match = regex.exec(queryString)) !== null) {
@@ -352,7 +351,7 @@ define("ember-oauth2",
        * @return {Object} Properties of the request state
        */
       getState: function(state) {
-        var keyName = this.stateKeyName();
+        var keyName = state || this.stateKeyName();
         var obj = JSON.parse(window.localStorage.getItem(keyName));
         this.removeState();
 
@@ -485,7 +484,7 @@ define("ember-oauth2",
      * @property {String} VERSION
      * @final
     */
-    var VERSION = "0.5.5";
+    var VERSION = "0.6.0";
 
     /**
      * @method version
