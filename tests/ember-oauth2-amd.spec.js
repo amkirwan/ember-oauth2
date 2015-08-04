@@ -30,6 +30,14 @@ describe("ember-oauth2", function() {
         scope: scope,
         state: state
       },
+      test_auth_code: {
+        clientId: clientId,
+        authBaseUri: authBaseUri,
+        redirectUri: redirectUri,
+        responseType: 'code',
+        scope: scope,
+        state: state
+      },
       test_auth_config: {
         clientId: clientId,
         authBaseUri: authBaseUri,
@@ -42,21 +50,24 @@ describe("ember-oauth2", function() {
     };
 
     OAuth2 = require('ember-oauth2')['default'];
+
+    // setup test_auth
     App.oauth = OAuth2.create({providerId: providerId});
+
+    // setup test_auth_config
     App.oauth_auth_config = OAuth2.create({providerId: 'test_auth_config'});
-    authorizeUri = authBaseUri;
-    authorizeUri += '?response_type=token' +
-                 '&redirect_uri=' + encodeURIComponent(redirectUri) +
-                 '&client_id=' + encodeURIComponent(clientId) +
-                 '&state=' + encodeURIComponent(state) +
-                 '&scope=' + encodeURIComponent(scope);
+
+    // setup test_auth_code
+    App.oauth_auth_code = OAuth2.create({providerId: 'test_auth_code'});
 
     callbackUri = redirectUri;
     callbackUri += '#access_token=' + ('12345abc') +
                 '&token_type=' + 'Bearer' +
                 '&expires_in=' + '3600' +
                 '&state=' + state;
-    callbackUriError = redirectUri;
+
+    callbackUriError = redirectUri + '?state=foobarqux';
+
     savedState = {
       provider_id: providerId,
       response_type: 'token',
@@ -81,6 +92,7 @@ describe("ember-oauth2", function() {
     };
   };
 
+  /* config test */
   describe("ENV['ember-oauth2'] namespace should exist", function() {
     it("should create a ENV object", function() {
       expect(window.ENV).toBeDefined();
@@ -99,6 +111,7 @@ describe("ember-oauth2", function() {
       expect(App.oauth.redirectUri).toEqual(redirectUri);
       expect(App.oauth.scope).toEqual(scope);
       expect(App.oauth.state).toEqual(state);
+      expect(App.oauth.responseType).toEqual('token');
       expect(App.oauth.statePrefix).toEqual('state');
       expect(App.oauth.tokenPrefix).toEqual('token');
       expect(App.oauth.config).toEqual(window.ENV['ember-oauth2']);
@@ -112,8 +125,13 @@ describe("ember-oauth2", function() {
     it("should set a custom token prefix", function() {
       expect(App.oauth_auth_config.tokenPrefix).toEqual('bar');
     });
+
+    it("set the responseType to 'code'", function() {
+      expect(App.oauth_auth_code.responseType).toEqual('code');
+    });
   });
 
+  // config errors
   describe("Errors when configuration is incomplete", function() {
     it("throws an error when there is no configuration", function() {
       window.ENV = undefined;
@@ -143,6 +161,7 @@ describe("ember-oauth2", function() {
     });
   });
 
+  // dialog window
   describe("Dialog window returns an Ember.RSVP.Promise", function() {
     var promise;
     var errorMessage;
@@ -173,9 +192,36 @@ describe("ember-oauth2", function() {
     });
   });
 
+  // generate oauth2 url 
   describe("Generate OAuth2 providers url", function() {
-    it("should create the url with the options", function() {
-      expect(App.oauth.authUri()).toEqual(authorizeUri);
+    describe("Implicit Grant authorize uri", function() {
+      beforeEach(function() {
+        authorizeUri = authBaseUri;
+        authorizeUri += '?response_type=' + encodeURIComponent(App.oauth.responseType) +
+                     '&redirect_uri=' + encodeURIComponent(redirectUri) +
+                     '&client_id=' + encodeURIComponent(clientId) +
+                     '&state=' + encodeURIComponent(state) +
+                     '&scope=' + encodeURIComponent(scope);
+      });
+
+      it("should create the url with the options", function() {
+        expect(App.oauth.authUri()).toEqual(authorizeUri);
+      });
+    });
+    
+    describe("Authorization Grant authorize uri", function() {
+      beforeEach(function() {
+        authorizeUri = authBaseUri;
+        authorizeUri += '?response_type=' + encodeURIComponent(App.oauth_auth_code.responseType) +
+                     '&redirect_uri=' + encodeURIComponent(redirectUri) +
+                     '&client_id=' + encodeURIComponent(clientId) +
+                     '&state=' + encodeURIComponent(state) +
+                     '&scope=' + encodeURIComponent(scope);
+      });
+
+      it("should create the url with the options", function() {
+        expect(App.oauth_auth_code.authUri()).toEqual(authorizeUri);
+      });
     });
   });
 
@@ -191,21 +237,54 @@ describe("ember-oauth2", function() {
     });
 
     describe("onRedirect", function() {
-      it("should call onSuccess callback when access_token is definned in the callback", function() {
-        App.oauth.onSuccess = function(){};
-        var spy = sinon.spy(App.oauth, "onSuccess");
-        var stub = sinon.stub(App.oauth, 'checkState', function() { return true; });
-        App.oauth.onRedirect(callbackUri);
-        expect(spy.called).toBeTruthy();
-        spy.reset();
+      describe("Implicit Grant authorize uri", function() {
+        it("should call onSuccess callback when access_token is definned in the callback", function() {
+          App.oauth.onSuccess = function(){};
+          var spy = sinon.spy(App.oauth, "onSuccess");
+          var spy2 = sinon.spy(App.oauth, "saveToken");
+          var stub = sinon.stub(App.oauth, 'checkState', function() { return true; });
+          App.oauth.onRedirect(callbackUri);
+          expect(spy.called).toBeTruthy();
+          expect(spy2.called).toBeTruthy();
+          spy.reset();
+        });
+
+        it("should call onError callback when access_token is not in the callback", function() {
+          App.oauth.onError = function(){};
+          var spy = sinon.spy(App.oauth, "onError");
+          App.oauth.onRedirect(callbackUriError);
+          expect(spy.called).toBeTruthy();
+          spy.reset();
+        });
       });
 
-      it("should call onError callback when access_token is not in the callback", function() {
-        App.oauth.onError = function(){};
-        var spy = sinon.spy(App.oauth, "onError");
-        App.oauth.onRedirect(callbackUriError);
-        expect(spy.called).toBeTruthy();
-        spy.reset();
+      describe("Authorization Grant authorize uri", function() {
+        var authcodeCallback;
+        beforeEach(function() {
+          authcodeCallback = redirectUri;
+          authcodeCallback += '?code=abcd12345' + '&state=' + state;
+
+          callbackUriError = redirectUri;
+        });
+
+        it("should call onSuccess callback when access_token is definned in the callback", function() {
+          App.oauth_auth_code.onSuccess = function(){};
+          var spy = sinon.spy(App.oauth_auth_code, "onSuccess");
+          var spy2 = sinon.spy(App.oauth, "saveToken");
+          var stub = sinon.stub(App.oauth_auth_code, 'checkState', function() { return true; });
+          App.oauth_auth_code.onRedirect(authcodeCallback);
+          expect(spy.called).toBeTruthy();
+          expect(spy2.called).toBeFalsy();
+          spy.reset();
+        });
+
+        it("should call onError callback when access_token is not in the callback", function() {
+          App.oauth.onError = function(){};
+          var spy = sinon.spy(App.oauth, "onError");
+          App.oauth.onRedirect(callbackUriError);
+          expect(spy.called).toBeTruthy();
+          spy.reset();
+        });        
       });
     });
 
