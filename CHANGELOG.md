@@ -1,5 +1,9 @@
 # Changelog Ember-OAuth2
 
+## v0.6.0
+  -- Remove global distribution
+  -- Bump project bower and node dependencies
+  -- Bump Ember to ~0.13.0
 ## v0.5.5
   - Provide funtion to remove the token from localstorage
   - Provide funtion to remove the state from localstorage
