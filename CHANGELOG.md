@@ -1,5 +1,7 @@
 # Changelog Ember-OAuth2
 
+## v0.7.0
+  -- Add support Authorization Grant Flow
 ## v0.6.0
   -- Remove global distribution
   -- Bump project bower and node dependencies
