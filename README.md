@@ -4,7 +4,7 @@
 ember-oauth2
 ============
 
-JavaScript library for using OAuth 2.0 Implicit Grant flow (Client-Side Flow) for Ember.js
+JavaScript library for using OAuth 2.0 Implicit Grant flow (Client-Side Flow) or Authorization Grant flow (Server-Side Flow) for Ember.js
 
 This creates an OAuth 2.0 Ember object class for handling authentication with OAuth 2.0 providers.
 
@@ -18,7 +18,7 @@ Ember-OAuth2 requires Ember and jQuery.
 
 ## Browser Support
 
-Ember-OAuth2 uses localStorage for saving the tokens, localStorage is supported in Firefox 3.5+, Safari 4+, IE8+, and Chrome.
+Ember-OAuth2 uses localStorage for saving the tokens, localStorage is supported in Firefox 3.5+, Safari 4+, IE9+, and Chrome.
 
 The latest version of Ember-OAuth2 supports ES6 modules and supports both AMD and a global version. This allows Ember-OAuth2 to be used in projects like [EmberCLI](https://github.com/stefanpenner/ember-cli) easier. The AMD version exports an 'ember-oauth2' module and the global distribution exports the library to the window.Ember.OAuth2 namespace.
 
@@ -96,8 +96,9 @@ The following are the options available for configuring a provider:
 * `authBaseUri`: (required) The authorization url for the OAuth2 provider.
 * `redirectUri`: (required) The URI that the OAuth2 provider will redirect back to when completed.
 * `scope`: Access your application is requesting from the OAuth2 provider.
-* `statePrefix`: the prefix name for state key stored in the localStorage. The default value is `state` and the key would be `state-the_state_number`
-* `tokenPrefix`: the prefix name for token key stored in the localStorage. The default value is `token` and the key would be `token-the_provider_id`
+* `responseType`: The type of authorization your application is requesting. The default is `token` but can be set to `code` if using the Authorization Grant flow.
+* `statePrefix`: The prefix name for state key stored in the localStorage. The default value is `state` and the key would be `state-the_state_number`
+* `tokenPrefix`: The prefix name for token key stored in the localStorage. The default value is `token` and the key would be `token-the_provider_id`
 
 ## Authorization
 
@@ -156,6 +157,8 @@ Old API for handling the redirect in version <= 0.2.3 that does not use Ember.Ev
 </html>
 ```
 
+## Implicit Grant Flow (Client-side flow)
+
 This will process the returned params and save the `provider_id`, `access_token`, `scope` and `expires_in` (the time the access_token will expire) to the localStorage. This localStorage can be accessed with the key `token-the_provider_id`.
 
 
@@ -164,13 +167,13 @@ After successful authorization and saving the access_token to the localStorage t
 As of version 0.4.0 the `authorize` call will return a `Ember.RSVP.Promise`. This will make it easier to handle callbacks. Authorize will `resolve` with a reference to the dialog window when it opens successfully and `rejects` with an error when the window fails to open.
 
 ```javascript
-App.oauth.authorize().then(function(stateObj){
-  // Handle the successful authorization here
-  console.log('hello, success');
-}).fail(function(err){
-  // Handle any errors within this block
-  console.error(err)
-});
+App.oauth = Ember.OAuth2.create({providerId: 'google'});
+
+App.oauth.authorize().then(function(response) {
+  App.oauth.trigger('redirect', response); /* will trigger success or error event */
+}, function(error) {
+  App.oauth.trigger('error', error);
+})
 ```
 
 New API for the callbacks in versions >= 0.2.4
@@ -185,6 +188,24 @@ Old API for the callbacks version <= 0.2.3 that does not use Ember.Evented for b
 ```javascript
 Ember.OAuth2.reopen({ onSuccess: function() { return 'hello, onSuccess' } });
 Ember.OAuth2.reopen({ onError: function() { return 'hello, onError' } });
+```
+
+## Authorization Grant flow
+
+If using the Authorization Grant flow with your provider your backend server will need to handle the final steps of authorizing your application. Your success handler will need to send the `AUTHORIZATON_CODE` returned from OAuth2 provider to your backend server which can then retrieve an access token using the client_id, client_secret, and authorization_code.
+
+To enable the Authorization Grant flow for a provider set the `responseType` value to `code`.  
+
+```javascript
+window.ENV = window.ENV || {};
+window.ENV['ember-oauth2'] = {
+  google: {
+    clientId: "xxxxxxxxxxxx",
+    authBaseUri: 'https://accounts.google.com/o/oauth2/auth',
+    redirectUri: 'https://oauth2-login-demo.appspot.com/oauth/callback',
+    responseType: 'code'
+  }
+}
 ```
 
 
