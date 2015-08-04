@@ -4,7 +4,7 @@ import Ember from 'ember';
   * @overview OAuth2 library for Emberjs that stores tokens in the browsers localStorage
   * @license   Licensed under MIT license
   *            See https://raw.github.com/amkirwan/ember-oauth2/master/LICENSE
-  * @version   0.6.0
+  * @version   0.6.0-4-g3b53877
   *
   * @module ember-oauth2
   * @class ember-oauth2
@@ -25,6 +25,7 @@ export default Ember.Object.extend(Ember.Evented, {
      *  @property {String} providerConfig.providerId.authBaseUri **Required**
      *  @property {String} providerConfig.providerId.redirectUri **Required**
      *  @property {String} providerConfig.providerId.scope **Optional**
+     *  @property {String} providerConfig.providerId.responseType **Default:** "token", **Optional**
      *  @property {String} providerConfig.providerId.statePrefix **Default:** "state", **Optional**
      *  @property {String} providerConfig.providerId.tokenPrefix **Default:** "prefix", **Optional**
      *  @example
@@ -65,6 +66,15 @@ export default Ember.Object.extend(Ember.Evented, {
      * @default "token"
      */
     this.set('tokenPrefix', 'token');
+
+    /**
+     * The response type for the authorization request.
+     *
+     * @property responseType
+     * @type String
+     * @default "token"
+     */
+    this.set('responseType', 'token');
 
     /**
      * @property {String} clientId
@@ -135,7 +145,8 @@ export default Ember.Object.extend(Ember.Evented, {
    * @return {Object} request object
    */
   requestObj: function() {
-    var request = { 'response_type': 'token' };
+    var request = {};
+    request.response_type = this.get('responseType');
     request.providerId = this.get('providerId');
     request.state = this.get('state');
     request.client_id = this.get('clientId');
@@ -151,7 +162,7 @@ export default Ember.Object.extend(Ember.Evented, {
   authUri: function() {
     if (!this.get('state')) { this.set('state', this.uuid()); }
     var uri = this.get('authBaseUri');
-    uri += '?response_type=token' +
+    uri += '?response_type=' + encodeURIComponent(this.get('responseType')) +
         '&redirect_uri=' + encodeURIComponent(this.get('redirectUri')) +
         '&client_id=' + encodeURIComponent(this.get('clientId')) +
         '&state=' + encodeURIComponent(this.get('state'));
@@ -199,7 +210,8 @@ export default Ember.Object.extend(Ember.Evented, {
     @return {String} the access_token from the params
   */
   authSuccess: function(params) {
-    return params.access_token;
+    return (this.get('responseType') === 'token' && params.access_token) ||
+            (this.get('responseType') === 'code' && params.code);
   },
 
   /**
@@ -248,14 +260,22 @@ export default Ember.Object.extend(Ember.Evented, {
    */
   handleRedirect: function(hash, callback) {
     var params = this.parseCallback(hash);
+
     if (this.authSuccess(params)) {
       var stateObj = this.getState(params.state);
       this.checkState(stateObj);
-      this.saveToken(this.generateToken(params));
-      this.trigger('success', stateObj);
+      
+      if (this.get('responseType') === "token") {
+        this.saveToken(this.generateToken(params));
+        this.trigger('success', stateObj);  
+      }
+      else {
+        this.trigger('success', params.code);
+      }  
     } else {
       this.trigger('error', params);
     }
+
     if (callback && typeof(callback) === "function") {
       callback();
     }
@@ -480,7 +500,7 @@ export default Ember.Object.extend(Ember.Evented, {
  * @property {String} VERSION
  * @final
 */
-var VERSION = "0.6.0";
+var VERSION = "0.6.0-4-g3b53877";
 
 /**
  * @method version
