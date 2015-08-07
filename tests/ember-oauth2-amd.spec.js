@@ -225,7 +225,9 @@ describe("ember-oauth2", function() {
     });
   });
 
-  describe("Handle the OAuth2 callback method", function() {
+  // callbacks success, error on called when redirect is triggered
+
+  describe("OAuth2 callback method", function() {
     describe("Parse the access token from the callback url", function() {
       it("should define a parseCallback function", function() {
         expect(App.oauth.parseCallback).toBeDefined();
@@ -236,25 +238,27 @@ describe("ember-oauth2", function() {
       });
     });
 
-    describe("onRedirect", function() {
+    describe("redirect", function() {
       describe("Implicit Grant authorize uri", function() {
-        it("should call onSuccess callback when access_token is definned in the callback", function() {
-          App.oauth.onSuccess = function(){};
-          var spy = sinon.spy(App.oauth, "onSuccess");
-          var spy2 = sinon.spy(App.oauth, "saveToken");
+        it("should trigger success when access_token is definned in the callback", function() {
+          var callback = sinon.spy();
+          App.oauth.on('success', callback);
+          var saveToken = sinon.spy(App.oauth, "saveToken");
           var stub = sinon.stub(App.oauth, 'checkState', function() { return true; });
-          App.oauth.onRedirect(callbackUri);
-          expect(spy.called).toBeTruthy();
-          expect(spy2.called).toBeTruthy();
-          spy.reset();
+
+          App.oauth.trigger('redirect', callbackUri);
+
+          expect(callback.called).toBeTruthy();
+          expect(saveToken.called).toBeTruthy();
+          callback.reset();
         });
 
-        it("should call onError callback when access_token is not in the callback", function() {
-          App.oauth.onError = function(){};
-          var spy = sinon.spy(App.oauth, "onError");
-          App.oauth.onRedirect(callbackUriError);
-          expect(spy.called).toBeTruthy();
-          spy.reset();
+        it("should trigger error when access_token is not in the callback", function() {
+          var callback = sinon.spy();
+          App.oauth.on('error', callback);
+          App.oauth.trigger('redirect', callbackUriError);
+          expect(callback.called).toBeTruthy();
+          callback.reset();
         });
       });
 
@@ -267,50 +271,32 @@ describe("ember-oauth2", function() {
           callbackUriError = redirectUri;
         });
 
-        it("should call onSuccess callback when access_token is definned in the callback", function() {
-          App.oauth_auth_code.onSuccess = function(){};
-          var spy = sinon.spy(App.oauth_auth_code, "onSuccess");
-          var spy2 = sinon.spy(App.oauth, "saveToken");
+        it("should call success callback when access_token is definned in the callback", function() {
+          var callback = sinon.spy();
+          App.oauth_auth_code.on('success', callback);
           var stub = sinon.stub(App.oauth_auth_code, 'checkState', function() { return true; });
-          App.oauth_auth_code.onRedirect(authcodeCallback);
-          expect(spy.called).toBeTruthy();
-          expect(spy2.called).toBeFalsy();
-          spy.reset();
+
+          App.oauth_auth_code.trigger('redirect', authcodeCallback);
+
+          expect(callback.called).toBeTruthy();
+          callback.reset();
         });
 
-        it("should call onError callback when access_token is not in the callback", function() {
-          App.oauth.onError = function(){};
-          var spy = sinon.spy(App.oauth, "onError");
-          App.oauth.onRedirect(callbackUriError);
-          expect(spy.called).toBeTruthy();
-          spy.reset();
+        it("should call error callback when access_token is not in the callback", function() {
+          var callback = sinon.spy();
+          App.oauth_auth_code.on('error', callback);
+
+          App.oauth_auth_code.trigger('redirect', callbackUriError);
+
+          expect(callback.called).toBeTruthy();
+          callback.reset();
         });        
       });
     });
 
-    describe("trigger('redirect')", function() {
-      it("should trigger success event when access_token is defined in the callback", function() {
-        var spy = sinon.spy();
-        App.oauth.on('success', once(spy));
-        var stub = sinon.stub(App.oauth, 'checkState', function() { return true; });
-        App.oauth.trigger('redirect', callbackUri);
-        expect(spy.called).toBeTruthy();
-        spy.reset();
-      });
-
-      it("should trigger error event when access_token is not in the callback", function() {
-        var spy = sinon.spy();
-        App.oauth.on('error', once(spy));
-        App.oauth.trigger('redirect', callbackUriError);
-        expect(spy.called).toBeTruthy();
-        spy.reset();
-      });
-    });
-
-
     it("should call the callback if defined", function() {
       var callback = sinon.spy();
-      App.oauth.onRedirect(callbackUriError, callback);
+      App.oauth.trigger('redirect', callbackUriError, callback);
       expect(callback.called).toBeTruthy();
     });
   });
