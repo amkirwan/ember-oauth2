@@ -8,7 +8,7 @@ define("ember-oauth2",
       * @overview OAuth2 library for Emberjs that stores tokens in the browsers localStorage
       * @license   Licensed under MIT license
       *            See https://raw.github.com/amkirwan/ember-oauth2/master/LICENSE
-      * @version   0.7.0
+      * @version   1.0.0
       *
       * @module ember-oauth2
       * @class ember-oauth2
@@ -95,24 +95,11 @@ define("ember-oauth2",
         // sets the properties from the providerConfig and overrides any default settings.
         this.setProperties(this.providerConfig);
 
-        // Bind deprecated event handlers
         /**
          * @event redirect
          * @param {function} The function that handles the redirect.
          */
         this.on('redirect', this.handleRedirect);
-
-        /**
-         * @event success
-         * @param {function} The function that handles the success callback.
-         */
-        this.on('success', this._onSuccess);
-
-        /**
-         * @event error
-         * @param {function} The function that handles the error callback.
-         */
-        this.on('error', this._onError);
       },
 
       /**
@@ -238,29 +225,22 @@ define("ember-oauth2",
       },
 
       /**
-        @method expiresIn
-        @return {Number} When the token expires in seconds.
+       * @method expiresIn
+       * @param {String} expires Expires time string from params
+       * @return {Number} When the token expires in seconds.
       */
       expiresIn: function(expires) {
         return this.now() + parseInt(expires, 10);
       },
 
       /**
-       * call on redirect from OAuth2 provider response
-        @method onRedirect
-        @deprecated Use `.trigger('redirect')` instead.
-       */
-      onRedirect: function(hash, callback) {
-        Ember.Logger.warn("Ember.OAuth2.onRedirect is deprecated and will be removed in future versions. Please use .trigger('redirect') instead.");
-        this.trigger('redirect', hash, callback);
-      },
-
-      /*
        * proxy functions for old event handlers
        *
        * Check if the token returned is valid and if so trigger `success` event else trigger `error`
        *
        * @method handleRedirect
+       * @param {Object} hash The window location hash callback url 
+       * @param {Function} callback Optional callback
        */
       handleRedirect: function(hash, callback) {
         var params = this.parseCallback(hash);
@@ -283,40 +263,6 @@ define("ember-oauth2",
         if (callback && typeof(callback) === "function") {
           callback();
         }
-      },
-
-      /**
-       * This method will call the old onSuccess callback when using the old API: Ember.OAuth2.reopen({ onSuccess: function() { return 'hello, onSuccess' } });
-       *
-       * The old onSuccess method will only be called when onSuccess is defined as a function on the Ember.OAuth2 instance
-       *
-       * @method _onSuccess
-       * @param {Object} stateObj
-       * @private
-       */
-      _onSuccess: function(stateObj) {
-        if (typeof(this.onSuccess) !== 'function')
-          return;
-
-        Ember.Logger.warn("Ember.OAuth2.onSuccess is deprecated and will be removed in future versions. Bind your callbacks using .on('success', fn) instead.");
-        this.onSuccess(stateObj);
-      },
-
-      /**
-       * This method will call the old onError callback when using the old API: Ember.OAuth2.reopen({ onError: function() { return 'hello, onError' } });
-       *
-       * The old onSuccess method will only be called when onError is defined as a function on the Ember.OAuth2 instance
-       *
-       * @method _onError
-       * @param {Object} err object
-       * @private
-       */
-      _onError: function(err) {
-        if (typeof(this.onError) !== 'function')
-          return;
-
-        Ember.Logger.warn("Ember.OAuth2.onError is deprecated and will be removed in furture versions. Bind your callbacks using .on('error', fn) instead.");
-        this.onError(err);
       },
 
       /**
@@ -406,6 +352,7 @@ define("ember-oauth2",
        * The key name to use for saving state to localstorage
        *
        * @method stateKeyName
+       * @return {String} The state key name used for localstorage
        */
       stateKeyName: function() {
         return this.get('statePrefix') + '-' + this.get('state');
@@ -416,6 +363,7 @@ define("ember-oauth2",
        * The key name to use for saving the token to localstorage
        *
        * @method tokenKeyName
+       * @return {String} The token key name used for localstorage
        */
       tokenKeyName: function() {
         return this.get('tokenPrefix') + '-' + this.get('providerId');
@@ -437,6 +385,10 @@ define("ember-oauth2",
 
       /**
        * remove the state from localstorage
+       *
+       * @method removeState
+       * @param {String} stateName The keyname of the state object in localstorage
+       * @return {Object} The deleted state object from localstorage
        */
       removeState: function(stateName) {
         if (stateName) {
@@ -448,6 +400,9 @@ define("ember-oauth2",
 
       /**
        * remove the token from localstorage
+       *
+       * @method removeToken
+       * @return {Object} The token object in localstorage
        */
       removeToken: function() {
         return window.localStorage.removeItem(this.tokenKeyName());
@@ -504,7 +459,7 @@ define("ember-oauth2",
      * @property {String} VERSION
      * @final
     */
-    var VERSION = "0.7.0";
+    var VERSION = "1.0.0";
 
     /**
      * @method version

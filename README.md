@@ -8,7 +8,7 @@ JavaScript library for using OAuth 2.0 Implicit Grant flow (Client-Side Flow) or
 
 This creates an OAuth 2.0 Ember object class for handling authentication with OAuth 2.0 providers.
 
-Current Version: **[0.7.0](https://github.com/amkirwan/ember-oauth2/releases/tag/v0.7.0)**
+Current Version: **[1.0.0](https://github.com/amkirwan/ember-oauth2/releases/tag/v1.0.0)**
 
 The EmberCli addon [EmberTokenAuth](https://github.com/amkirwan/ember-token-auth) demonstrates how to use Ember-OAuth2 library for authentication. 
 
@@ -150,7 +150,7 @@ Old API for handling the redirect in version <= 0.2.3 that does not use Ember.Ev
     <title>Authorize</title>
     <script>
       var hash = window.location.hash;
-      window.opener.App.oauth.onRedirect(hash);
+      window.opener.App.oauth.trigger('redirect', hash);
       window.close();
     </script>
   </head>
@@ -181,13 +181,6 @@ New API for the callbacks in versions >= 0.2.4
 ```javascript
 App.oauth.on('success', function(stateObj) { return 'hello, success' } });
 App.oauth.on('error', function(err) { return 'hello, error' } });
-```
-
-Old API for the callbacks version <= 0.2.3 that does not use Ember.Evented for binding events.
-
-```javascript
-Ember.OAuth2.reopen({ onSuccess: function() { return 'hello, onSuccess' } });
-Ember.OAuth2.reopen({ onError: function() { return 'hello, onError' } });
 ```
 
 ## Authorization Grant flow
