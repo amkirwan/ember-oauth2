@@ -336,18 +336,6 @@ describe("ember-oauth2", function() {
       App.oauth.clearStates();
       expect(App.oauth.getState()).toEqual(null);
     });
-
-    it("should remove any saved states with a regex param", function() {
-      App.oauth.saveState(savedState);
-
-      var newState = "99999";
-      var newSavedState = $.extend(true, {}, savedState);
-      newSavedState.state = newState;
-      App.oauth.saveState(newSavedState);
-
-      App.oauth.clearStates();
-      expect(App.oauth.getState()).toEqual(null);
-    });
   });
 
   // checkState checks that the state returned by the OAuth server is the same as the one sent
