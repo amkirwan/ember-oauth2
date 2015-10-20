@@ -305,38 +305,36 @@ describe("ember-oauth2", function() {
   describe("localStorage state", function() {
     it("should save the state to localStorage", function() {
       var spy = sinon.spy(localStorage, 'setItem');
-      App.oauth.saveState(state, savedState);
+      App.oauth.saveState(savedState);
       expect(spy.called).toBeTruthy();
       spy.reset();
     });
 
     it("returns the localStorage by state", function() {
-      App.oauth.saveState(state, savedState);
+      App.oauth.saveState(savedState);
       expect(App.oauth.getState()).toEqual(savedState);
     });
 
-    it("returns the state by the given localStorage key name", function() {
-      App.oauth.saveState(state, savedState);
-      expect(App.oauth.getState('state-' + state)).toEqual(savedState);
+    it("returns null if there is no state object in the localStorage", function() {
+      expect(App.oauth.getState()).toEqual(null);
     });
 
     it("should remove the localStorage state after retreiving", function() {
-      App.oauth.saveState(state, savedState);
-      App.oauth.getState(state);
-      expect(App.oauth.getState(state)).toEqual(null);
+      App.oauth.saveState(savedState);
+      App.oauth.getState();
+      expect(App.oauth.getState()).toEqual(null);
     });
 
     it("should remove any saved states", function() {
-      App.oauth.saveState(state, savedState);
+      App.oauth.saveState(savedState);
 
       var newState = "99999";
       var newSavedState = $.extend(true, {}, savedState);
       newSavedState.state = newState;
-      App.oauth.saveState(newState, newSavedState);
+      App.oauth.saveState(newSavedState);
 
       App.oauth.clearStates();
-      expect(App.oauth.getState(state)).toEqual(null);
-      expect(App.oauth.getState(newState)).toEqual(null);
+      expect(App.oauth.getState()).toEqual(null);
     });
   });
 
@@ -347,12 +345,13 @@ describe("ember-oauth2", function() {
     });
 
     it("should throw an Error when the states are not equal", function() {
-      savedState.state = 'abcdefg';
-      expect(function() {App.oauth.checkState(savedState);}).toThrow(new Error("State returned from the server did not match the local saved state."));
+      var badState = $.extend(true, {}, savedState);
+      badState.state = '999999';
+      expect(function() { App.oauth.checkState(badState); }).toThrow(new Error("State returned from the server did not match the local saved state."));
     });
 
     it("should not throw an Error when the states are equal", function() {
-      expect(function() {App.oauth.checkState(savedState);}).toBeTruthy();
+      expect(App.oauth.checkState(savedState)).toBeTruthy();
     });
   });
 
