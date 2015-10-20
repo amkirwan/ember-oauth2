@@ -8,7 +8,7 @@ JavaScript library for using OAuth 2.0 Implicit Grant flow (Client-Side Flow) or
 
 This creates an OAuth 2.0 Ember object class for handling authentication with OAuth 2.0 providers.
 
-Current Version: **[1.0.0](https://github.com/amkirwan/ember-oauth2/releases/tag/v1.0.0)**
+Current Version: **[1.0.1](https://github.com/amkirwan/ember-oauth2/releases/tag/v1.0.1)**
 
 The EmberCli addon [EmberTokenAuth](https://github.com/amkirwan/ember-token-auth) demonstrates how to use Ember-OAuth2 library for authentication. 
 

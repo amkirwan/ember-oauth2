@@ -8,7 +8,7 @@ define("ember-oauth2",
       * @overview OAuth2 library for Emberjs that stores tokens in the browsers localStorage
       * @license   Licensed under MIT license
       *            See https://raw.github.com/amkirwan/ember-oauth2/master/LICENSE
-      * @version   1.0.0
+      * @version   1.0.1
       *
       * @module ember-oauth2
       * @class ember-oauth2
@@ -97,7 +97,6 @@ define("ember-oauth2",
 
         /**
          * @event redirect
-         * @param {function} The function that handles the redirect.
          */
         this.on('redirect', this.handleRedirect);
       },
@@ -174,7 +173,7 @@ define("ember-oauth2",
         if (!this.get('redirectUri')) throw new Error('No redirect uri given.');
         var authorizeUri = this.authUri();
         this.clearStates();
-        this.saveState(this.get('state'), this.requestObj());
+        this.saveState(this.requestObj());
         return this.openWindow(authorizeUri);
       },
 
@@ -246,7 +245,7 @@ define("ember-oauth2",
         var params = this.parseCallback(hash);
 
         if (this.authSuccess(params)) {
-          var stateObj = this.getState(params.state);
+          var stateObj = this.getState();
           this.checkState(stateObj);
           
           if (this.get('responseType') === "token") {
@@ -270,10 +269,15 @@ define("ember-oauth2",
        *
        * @method checkState
        * @param {Object} stateObj The object returned from localStorage
+       * @return {Boolean} Will return true if the states match otherwise it will throw an Error
        */
       checkState: function(stateObj) {
         if (!stateObj) throw new Error("Could not find state.");
-        if (stateObj.state !== this.get('state')) throw new Error("State returned from the server did not match the local saved state.");
+        if (stateObj.state === this.get('state')) {
+          return true;
+        } else {
+          throw new Error("State returned from the server did not match the local saved state.");
+        }
       },
 
       /**
@@ -302,26 +306,25 @@ define("ember-oauth2",
 
       /**
        * @method saveState
-       * @param {String} state The state uuid
        * @param {Object} requestObj Properties of the request state to save in localStorage
        */
-      saveState: function(state, requestObj) {
+      saveState: function(requestObj) {
         window.localStorage.setItem(this.stateKeyName(), JSON.stringify(requestObj));
       },
 
       /**
-       * Return the saved state and remove it from the localStoage.
+       * Return the saved state object and remove it from the localStoage.
        *
        * @method getState
-       * @param {String} state The state uuid to retreive from localStorage
        * @return {Object} Properties of the request state
        */
-      getState: function(state) {
-        var keyName = state || this.stateKeyName();
-        var obj = JSON.parse(window.localStorage.getItem(keyName));
-        this.removeState();
+      getState: function() {
+        var stateObj = JSON.parse(window.localStorage.getItem(this.stateKeyName()));
+        if (!stateObj) return null;
 
-        return obj;
+        this.removeState(this.stateKeyName());
+
+        return stateObj;
       },
 
       /**
@@ -459,7 +462,7 @@ define("ember-oauth2",
      * @property {String} VERSION
      * @final
     */
-    var VERSION = "1.0.0";
+    var VERSION = "1.0.1";
 
     /**
      * @method version
