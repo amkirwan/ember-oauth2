@@ -289,6 +289,17 @@ describe("ember-oauth2", function() {
           expect(callback.called).toBeTruthy();
           callback.reset();
         });
+
+        it("should trigger error when code not in the callback", function() {
+          var callbackUriError = redirectUri + '#token=12345abcd' + '&state=' + state;
+
+          var callback = sinon.spy();
+          App.oauth.on('error', callback);
+          App.oauth.trigger('redirect', callbackUriError);
+          expect(callback.called).toBeTruthy();
+          callback.reset();
+        });
+
       });
     });
 
