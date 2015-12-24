@@ -282,32 +282,35 @@ describe("ember-oauth2", function() {
           callback.reset();
         });
 
-        it("should trigger error when the states do not match", function() {
-          var callback = sinon.spy();
-          App.oauth.on('error', callback);
-          App.oauth.trigger('redirect', callbackUriError);
-          expect(callback.called).toBeTruthy();
-          callback.reset();
-        });
+        describe("errors", function() {
+          var callback;
+          beforeEach(function() {
+            callback = sinon.spy();
+            App.oauth.on('error', callback);
+          });
 
-        it("should trigger error when code not in the callback", function() {
-          var callbackUriError = redirectUri + '#token=12345abcd' + '&state=' + state;
+          afterEach(function() {
+            callback.reset();
+          });
 
-          var callback = sinon.spy();
-          App.oauth.on('error', callback);
-          App.oauth.trigger('redirect', callbackUriError);
-          expect(callback.called).toBeTruthy();
-          callback.reset();
-        });
+          it("should trigger error when the states do not match", function() {
+            App.oauth.trigger('redirect', callbackUriError);
+            expect(callback.called).toBeTruthy();
+          });
 
-        it("should trigger error when the response type is code but EmberOauth2 is expecting a token ", function() {
-          App.oauth.set('responseType', 'token');
+          it("should trigger error when code not in the callback", function() {
+            var callbackUriError = redirectUri + '#token=12345abcd' + '&state=' + state;
 
-          var callback = sinon.spy();
-          App.oauth.on('error', callback);
-          App.oauth.trigger('redirect', callbackUri);
-          expect(callback.called).toBeTruthy();
-          callback.reset();
+            App.oauth.trigger('redirect', callbackUriError);
+            expect(callback.called).toBeTruthy();
+          });
+
+          it("should trigger error when the response type of code is returned but EmberOAuth2 is expecting a token ", function() {
+            App.oauth.set('responseType', 'token');
+
+            App.oauth.trigger('redirect', callbackUri);
+            expect(callback.called).toBeTruthy();
+          });
         });
       });
     });
