@@ -282,7 +282,7 @@ describe("ember-oauth2", function() {
           callback.reset();
         });
 
-        it("should trigger error when code is not in the callback", function() {
+        it("should trigger error when the states do not match", function() {
           var callback = sinon.spy();
           App.oauth.on('error', callback);
           App.oauth.trigger('redirect', callbackUriError);
