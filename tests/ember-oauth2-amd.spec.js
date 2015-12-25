@@ -8,7 +8,7 @@ describe("ember-oauth2", function() {
   var callbackUri;
   var savedState;
 
-  var providerId, authBaseUri, callbackUriError, redirectUri, clientId, scope, state;
+  var providerId, authBaseUri, redirectUri, clientId, scope, state;
 
   var OAuth2;
 
@@ -65,8 +65,6 @@ describe("ember-oauth2", function() {
                 '&token_type=' + 'Bearer' +
                 '&expires_in=' + '3600' +
                 '&state=' + state;
-
-    callbackUriError = redirectUri + '?state=foobarqux';
 
     savedState = {
       provider_id: providerId,
