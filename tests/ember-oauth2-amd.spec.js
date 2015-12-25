@@ -223,9 +223,8 @@ describe("ember-oauth2", function() {
     });
   });
 
-
   describe("handleRedirect", function() {
-    // im;icit grant flow
+    // implicit grant flow
     describe("Implicit grant", function() {
       describe("parse the access token from the callback url", function() {
         it("should return the params from the callback url", function() {
