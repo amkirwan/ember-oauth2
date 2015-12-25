@@ -315,9 +315,26 @@ describe("ember-oauth2", function() {
     describe("Redirect callback", function() {
       it("should call the callback if defined", function() {
         var callback = sinon.spy();
-        App.oauth.trigger('redirect', callbackUriError, callback);
+        App.oauth.trigger('redirect', callbackUri, callback);
         expect(callback.called).toBeTruthy();
       });
+    });
+  });
+
+  //gnerateState
+  describe("generateState", function() {
+    it("returns a new state", function() { 
+      var stub = sinon.stub(App.oauth, 'uuid', function() { return '12345'; });
+
+      var state = App.oauth.generateState();
+      expect(state).toEqual('12345');
+      stub.reset();
+    });
+
+    it("returns the state if one is already set on the oauth2 object", function() {
+      App.oauth.set('state', 'abcdefg');
+      var state = App.oauth.generateState();
+      expect(state).toEqual('abcdefg');
     });
   });
 
