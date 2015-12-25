@@ -383,18 +383,23 @@ describe("ember-oauth2", function() {
 
   // checkState checks that the state returned by the OAuth server is the same as the one sent
   describe("Check the state to make sure it is set", function() {
-    it("should throw an error when there is no state set", function() {
-      expect(function() {App.oauth.checkState(null);}).toThrow(new Error("Could not find state."));
+    it("should return false when there is no state set", function() {
+      expect(App.oauth.checkState(null)).toBeFalsy();
     });
 
-    it("should throw an Error when the states are not equal", function() {
-      var badState = $.extend(true, {}, savedState);
-      badState.state = '999999';
-      expect(function() { App.oauth.checkState(badState); }).toThrow(new Error("State returned from the server did not match the local saved state."));
+    it("should return false when the states are not equal", function() {
+      App.oauth.saveState(savedState);
+      var badState = '999999';
+      expect(App.oauth.checkState(badState)).toBeFalsy();
     });
 
     it("should not throw an Error when the states are equal", function() {
-      expect(App.oauth.checkState(savedState)).toBeTruthy();
+      App.oauth.saveState(savedState);
+
+      expect(App.oauth.checkState(savedState.state)).toBeTruthy();
+    });
+  });
+
     });
   });
 
