@@ -330,6 +330,12 @@ describe("ember-oauth2", function() {
       spy.reset();
     });
 
+    it("reads the localStorage by state and does not remove it", function() {
+      App.oauth.saveState(savedState);
+      expect(App.oauth.readState()).toEqual(savedState);
+      expect(App.oauth.readState()).toEqual(savedState);
+    });
+
     it("returns the localStorage by state", function() {
       App.oauth.saveState(savedState);
       expect(App.oauth.getState()).toEqual(savedState);
