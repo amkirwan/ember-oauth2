@@ -232,8 +232,8 @@ describe("ember-oauth2", function() {
         });
       });
 
-      describe("redirect", function(done) {
-        it("should checkState, verify the token and trigger success", function() {
+      describe("redirect", function() {
+        it("should checkState, verify the token and trigger success", function(done) {
           var callback = sinon.spy();
           App.oauth.on('success', callback);
           var saveToken = sinon.spy(App.oauth, "saveToken");
@@ -242,15 +242,70 @@ describe("ember-oauth2", function() {
           App.oauth.trigger('redirect', callbackUri);
 
           expect(saveToken.called).toBeTruthy();
+          window.setTimeout(function() {
+            expect(callback.called).toBeTruthy();
+            stub.reset();
+            done();
+          }, 250);
+        });
+      });
+
+      describe("errors", function() {
+        var callback;
+
+        beforeEach(function() {
+          callback = sinon.spy();
+          App.oauth.on('error', callback);
+          App.oauth.saveState(savedState);
+        });
+
+        afterEach(function() {
           callback.reset();
         });
 
-        it("should trigger error when access_token is not in the callback", function() {
-          var callback = sinon.spy();
-          App.oauth.on('error', callback);
+        it("should trigger error when the response type of access_token is returned but EmberOAuth2 is expecting code", function() {
+          var callbackUriError = redirectUri + '#access_token=' + ('12345abc') + 
+                                               '&token_type=' + 'Bearer' + 
+                                               '&expires_in=' + '3600' + 
+                                               '&state=' + state;
+
+          App.oauth.set('responseType', 'code');
+
+          App.oauth.trigger('redirect', callbackUri);
+          expect(callback.called).toBeTruthy();
+        });
+
+        it("should trigger error when the states do not match", function() {
+          var callbackUriError = redirectUri + '#access_token=' + ('12345abc') + 
+                                               '&token_type=' + 'Bearer' + 
+                                               '&expires_in=' + '3600' + 
+                                               '&state=' + 'error';
+
           App.oauth.trigger('redirect', callbackUriError);
           expect(callback.called).toBeTruthy();
-          callback.reset();
+        });
+
+        it("should trigger error when access_token is not in the callback", function() {
+          var callbackUriError = redirectUri + '#access_token=' +
+                                               '&token_type=' + 'Bearer' + 
+                                               '&expires_in=' + '3600' + 
+                                               '&state=' + state;
+
+          App.oauth.trigger('redirect', callbackUriError);
+          expect(callback.called).toBeTruthy();
+        });
+
+        it("should trigger error when verifyToken rejects", function(done) {
+          var removeToken = sinon.spy(App.oauth, "removeToken");
+          App.oauth.verifyToken = function() { return new Ember.RSVP.reject('error'); };
+
+          App.oauth.trigger('redirect', callbackUri);
+
+          window.setTimeout(function() {
+            expect(removeToken.called).toBeTruthy();
+            expect(callback.called).toBeTruthy();
+            done();
+          }, 250);
         });
       });
     });
@@ -258,7 +313,7 @@ describe("ember-oauth2", function() {
     describe("Authorization Grant", function() {
       beforeEach(function() {
         App.oauth.set('responseType', 'code');
-        callbackUri = redirectUri + '#code=12345abcd' + '&state=' + state;
+        callbackUri = redirectUri + '#code=12345abcd&state=12345';
       }); 
 
       describe("parse the code and state from the callback url", function() {
@@ -276,6 +331,7 @@ describe("ember-oauth2", function() {
           App.oauth.trigger('redirect', callbackUri);
 
           expect(callback.called).toBeTruthy();
+          stub.reset();
           callback.reset();
         });
 
@@ -284,6 +340,7 @@ describe("ember-oauth2", function() {
           beforeEach(function() {
             callback = sinon.spy();
             App.oauth.on('error', callback);
+            App.oauth.saveState(savedState);
           });
 
           afterEach(function() {
@@ -291,6 +348,8 @@ describe("ember-oauth2", function() {
           });
 
           it("should trigger error when the states do not match", function() {
+            var callbackUriError = redirectUri + '#code=12345abcd&state=error';
+
             App.oauth.trigger('redirect', callbackUriError);
             expect(callback.called).toBeTruthy();
           });
@@ -400,6 +459,9 @@ describe("ember-oauth2", function() {
     });
   });
 
+  describe("verify the token wth the endpoint to mitigate the confused deputy", function() {
+    it("default implimentation returns true", function() {
+      expect(function() {App.oauth.verifyToken().then(function(value) { return value; }); }).toBeTruthy();
     });
   });
 
