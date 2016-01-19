@@ -400,10 +400,15 @@ describe("ember-oauth2", function() {
   // saving and removing state to localStorage
   describe("localStorage state", function() {
     it("should save the state to localStorage", function() {
+      var oldSetItem = window.localStorage.setItem;
+      window.localStorage.setItem = function() { return true; };
+
       var spy = sinon.spy(localStorage, 'setItem');
       App.oauth.saveState(savedState);
       expect(spy.called).toBeTruthy();
-      spy.reset();
+      spy.restore();
+
+      window.localStorage.setItem = oldSetItem;
     });
 
     it("reads the localStorage by state and does not remove it", function() {
@@ -484,9 +489,14 @@ describe("ember-oauth2", function() {
     });
 
     it("should save the token to the localStorage", function() {
+      var oldGetItem = window.localStorage.getItem;
+      window.localStorage.getItem = function() { return JSON.stringify(token); };
+
       var spy = sinon.spy(localStorage, 'getItem');
       expect(App.oauth.getToken()).toEqual(token);
       spy.reset();
+
+      window.localStorage.getItem = oldGetItem;
     });
 
     it("should return the access_token from the localStorage", function() {
