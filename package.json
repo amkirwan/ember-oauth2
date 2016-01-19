@@ -36,7 +36,7 @@
     "grunt-contrib-clean": "~0.6.0",
     "load-grunt-config": "~0.17.2",
     "testem": "~0.9.1",
-    "grunt-contrib-testem": "~0.5.16",
+    "grunt-testem-mincer": "~0.5.18",
     "install": "~0.1.7",
     "grunt-preprocess": "~5.0.0"
   },
