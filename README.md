@@ -183,6 +183,47 @@ App.oauth.on('success', function(stateObj) { return 'hello, success' } });
 App.oauth.on('error', function(err) { return 'hello, error' } });
 ```
 
+When using the client-side flow it is vital to validate the token received from the endpoint, failure to do so will make your application vulnerable to the [confused deputy problem](https://en.wikipedia.org/wiki/Confused_deputy_problem). As of version `v1.0.2` Ember-OAuth2 supports the `verifyToken` method for validating tokens when using the client-side flow. The user will need to override this method for validating the different server endpoints. 
+
+Here is an example of how this might be accomplished in an Ember-CLI instance initializer using the Google token validation endpoint.
+
+```javascript
+import Ember from 'ember';
+import OAuth2 from 'ember-oauth2';
+import env from 'ember-pacu/config/environment';
+
+export function initialize(app) {
+  verifyTokenInit(app);
+}
+
+function verifyTokenInit(app) {
+  OAuth2.reopen({
+    // mitigate confused deputy
+    verifyToken: function() { 
+      return new Ember.RSVP.Promise((resolve, reject) => {
+        // implement the adapter with the url to the google tokeinfo endpoint
+        var adapter = app.lookup('adapter:session');
+        adapter.google_tokeninfo().then(function(response) {
+          if (response.audience === env.APP.GOOGLE_CLIENT_ID) {
+            resolve(response);
+          } else {
+            reject('app uid does not match');
+          }
+        }, function(error) {
+          reject(error);
+        });
+      });
+    }
+  });
+}
+
+export default { 
+  name: 'ember-oauth2',
+  initialize: initialize
+};
+```
+
+
 ## Authorization Grant flow
 
 If using the Authorization Grant flow with your provider your backend server will need to handle the final steps of authorizing your application. Your success handler will need to send the `AUTHORIZATON_CODE` returned from OAuth2 provider to your backend server which can then retrieve an access token using the client_id, client_secret, and authorization_code.
