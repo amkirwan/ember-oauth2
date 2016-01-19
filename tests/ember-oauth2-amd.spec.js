@@ -322,7 +322,7 @@ describe("ember-oauth2", function() {
         });
       });
 
-      describe("redirect", function(done) {
+      describe("redirect", function() {
         it("should checkState and trigger success", function() {
           var callback = sinon.spy();
           App.oauth.on('success', callback);
