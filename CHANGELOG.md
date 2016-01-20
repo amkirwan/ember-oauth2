@@ -1,5 +1,14 @@
 # Changelog Ember-OAuth2
 
+## v1.1.0
+  -- Add verifyToken method to handle mitigation of the confused deputy
+  -- fix bug with checking of state 
+## v1.0.1
+  -- Update getState function to not take a param argument and use the configure statePrefix to find the state from localStorage.
+  -- This makes getState and getToken perform the same way and avoids confusion with the api
+  -- Fix bug where handleRedircect could not find the stateObj
+## v1.0.0
+  -- Drop support for deprecated callback methods onSuccess, onError, and onRedirect. Callbacks can be called using Ember.Evented trigger with the targets success, error, and redirect.
 ## v0.7.0
   -- Add support Authorization Grant Flow
 ## v0.6.0
