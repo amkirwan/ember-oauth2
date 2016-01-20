@@ -8,7 +8,7 @@ define("ember-oauth2",
       * @overview OAuth2 library for Emberjs that stores tokens in the browsers localStorage
       * @license   Licensed under MIT license
       *            See https://raw.github.com/amkirwan/ember-oauth2/master/LICENSE
-      * @version   1.0.1
+      * @version   1.1.0
       *
       * @module ember-oauth2
       * @class ember-oauth2
@@ -138,9 +138,8 @@ define("ember-oauth2",
         var request = {};
         request.response_type = this.get('responseType');
         request.providerId = this.get('providerId');
-        request.state = this.get('state');
         request.client_id = this.get('clientId');
-        request.state = this.get('state');
+        request.state = this.generateState();
         if (this.get('scope')) request.scope = this.get('scope');
         return request;
       },
@@ -150,7 +149,6 @@ define("ember-oauth2",
        * @return {String} Authorization uri for generating an OAuth2 token
        */
       authUri: function() {
-        if (!this.get('state')) { this.set('state', this.uuid()); }
         var uri = this.get('authBaseUri');
         uri += '?response_type=' + encodeURIComponent(this.get('responseType')) +
             '&redirect_uri=' + encodeURIComponent(this.get('redirectUri')) +
@@ -171,10 +169,9 @@ define("ember-oauth2",
         if (!this.get('clientId')) throw new Error('No client id given.');
         if (!this.get('authBaseUri')) throw new Error('No auth base uri given.');
         if (!this.get('redirectUri')) throw new Error('No redirect uri given.');
-        var authorizeUri = this.authUri();
         this.clearStates();
         this.saveState(this.requestObj());
-        return this.openWindow(authorizeUri);
+        return this.openWindow(this.authUri());
       },
 
       /**
@@ -224,6 +221,16 @@ define("ember-oauth2",
       },
 
       /**
+       * @method generateState
+       * @return {String} The state 
+       */
+      generateState: function() {
+        // set the stats
+        if (!this.get('state')) { this.set('state', this.uuid()); }
+        return this.get('state');
+      },
+
+      /**
        * @method expiresIn
        * @param {String} expires Expires time string from params
        * @return {Number} When the token expires in seconds.
@@ -242,41 +249,60 @@ define("ember-oauth2",
        * @param {Function} callback Optional callback
        */
       handleRedirect: function(hash, callback) {
-        var params = this.parseCallback(hash);
+        var self = this;
+        var params = self.parseCallback(hash);
 
-        if (this.authSuccess(params)) {
-          var stateObj = this.getState();
-          this.checkState(stateObj);
-          
-          if (this.get('responseType') === "token") {
-            this.saveToken(this.generateToken(params));
-            this.trigger('success', stateObj);  
+        if (self.authSuccess(params) && self.checkState(params.state)) {
+          if (self.get('responseType') === 'token') {
+            self.saveToken(self.generateToken(params));
+            // verify the token on the client end 
+            self.verifyToken().then(function(result) {
+              /*jshint unused:false*/ 
+              self.trigger('success', params);  
+            }, function(error) {
+              /*jshint unused:false*/ 
+              self.removeToken();
+              self.trigger('error', 'Error: verifying token', params);
+            });
+          } else {
+            self.trigger('success', params.code);
           }
-          else {
-            this.trigger('success', params.code);
-          }  
         } else {
-          this.trigger('error', params);
+          self.trigger('error', 'Error: authorization', params);
         }
 
-        if (callback && typeof(callback) === "function") {
+        if (callback && typeof(callback) === 'function') {
           callback();
         }
+      },
+
+      /**
+       * For Client-side flow verify the token with the endpoint. Mitigation for confused deputy.
+       * This method should be replaced by the app using this library.
+       *
+       * @method verifyToken
+       * @return {Promise} Checks with the endpoint if the token is valid
+       */
+      verifyToken: function() {
+        return Ember.RSVP.Promise.resolve(true);
       },
 
       /**
        * Checks if the State returned from the server matches the state that was generated in the original request and saved in the browsers localStorage.
        *
        * @method checkState
-       * @param {Object} stateObj The object returned from localStorage
-       * @return {Boolean} Will return true if the states match otherwise it will throw an Error
+       * @param {String} state The state to check
+       * @return {Boolean} Will return true if the states false if they do not match
        */
-      checkState: function(stateObj) {
-        if (!stateObj) throw new Error("Could not find state.");
-        if (stateObj.state === this.get('state')) {
+      checkState: function(state) {
+        if (!state) return false;
+        // check the state returned with state saved in localstorage
+        if (state === this.readState().state) {
+          this.removeState(this.stateKeyName());
           return true;
         } else {
-          throw new Error("State returned from the server did not match the local saved state.");
+          Ember.Logger.warn("State returned from the server did not match the local saved state.");
+          return false;
         }
       },
 
@@ -310,6 +336,19 @@ define("ember-oauth2",
        */
       saveState: function(requestObj) {
         window.localStorage.setItem(this.stateKeyName(), JSON.stringify(requestObj));
+      },
+
+      /**
+       * Return the saved state object from localStoage.
+       *
+       * @method getState
+       * @return {Object} Properties of the request state
+       */
+      readState: function() {
+        var stateObj = JSON.parse(window.localStorage.getItem(this.stateKeyName()));
+        if (!stateObj) return null;
+
+        return stateObj;
       },
 
       /**
@@ -462,7 +501,7 @@ define("ember-oauth2",
      * @property {String} VERSION
      * @final
     */
-    var VERSION = "1.0.1";
+    var VERSION = "1.1.0";
 
     /**
      * @method version
