@@ -112,7 +112,7 @@ App.oauth = OAuth2.create({providerId: 'google'});
 App.oauth.authorize();
 ```
 
-Using the global distribution `ember-aouth2.js`.
+Using the global distribution `ember-oauth2.js`.
 
 ```javascript
 App.oauth = Ember.OAuth2.create({providerId: 'google'});
