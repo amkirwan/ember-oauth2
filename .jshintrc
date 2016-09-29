@@ -1,20 +1,12 @@
 {
-  "predef": {
-    "document": true,
-    "window": true,
-    "Ember": true,
-    "Em": true,
-    "$": true,
-    "define": true,
-    "require": true,
-    "requirejs": true,
-    "requireModule": true,
-    "module": true
-  },
-  "node" : false,
-  "browser" : true,
-  "boss" : true,
-  "curly": false,
+  "predef": [
+    "document",
+    "window",
+    "-Promise"
+  ],
+  "browser": true,
+  "boss": true,
+  "curly": true,
   "debug": false,
   "devel": true,
   "eqeqeq": true,
@@ -31,11 +23,10 @@
   "plusplus": false,
   "regexp": false,
   "undef": true,
-  "unused": true,
   "sub": true,
   "strict": false,
   "white": false,
   "eqnull": true,
-  "esnext": true,
-  "jasmine": true
+  "esversion": 6,
+  "unused": true
 }
