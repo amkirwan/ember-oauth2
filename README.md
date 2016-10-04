@@ -33,7 +33,14 @@ $ npm install --save-dev ember-oauth2
 
 ```
 
+Ember-OAuth2 is an Ember [service](https://guides.emberjs.com/v2.8.0/applications/services/) that you can inject to different parts of your app using the inject syntax
 
+```javascript
+import Ember from 'ember';
+export default DS.Model.extend({
+  emberOauth2: Ember.inject.service();
+});
+```
 
 
 

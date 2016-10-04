@@ -1,8 +1,13 @@
 # Changelog Ember-OAuth2
 
+## v2.0.0-beta
+  -- Converted to EmberAddon and turned EmberOAuth2 into a service 
+  -- Updated testing to use Ember-Qunit
+  -- Update project README
 ## v1.1.0
   -- Add verifyToken method to handle mitigation of the confused deputy
   -- fix bug with checking of state 
+
 ## v1.0.1
   -- Update getState function to not take a param argument and use the configure statePrefix to find the state from localStorage.
   -- This makes getState and getToken perform the same way and avoids confusion with the api
