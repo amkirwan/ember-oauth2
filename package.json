@@ -9,6 +9,7 @@
     "test": "tests"
   },
   "keywords": [
+    "ember-addon",
     "ember-oauth2",
     "oauth2",
     "oauth2.0",
@@ -16,7 +17,10 @@
     "ember.js",
     "emberjs"
   ],
-  "author": "Anthony Kirwan",
+  "ember-addon": {
+    "configPath": "tests/dummy/config"
+  },
+  "author": "",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/amkirwan/ember-oauth2/issues"
@@ -33,8 +37,6 @@
   "engines": {
     "node": ">= 0.10.0"
   },
-  "author": "",
-  "license": "MIT",
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.2",
     "ember-ajax": "^2.0.1",
@@ -55,6 +57,7 @@
     "ember-export-application-global": "^1.0.5",
     "ember-load-initializers": "^0.5.1",
     "ember-resolver": "^2.0.3",
+    "ember-sinon": "^0.5.1",
     "ember-welcome-page": "^1.0.1",
     "loader.js": "^4.0.1"
   }
