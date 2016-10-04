@@ -1,11 +1,11 @@
 {
   "name": "Ember.OAuth2",
   "description": "OAuth2 library for Emberjs that stores tokens in the browsers localStorage",
-  "version": "1.1.0",
+  "version": "2.0.0-beta",
   "url": "https://github.com/amkirwan/ember-oauth2",
   "options": {
-    "exclude": "node_modules,bower_components,scripts",
-    "paths": "./lib/ember-oauth2.js",
+    "exclude": "node_modules,bower_components,scripts,tmp,vendor",
+    "paths": "./addon/services/ember-oauth2.js",
     "outdir": "./doc"
   }
 }

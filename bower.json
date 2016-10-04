@@ -6,7 +6,6 @@
     "Anthony Kirwan <amkirwan@gmail.com>"
   ],
   "description": "OAuth2 library for Emberjs that stores tokens in the browsers localStorage",
-  "main": "dist/ember.oauth2.js",
   "keywords": [
     "ember-oauth2",
     "oauth2",
@@ -36,14 +35,7 @@
     "CHANGELOG.md"
   ],
   "dependencies": {
-    "ember": "~1.13.0"
-  },
-  "devDependencies": {
-    "ember-resolver": "~0.1.18",
-    "loader.js": "ember-cli/loader.js#3.2.1",
-    "ember-cli-shims": "ember-cli/ember-cli-shims#0.0.3",
-    "handlebars": "~2.0",
-    "jasmine": ">= 2.0",
-    "sinonjs": "*"
+    "ember": "~2.8.0",
+    "ember-cli-shims": "0.1.1"
   }
 }
