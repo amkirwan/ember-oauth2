@@ -1,9 +1,19 @@
 # Changelog Ember-OAuth2
 
+## v2.0.1-beta
+  (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v2.0.0-beta...v2.0.1-beta] 
+
+  -- Update NPM author info 
+
+
 ## v2.0.0-beta
+  (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v1.1.0...v2.0.0-beta] 
+
   -- Converted to EmberAddon and turned EmberOAuth2 into a service 
   -- Updated testing to use Ember-Qunit
   -- Update project README
+
+
 ## v1.1.0
   -- Add verifyToken method to handle mitigation of the confused deputy
   -- fix bug with checking of state 

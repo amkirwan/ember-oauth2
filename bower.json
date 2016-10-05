@@ -1,6 +1,6 @@
 {
   "name": "ember-oauth2",
-  "version": "2.0.0-beta",
+  "version": "2.0.1-beta",
   "homepage": "https://github.com/amkirwan/ember-oauth2",
   "authors": [
     "Anthony Kirwan <amkirwan@gmail.com>"
