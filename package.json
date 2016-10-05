@@ -3,7 +3,6 @@
   "version": "2.0.0-beta",
   "description": "OAuth2 library for Emberjs that stores tokens in the browsers localStorage",
   "homepage": "https://github.com/amkirwan/ember-ouath2",
-  "private": true,
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -20,7 +19,7 @@
   "ember-addon": {
     "configPath": "tests/dummy/config"
   },
-  "author": "",
+  "author": "Anthony Kirwan",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/amkirwan/ember-oauth2/issues"
