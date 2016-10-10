@@ -3,46 +3,44 @@
 ## v2.0.2-beta
   (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v2.0.1-beta...v2.0.2-beta] 
 
-  -- add setProvider method 
-  -- change init to not take providerId
+  - add setProvider method 
+  - change init to not take providerId
 
 ## v2.0.1-beta
   (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v2.0.0-beta...v2.0.1-beta] 
 
-  -- Update NPM author info 
-
-
+  - Update NPM author info 
 
 ## v2.0.0-beta
   (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v1.1.0...v2.0.0-beta] 
 
-  -- Converted to EmberAddon and turned EmberOAuth2 into a service 
-  -- Updated testing to use Ember-Qunit
-  -- Update project README
-
-
+  - Converted to EmberAddon and turned EmberOAuth2 into a service 
+  - Updated testing to use Ember-Qunit
+  - Update project README
 
 ## v1.1.0
-  -- Add verifyToken method to handle mitigation of the confused deputy
-  -- fix bug with checking of state 
-
+  - Add verifyToken method to handle mitigation of the confused deputy
+  - fix bug with checking of state 
 
 ## v1.0.1
-  -- Update getState function to not take a param argument and use the configure statePrefix to find the state from localStorage.
-  -- This makes getState and getToken perform the same way and avoids confusion with the api
-  -- Fix bug where handleRedircect could not find the stateObj
+  - Update getState function to not take a param argument and use the configure statePrefix to find the state from localStorage.
+  - This makes getState and getToken perform the same way and avoids confusion with the api
+  - Fix bug where handleRedircect could not find the stateObj
+
 ## v1.0.0
-  -- Drop support for deprecated callback methods onSuccess, onError, and onRedirect. Callbacks can be called using Ember.Evented trigger with the targets success, error, and redirect.
+  - Drop support for deprecated callback methods onSuccess, onError, and onRedirect. Callbacks can be called using Ember.Evented trigger with the targets success, error, and redirect.
 ## v0.7.0
-  -- Add support Authorization Grant Flow
+  - Add support Authorization Grant Flow
 ## v0.6.0
-  -- Remove global distribution
-  -- Bump project bower and node dependencies
-  -- Bump Ember to ~0.13.0
+  - Remove global distribution
+  - Bump project bower and node dependencies
+  - Bump Ember to ~0.13.0
+
 ## v0.5.5
   - Provide funtion to remove the token from localstorage
   - Provide funtion to remove the state from localstorage
   - Funtion to get the stateKeyName and tokenKeyName
+
 ## v0.5.4
   - Added support for versions of Ember >= 1.7
 ## v0.5.3
