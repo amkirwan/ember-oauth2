@@ -4,13 +4,13 @@ import Ember from 'ember';
   * @overview OAuth2 addon for Emberjs that stores tokens in the browsers localStorage
   * @license   Licensed under MIT license
   *            See https://raw.github.com/amkirwan/ember-oauth2/master/LICENSE
-  * @version   2.0.1-beta
+  * @version   2.0.2-beta
   *
   * @module ember-oauth2
   * @class ember-oauth2
   */
 export default Ember.Service.extend(Ember.Evented, {
-  VERSION: '2.0.1-beta',
+  VERSION: '2.0.2-beta',
   /**
    * initialize with the providerId to find in
    * EmberENV['ember-oauth2'] config

@@ -1,9 +1,16 @@
 # Changelog Ember-OAuth2
 
+## v2.0.2-beta
+  (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v2.0.1-beta...v2.0.2-beta] 
+
+  -- add setProvider method 
+  -- change init to not take providerId
+
 ## v2.0.1-beta
   (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v2.0.0-beta...v2.0.1-beta] 
 
   -- Update NPM author info 
+
 
 
 ## v2.0.0-beta
@@ -14,9 +21,11 @@
   -- Update project README
 
 
+
 ## v1.1.0
   -- Add verifyToken method to handle mitigation of the confused deputy
   -- fix bug with checking of state 
+
 
 ## v1.0.1
   -- Update getState function to not take a param argument and use the configure statePrefix to find the state from localStorage.
@@ -98,3 +107,4 @@
   - [8de0dc3](https://github.com/amkirwan/ember-oauth2/commit/8de0dc3f6cb2d93a0a16752e9306b18e998a906b) adjusted readme.md
   - [c4e5829](https://github.com/amkirwan/ember-oauth2/commit/c4e58292a43190fd6e9b7af7d1b3bde900e7776f) travis should run tests using grunt task
   - [17eb7f7](https://github.com/amkirwan/ember-oauth2/commit/17eb7f71a275c94b3053d334f77004fbf6ef03b4) fixed ember-oauth2.png image
+
