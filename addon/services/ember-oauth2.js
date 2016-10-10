@@ -21,18 +21,29 @@ export default Ember.Service.extend(Ember.Evented, {
       window.EmberENV['ember-oauth2'] = {};
     }
     this.set('config', window.EmberENV['ember-oauth2']);
-  
-    // if the provider id doesn't exist in the config throw an error
-    if (!this.get('config')[this.get('providerId')]) {
-      throw new Error("Cannot find the providerId: '" + this.get('providerId') + "' in the config.");
-    } else {
-      this.set('providerConfig', this.get('config')[this.get('providerId')]);
-    }
 
     this.set('statePrefix', 'state');
     this.set('tokenPrefix', 'token');
     this.set('responseType', 'token');
-    this.setProperties(this.providerConfig);
+  },
+
+  /**
+   * Set the provider for the ember-oauth2 service with the providerId configured
+   * in EmberENV['ember-oauth2'].
+   *
+   * @method setProvider
+   * @param {String} providerId the provider Id configured in EmberENV['ember-oauth2']
+   */
+  setProvider(providerId) {
+    this.set('providerId', providerId);
+    // if the provider id doesn't exist in the config throw an error
+    if (!this.get('config')[this.get('providerId')]) {
+      throw new Error(`Cannot find the providerId: ${this.get('providerId')} in the config.`);
+    } else {
+      this.set('providerConfig', this.get('config')[this.get('providerId')]);
+      this.setProperties(this.providerConfig);
+      return this;
+    }
   },
 
   /**

@@ -3,7 +3,7 @@ import { moduleFor, test } from 'ember-qunit';
 import sinon from 'sinon';
 
 
-let responseType, clientId, authBaseUri, redirectUri, scopes;
+let service, responseType, clientId, authBaseUri, redirectUri, scopes;
 
 moduleFor('service:ember-oauth2', 'Unit | Service | EmberOAuth2', {
   unit: true,
@@ -23,6 +23,8 @@ moduleFor('service:ember-oauth2', 'Unit | Service | EmberOAuth2', {
         scope: scopes
       }
     };
+    service = this.subject();
+    service.setProvider('test_auth');
   }
 });
 
@@ -31,55 +33,44 @@ test('EmberENV defined', function(assert) {
 });
 
 test('adds ember-oauth2 object to EmberENV', function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   assert.expect(2);
   assert.ok(window.EmberENV['ember-oauth2']);
   assert.equal(window.EmberENV['ember-oauth2'], service.get('config'));
 });
 
-test('checks the providerId is in the config', function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
-  assert.deepEqual(window.EmberENV['ember-oauth2']['test_auth'], service.get('config.test_auth'));
-});
-
-test('it sets the providerConfig', function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
-  assert.deepEqual(window.EmberENV['ember-oauth2']['test_auth'], service.get('providerConfig'));
-});
-
-test('throws an error if the providerId is not in the config', function(assert) {
-  assert.throws(function() {
-    this.subject({providerId: 'qux'});
-  });
-});
-
-test('it returns the version', function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
-  assert.ok(service.VERSION);
-});
-
 test("base properties token configuration", function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   assert.ok(service.get('statePrefix'));
   assert.ok(service.get('tokenPrefix'));
   assert.ok(service.get('responseType'));
 });
 
-test("set properties from the providerConfig", function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
-  assert.ok(service.get('clientId'));
-  assert.ok(service.get('authBaseUri'));
-  assert.ok(service.get('redirectUri'));
+test("#setProvider configures the provider from the providerId in the ember-oauth2 config", function(assert) {
+  service.setProvider('test_auth');
+  assert.expect(5);
+  assert.equal(service.get('providerId'), 'test_auth');
+  assert.deepEqual(service.get('providerConfig'), window.EmberENV['ember-oauth2']['test_auth']); 
+  // sets the properties from the providerConfig
+  assert.equal(service.get('clientId'), clientId);
+  assert.equal(service.get('authBaseUri'), authBaseUri);
+  assert.equal(service.get('redirectUri'), redirectUri);
+});
+
+test("#setProvider providerId does not exists in ember-oauth2 config", function(assert) {
+  assert.throws(function() {
+    service.setProvider('qux');
+  }, /Cannot find the providerId: qux in the config./);
+});
+
+test('it returns the version', function(assert) {
+  assert.ok(service.VERSION);
 });
 
 test('#uuid returns a version 4 formatted uuid', function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   let re = /[\d\w]{8}-[\d\w]{4}-4[\d\w]{3}-[\d\w]{4}-[\d\w]{12}/;
   assert.ok(re.test(service.uuid()));
 });
 
 test('#now returns the time rounded to the closest second', function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   let stub = sinon.stub(Date.prototype, 'getTime', function() { return '1000'; });
   assert.equal(service.now(), 1);
   stub.reset();
@@ -87,14 +78,12 @@ test('#now returns the time rounded to the closest second', function(assert) {
 
 // tests #stateKeyName
 test('#statKeyName calls generateState if state empty', function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   let spy = sinon.spy(service, 'generateState');
   service.stateKeyName();
   assert.ok(spy.calledOnce);
 });
 
 test('#statKeyName returns the name for saving state to localstorage', function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   service.set('state', '12345');
   assert.equal(service.stateKeyName(), 'state-12345');
 });
@@ -102,7 +91,6 @@ test('#statKeyName returns the name for saving state to localstorage', function(
 // tests #generateState
 test('#generateState creates a new state', function(assert) {
   assert.expect(3);
-  let service = this.subject({providerId: 'test_auth'});
   let spy = sinon.spy(service, 'uuid');
   assert.notOk(service.get('state'));
   service.generateState();
@@ -112,7 +100,6 @@ test('#generateState creates a new state', function(assert) {
 
 // #expiresIn
 test('#expiresIn returns when the token will expires', function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   let stub = sinon.stub(service, 'now', function() { return 1000; });
   assert.equal(service.expiresIn('3600'), 4600);
   stub.reset();
@@ -121,7 +108,6 @@ test('#expiresIn returns when the token will expires', function(assert) {
 
 test('#saveState', function(assert) {
   assert.expect(2);
-  let service = this.subject({providerId: 'test_auth'});
   let spy = sinon.spy(service, 'stateKeyName');
   let obj = {foo: 'bar'};
   service.saveState(obj);
@@ -131,7 +117,6 @@ test('#saveState', function(assert) {
 
 test('#removeState', function(assert) {
   assert.expect(4);
-  let service = this.subject({providerId: 'test_auth'});
 
   window.localStorage.setItem('foobar', {});
   assert.ok(window.localStorage.getItem('foobar'));
@@ -149,7 +134,8 @@ test('#removeState', function(assert) {
 // clearStates all states with prefix
 test('remove any saved states with prefix', function(assert) {
   assert.expect(2);
-  let service = this.subject({providerId: 'test_auth'});
+  service = this.subject();
+  service.setProvider('test_auth');
   let obj = {foo: 'bar'};
 
   service.saveState(obj);
@@ -169,7 +155,6 @@ test('remove any saved states with prefix', function(assert) {
 
 // requestObj
 test('#requestObj', function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   let obj = service.requestObj();
   
   assert.equal(obj.response_type, 'token');
@@ -180,7 +165,6 @@ test('#requestObj', function(assert) {
 });
 
 test('#authUri generates the authorization uri', function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   let uri = service.get('authBaseUri');
   uri += '?response_type=' + encodeURIComponent(responseType) +
                '&redirect_uri=' + encodeURIComponent(redirectUri) +
@@ -193,7 +177,6 @@ test('#authUri generates the authorization uri', function(assert) {
 
 // #authorize
 test("#authorize success", function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   let spyClearState = sinon.spy(service, 'clearStates');
   let spySaveState = sinon.spy(service, 'saveState');
   let spyOpenWindow = sinon.spy(service, 'openWindow');
@@ -210,7 +193,6 @@ test("#authorize success", function(assert) {
 
 // #authorize config errors
 test("should require a providerId in the config", function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   service.set('providerId', null);
   assert.throws(function() {
     service.authorize();
@@ -218,7 +200,6 @@ test("should require a providerId in the config", function(assert) {
 });
 
 test("should require a clientId in the config", function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   service.set('clientId', null);
   assert.throws(function() {
     service.authorize();
@@ -226,7 +207,6 @@ test("should require a clientId in the config", function(assert) {
 });
 
 test("should require an authBaseUri in the config", function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   service.set('authBaseUri', null);
   assert.throws(function() {
     service.authorize();
@@ -234,7 +214,6 @@ test("should require an authBaseUri in the config", function(assert) {
 });
 
 test("should require a redirectUri in the config", function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   service.set('redirectUri', null);
   assert.throws(function() {
     service.authorize();
@@ -243,7 +222,6 @@ test("should require a redirectUri in the config", function(assert) {
 
 test("should error when dialog does not open", function(assert) {
   var stub = sinon.stub(window, 'open').returns(false);
-  let service = this.subject({providerId: 'test_auth'});
   let prom = service.authorize();
   prom.then(function(){},function(error) {
     assert.equal(error.message, 'Opening dialog login window failed.');
@@ -253,7 +231,6 @@ test("should error when dialog does not open", function(assert) {
 
 // parse callback
 test('#parseCallback', function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   let callbackUri = redirectUri;
   let state = service.generateState();
   callbackUri += '#access_token=' + ('12345abc') +
@@ -266,7 +243,6 @@ test('#parseCallback', function(assert) {
 
 test('#authSuccess', function(assert) {
   assert.expect(3);
-  let service = this.subject({providerId: 'test_auth'});
   let params = { access_token: '12345abc' };
   assert.ok(service.authSuccess(params));
 
@@ -282,7 +258,6 @@ test('#authSuccess', function(assert) {
 
 test('#checkState', function(assert) {
   assert.expect(3);
-  let service = this.subject({providerId: 'test_auth'});
   assert.notOk(service.checkState());
 
   let state = '12345abcd';
@@ -295,7 +270,6 @@ test('#checkState', function(assert) {
 });
 
 test('#readState', function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   assert.notOk(service.readState());
 
   let data = {foo: 'bar'};
@@ -305,7 +279,6 @@ test('#readState', function(assert) {
 });
 
 test("#generateToken should generate the token that will be saved to the localStorage", function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   let stub = sinon.stub(service, 'expiresIn', function() { return 1000; });
   let params = {expires_in: 1000, scope: scopes, access_token: 'abcd12345'};
   let token = { provider_id: 'test_auth', expires_in: 1000, scope: scopes, access_token: 'abcd12345' };
@@ -316,12 +289,10 @@ test("#generateToken should generate the token that will be saved to the localSt
 
 test("#tokenKeyName returns tokenPrefx with providerId", function(assert) {
   // should return token-google
-  let service = this.subject({providerId: 'test_auth'});
   assert.equal(service.tokenKeyName(), 'token-test_auth');
 });
 
 test("#saveToken should generated the token localStorage", function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   let token = { provider_id: 'test_auth', expires_in: 1000, scope: scopes, access_token: 'abcd12345' };
   assert.deepEqual(service.saveToken(token), window.localStorage.getItem('token-test_auth'));
 });
@@ -329,7 +300,6 @@ test("#saveToken should generated the token localStorage", function(assert) {
 // handle redirect
 // success Implicit client-side flow
 test('#handleRedirect - success', function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   let spy = sinon.spy(service, 'handleRedirect');
   let triggerSpy = sinon.spy(service, 'trigger');
 
@@ -354,7 +324,6 @@ test('#handleRedirect - success', function(assert) {
 // failure Implicit client-side flow
 // verifyToken failure
 test('#handleRedirect - verifyToken failure', function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   let spy = sinon.spy(service, 'handleRedirect');
   let triggerSpy = sinon.spy(service, 'trigger');
   let verifyStub = sinon.stub(service, 'verifyToken', function() { return new Ember.RSVP.reject('error'); });
@@ -381,7 +350,6 @@ test('#handleRedirect - verifyToken failure', function(assert) {
 // failure Implicit client-side flow
 // state does not match failure
 test('#handleRedirect - failure state does not match', function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   let spy = sinon.spy(service, 'handleRedirect');
   let triggerSpy = sinon.spy(service, 'trigger');
 
@@ -407,7 +375,6 @@ test('#handleRedirect - failure state does not match', function(assert) {
 // responseType is 'token' but response of the 
 // callbackUri is 'code' instead of 'token'
 test('#handleRedirect - tokenType is incorrect', function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   let spy = sinon.spy(service, 'handleRedirect');
   let triggerSpy = sinon.spy(service, 'trigger');
 
@@ -431,7 +398,7 @@ test('#handleRedirect - tokenType is incorrect', function(assert) {
 
 // success authorization flow
 test('#handleRedirect - success authorization flow', function(assert) {
-  let service = this.subject({providerId: 'test_auth', responseType: 'code'});
+  service = this.subject({providerId: 'test_auth', responseType: 'code'});
   let spy = sinon.spy(service, 'handleRedirect');
   let triggerSpy = sinon.spy(service, 'trigger');
 
@@ -455,7 +422,6 @@ test('#handleRedirect - success authorization flow', function(assert) {
 
 test("#getToken should return the token from localStorage", function(assert) {
   assert.expect(3);
-  let service = this.subject({providerId: 'test_auth' });
   let invalidToken = {foo: 'bar'};
   let validToken = {access_token: 'abcd', foo: 'bar'};
   window.localStorage.removeItem(service.tokenKeyName());
@@ -470,7 +436,6 @@ test("#getToken should return the token from localStorage", function(assert) {
 
 test("#getAccessToken should return the access_token from the localStorage", function(assert) {
   assert.expect(2);
-  let service = this.subject({providerId: 'test_auth' });
   let token = {access_token: 'abcd', foo: 'bar'};
   window.localStorage.removeItem(service.tokenKeyName());
   assert.notOk(service.getAccessToken());
@@ -481,7 +446,6 @@ test("#getAccessToken should return the access_token from the localStorage", fun
 
 test("#accessTokenIsExpired", function(assert) {
   assert.expect(3);
-  let service = this.subject({providerId: 'test_auth'});
   let expiredToken = { access_token: 'abcd', foo: 'bar', expires_in: 3600 };
   let validToken = { access_token: 'abcd', foo: 'bar', expires_in: 3600 };
   window.localStorage.removeItem(service.tokenKeyName());
@@ -500,7 +464,6 @@ test("#accessTokenIsExpired", function(assert) {
 });
 
 test("#expiresIn", function(assert) {
-  let service = this.subject({providerId: 'test_auth'});
   let stub = sinon.stub(service, 'now', function() { return 1000; });
   
   assert.equal(service.expiresIn(3600), 4600);
@@ -509,7 +472,6 @@ test("#expiresIn", function(assert) {
 
 test("#removeToken", function(assert) {
   assert.expect(2);
-  let service = this.subject({providerId: 'test_auth'});
   window.localStorage.removeItem(service.tokenKeyName());
   let token = {access_token: 'abcd', foo: 'bar'};
   service.saveToken(token);  
