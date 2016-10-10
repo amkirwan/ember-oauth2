@@ -48,11 +48,8 @@ export default DS.Model.extend({
 
 First you must configure your OAuth provider. For Google you would configure it like this.
 
-New API for configuration >= 0.5.0 for AMD distribution `ember-oauth2.amd.js`. 
-
 ```
-window.ENV = window.ENV || {};
-window.ENV['ember-oauth2'] = {
+window.EmberENV['ember-oauth2'] = {
   google: {
     clientId: "xxxxxxxxxxxx",
     authBaseUri: 'https://accounts.google.com/o/oauth2/auth',
@@ -86,7 +83,6 @@ The example above sets *google* as a *providerId* along with configuration infor
 The configuration object allows you to also customize the prefix for the state and token that are stored in the browsers localStorage. The default value for the state prefix is *state* and the default for token is *token*. Using the previous example you can customize the prefixes by doing the following.
 
 ```javascript
-window.ENV = window.ENV || {};
 window.ENV['ember-oauth2'] = {
   google: {
     clientId: "xxxxxxxxxxxx",
@@ -110,15 +106,27 @@ The following are the options available for configuring a provider:
 * `tokenPrefix`: The prefix name for token key stored in the localStorage. The default value is `token` and the key would be `token-the_provider_id`
 
 
+
 ## Authorization
 
-To sign into the OAuth2 provider create an auth object using the providerId and call the authorize method. Using the previous Google configuration example you would call it like this:
+To sign into the OAuth2 provider create by injecting the service, set the provider with `setProvider` and call the `authorize`. You can inject this addon into your route for example and when the user clicks a button fire the action to handle the request and set the service providerId and call authorize. This is a simple example and you would probably want to wrap this functionality in a session model. Checkout [ember-token-auth](https://github.com/amkirwan/ember-token-auth) for a full example. 
 
 ```javascript
 // login route
 import Ember from 'ember';
 export default Ember.Route.extend({
-  emberOAuth2: Ember.inject.service()
+  emberOauth2: Ember.inject.service(),
+  action: {
+    authenticate(providerId) {
+      emberOauth2.setProvider(providerId);
+      return emberOauth2.authorize().then(function(response) {
+        emberOauth2.get('auth').trigger('redirect', response.location.hash);
+      }, function(error) {
+        emberOauth2.get('auth').trigger('error', error);
+      })
+    }
+  }
+
 });
 ```
 
@@ -139,6 +147,9 @@ At the redirectURI add the following to process the params returned from the OAu
   </head>
 </html>
 ```
+
+
+
 
 ## Implicit Grant Flow (Client-side flow)
 
@@ -253,4 +264,6 @@ $ yuidoc .
 #### Thanks to the following projects for ideas on how to make this work.
 
 * [backbone-oauth](http://github.com/ptnplanet/backbone-oauth)
+
+
 
