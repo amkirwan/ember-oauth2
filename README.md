@@ -118,11 +118,11 @@ export default Ember.Route.extend({
   emberOauth2: Ember.inject.service(),
   action: {
     authenticate(providerId) {
-      emberOauth2.setProvider(providerId);
-      return emberOauth2.authorize().then(function(response) {
-        emberOauth2.get('auth').trigger('redirect', response.location.hash);
+      this.get('emberOauth2').setProvider(providerId);
+      return this.get('emberOauth2').authorize().then(function(response) {
+        this.get('emberOauth2').get('auth').trigger('redirect', response.location.hash);
       }, function(error) {
-        emberOauth2.get('auth').trigger('error', error);
+        this.get('emberOauth2').get('auth').trigger('error', error);
       })
     }
   }
