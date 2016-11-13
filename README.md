@@ -29,14 +29,14 @@ The latest version of Ember-OAuth2 is an Ember Addon and uses the ES6 modules. T
 Ember-OAuth2 is an Ember Addon that can be installed with the following command from your ember project.
 
 ```javascript
-$ npm install --save-dev ember-oauth2  
-
+$ ember install ember-oauth2  
 ```
 
 Ember-OAuth2 is an Ember [service](https://guides.emberjs.com/v2.8.0/applications/services/) that you can inject to different parts of your app using the inject syntax
 
 ```javascript
 import Ember from 'ember';
+
 export default DS.Model.extend({
   emberOauth2: Ember.inject.service();
 });
