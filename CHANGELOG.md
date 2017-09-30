@@ -1,26 +1,30 @@
 # Changelog Ember-OAuth2
 
-## v2.0.2-beta
-  (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v2.0.1-beta...v2.0.2-beta] 
+## v2.0.3-beta
+  (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v2.0.2-beta...v2.0.3-beta]
+  - fix typo in scope
 
-  - add setProvider method 
+## v2.0.2-beta
+  (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v2.0.1-beta...v2.0.2-beta]
+
+  - add setProvider method
   - change init to not take providerId
 
 ## v2.0.1-beta
-  (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v2.0.0-beta...v2.0.1-beta] 
+  (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v2.0.0-beta...v2.0.1-beta]
 
-  - Update NPM author info 
+  - Update NPM author info
 
 ## v2.0.0-beta
-  (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v1.1.0...v2.0.0-beta] 
+  (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v1.1.0...v2.0.0-beta]
 
-  - Converted to EmberAddon and turned EmberOAuth2 into a service 
+  - Converted to EmberAddon and turned EmberOAuth2 into a service
   - Updated testing to use Ember-Qunit
   - Update project README
 
 ## v1.1.0
   - Add verifyToken method to handle mitigation of the confused deputy
-  - fix bug with checking of state 
+  - fix bug with checking of state
 
 ## v1.0.1
   - Update getState function to not take a param argument and use the configure statePrefix to find the state from localStorage.
@@ -50,7 +54,7 @@
 ## v0.5.2
   - Update Ember dependeny to 1.7
   - Moved bower install dependences from vendor to bower_components
-  - Add dist dir to repo for bower installs 
+  - Add dist dir to repo for bower installs
 ## v0.5.1
   - Fixed bug where the random UUID for the state was not being set.
   - openWindow resolves with a reference to the dialog window and rejects
@@ -65,7 +69,7 @@
   - Login dialog window returns a promise, it resolves on success and reject on error
 ## v0.3.2
   - Remove files not needed in package.
-  - Add build files to dist dir for package manaagers. 
+  - Add build files to dist dir for package manaagers.
 ## v0.3.1
   - Initial relase to Bower
 ## v0.3.0

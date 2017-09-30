@@ -2,7 +2,6 @@ import Ember from 'ember';
 import { moduleFor, test } from 'ember-qunit';
 import sinon from 'sinon';
 
-
 let service, responseType, clientId, authBaseUri, redirectUri, scopes;
 
 moduleFor('service:ember-oauth2', 'Unit | Service | EmberOAuth2', {
@@ -48,7 +47,7 @@ test("#setProvider configures the provider from the providerId in the ember-oaut
   service.setProvider('test_auth');
   assert.expect(5);
   assert.equal(service.get('providerId'), 'test_auth');
-  assert.deepEqual(service.get('providerConfig'), window.EmberENV['ember-oauth2']['test_auth']); 
+  assert.deepEqual(service.get('providerConfig'), window.EmberENV['ember-oauth2']['test_auth']);
   // sets the properties from the providerConfig
   assert.equal(service.get('clientId'), clientId);
   assert.equal(service.get('authBaseUri'), authBaseUri);
@@ -120,7 +119,7 @@ test('#removeState', function(assert) {
 
   window.localStorage.setItem('foobar', {});
   assert.ok(window.localStorage.getItem('foobar'));
-  service.removeState('foobar'); 
+  service.removeState('foobar');
   assert.notOk(window.localStorage.getItem('foobar'));
 
   // without stateName use saved stateKeyName;
@@ -156,7 +155,7 @@ test('remove any saved states with prefix', function(assert) {
 // requestObj
 test('#requestObj', function(assert) {
   let obj = service.requestObj();
-  
+
   assert.equal(obj.response_type, 'token');
   assert.equal(obj.providerId, 'test_auth');
   assert.equal(obj.clientId, 'abcd');
@@ -282,7 +281,7 @@ test("#generateToken should generate the token that will be saved to the localSt
   let stub = sinon.stub(service, 'expiresIn', function() { return 1000; });
   let params = {expires_in: 1000, scope: scopes, access_token: 'abcd12345'};
   let token = { provider_id: 'test_auth', expires_in: 1000, scope: scopes, access_token: 'abcd12345' };
- 
+
   assert.deepEqual(service.generateToken(params), token);
   stub.reset();
 });
@@ -311,7 +310,7 @@ test('#handleRedirect - success', function(assert) {
               '&token_type=' + 'Bearer' +
               '&expires_in=' + '3600' +
               '&state=' + state;
- 
+
   let parsed = { access_token : '12345abc', token_type : 'Bearer', expires_in : '3600', state : state };
   let stub = sinon.stub(service, 'parseCallback', function() { return parsed; });
 
@@ -336,7 +335,7 @@ test('#handleRedirect - verifyToken failure', function(assert) {
               '&token_type=' + 'Bearer' +
               '&expires_in=' + '3600' +
               '&state=' + state;
- 
+
   let parsed = { access_token: '12345abc', token_type : 'Bearer', expires_in : '3600', state : state };
   let stub = sinon.stub(service, 'parseCallback', function() { return parsed; });
 
@@ -361,7 +360,7 @@ test('#handleRedirect - failure state does not match', function(assert) {
               '&token_type=' + 'Bearer' +
               '&expires_in=' + '3600' +
               '&state=' + '12345';
- 
+
   let parsed = { access_token: '12345abc', token_type : 'Bearer', expires_in : '3600', state : state };
   let stub = sinon.stub(service, 'parseCallback', function() { return parsed; });
 
@@ -372,7 +371,7 @@ test('#handleRedirect - failure state does not match', function(assert) {
 });
 
 // failure Implicit client-side flow
-// responseType is 'token' but response of the 
+// responseType is 'token' but response of the
 // callbackUri is 'code' instead of 'token'
 test('#handleRedirect - tokenType is incorrect', function(assert) {
   let spy = sinon.spy(service, 'handleRedirect');
@@ -386,7 +385,7 @@ test('#handleRedirect - tokenType is incorrect', function(assert) {
               '&token_type=' + 'Bearer' +
               '&expires_in=' + '3600' +
               '&state=' + state;
- 
+
   let parsed = { code: '12345abc', token_type : 'Bearer', expires_in : '3600', state : state };
   let stub = sinon.stub(service, 'parseCallback', function() { return parsed; });
 
@@ -410,7 +409,7 @@ test('#handleRedirect - success authorization flow', function(assert) {
               '&token_type=' + 'Bearer' +
               '&expires_in=' + '3600' +
               '&state=' + state;
- 
+
   let parsed = { code: '12345abc', token_type : 'Bearer', expires_in : '3600', state : state };
   let stub = sinon.stub(service, 'parseCallback', function() { return parsed; });
 
@@ -465,7 +464,7 @@ test("#accessTokenIsExpired", function(assert) {
 
 test("#expiresIn", function(assert) {
   let stub = sinon.stub(service, 'now', function() { return 1000; });
-  
+
   assert.equal(service.expiresIn(3600), 4600);
   stub.reset();
 });
@@ -474,7 +473,7 @@ test("#removeToken", function(assert) {
   assert.expect(2);
   window.localStorage.removeItem(service.tokenKeyName());
   let token = {access_token: 'abcd', foo: 'bar'};
-  service.saveToken(token);  
+  service.saveToken(token);
   assert.equal(window.localStorage.getItem(service.tokenKeyName()), JSON.stringify(token));
   service.removeToken();
   assert.equal(window.localStorage.getItem(service.tokenKeyName()), undefined);
