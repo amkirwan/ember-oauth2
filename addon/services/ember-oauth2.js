@@ -4,13 +4,13 @@ import Ember from 'ember';
   * @overview OAuth2 addon for Emberjs that stores tokens in the browsers localStorage
   * @license   Licensed under MIT license
   *            See https://raw.github.com/amkirwan/ember-oauth2/master/LICENSE
-  * @version   2.0.2-beta
+  * @version   2.0.3-beta
   *
   * @module ember-oauth2
   * @class ember-oauth2
   */
 export default Ember.Service.extend(Ember.Evented, {
-  VERSION: '2.0.2-beta',
+  VERSION: '2.0.3-beta',
   /**
    * initialize with the providerId to find in
    * EmberENV['ember-oauth2'] config
@@ -74,8 +74,8 @@ export default Ember.Service.extend(Ember.Evented, {
     let dialog = window.open(url, 'Authorize', 'height=600, width=450');
     if (window.focus && dialog) { dialog.focus(); }
     return new Ember.RSVP.Promise(function(resolve, reject) {
-      if (dialog) { resolve(dialog); } 
-      else { reject(new Error('Opening dialog login window failed.')); } 
+      if (dialog) { resolve(dialog); }
+      else { reject(new Error('Opening dialog login window failed.')); }
     });
   },
 
@@ -84,7 +84,7 @@ export default Ember.Service.extend(Ember.Evented, {
    * Check if the token returned is valid and if so trigger `success` event else trigger `error`
    *
    * @method handleRedirect
-   * @param {Object} hash The window location hash callback url 
+   * @param {Object} hash The window location hash callback url
    * @param {Function} callback Optional callback
    */
 
@@ -95,12 +95,12 @@ export default Ember.Service.extend(Ember.Evented, {
     if (self.authSuccess(params) && self.checkState(params.state)) {
       if (self.get('responseType') === 'token') {
         self.saveToken(self.generateToken(params));
-        // verify the token on the client end 
+        // verify the token on the client end
         self.verifyToken().then(function(result) {
-          /*jshint unused:false*/ 
+          /*jshint unused:false*/
           self.trigger('success');
         }, function(error) {
-          /*jshint unused:false*/ 
+          /*jshint unused:false*/
           self.removeToken();
           self.trigger('error', 'Error: verifying token', params);
         });
@@ -181,8 +181,6 @@ export default Ember.Service.extend(Ember.Evented, {
     return Ember.RSVP.Promise.resolve(true);
   },
 
-
-
   /**
    * Checks if the State returned from the server matches the state that was generated in the original request and saved in the browsers localStorage.
    *
@@ -236,7 +234,7 @@ export default Ember.Service.extend(Ember.Evented, {
         '&redirect_uri=' + encodeURIComponent(this.get('redirectUri')) +
         '&client_id=' + encodeURIComponent(this.get('clientId')) +
         '&state=' + encodeURIComponent(this.get('state'));
-    if (this.get('scope')) { 
+    if (this.get('scope')) {
       uri += '&scope=' + encodeURIComponent(this.get('scope')).replace('%20', '+');
     }
     return uri;
@@ -350,7 +348,7 @@ export default Ember.Service.extend(Ember.Evented, {
 
   /**
    * @method generateState
-   * @return {String} The state 
+   * @return {String} The state
    */
   generateState(clear = false) {
     if (!this.get('state') || clear === true) { this.set('state', this.uuid()); }
@@ -362,7 +360,7 @@ export default Ember.Service.extend(Ember.Evented, {
    * @return {Object} The params from the OAuth2 response from localStorage with the key 'tokenPrefix-providerId'.
    */
   getToken: function() {
-    var token = JSON.parse(window.localStorage.getItem(this.tokenKeyName())); 
+    var token = JSON.parse(window.localStorage.getItem(this.tokenKeyName()));
     if (!token) { return null; }
     if (!token.access_token) { return null; }
     return token;
