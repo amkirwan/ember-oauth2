@@ -81,10 +81,13 @@ export default Ember.Service.extend(Ember.Evented, {
                     On reject returns Object with reference to dialog and error.
    */
   openWindow(url) {
-    let dialog = window.open(url, 'Authorize', 'height=600, width=450');
-    if (window.focus && dialog) {
-      dialog.focus();
-    }
+    let windowWidth = 600;
+    let windowHeight = 800;
+    let windowLeft = (window.screen.width / 2) - (windowWidth / 2);
+    let windowTop = (window.screen.height / 2) - (windowHeight / 2);
+    let options = 'menubar, width=' + windowWidth + ', height=' + windowHeight + ', top=' + windowTop + ', left=' + windowLeft;
+    let dialog = window.open(url, 'Authorize', options);
+    if (window.focus && dialog) { dialog.focus(); }
     return new Ember.RSVP.Promise(function(resolve, reject) {
       if (dialog) {
         resolve(dialog);
