@@ -1,5 +1,9 @@
 # Changelog Ember-OAuth2
 
+## v2.0.4-beta
+  (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v2.0.3-beta...v2.0.4-beta]
+  - Move ember-cli-babel to dev dependencies
+
 ## v2.0.3-beta
   (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v2.0.2-beta...v2.0.3-beta]
   - fix typo in scope
