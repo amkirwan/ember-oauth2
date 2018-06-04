@@ -1,16 +1,16 @@
 import Ember from 'ember';
 
 /**
-  * @overview OAuth2 addon for Emberjs that stores tokens in the browsers localStorage
-  * @license   Licensed under MIT license
-  *            See https://raw.github.com/amkirwan/ember-oauth2/master/LICENSE
-  * @version   2.0.3-beta
-  *
-  * @module ember-oauth2
-  * @class ember-oauth2
-  */
+ * @overview OAuth2 addon for Emberjs that stores tokens in the browsers localStorage
+ * @license   Licensed under MIT license
+ *            See https://raw.github.com/amkirwan/ember-oauth2/master/LICENSE
+ * @version   2.0.4-beta
+ *
+ * @module ember-oauth2
+ * @class ember-oauth2
+ */
 export default Ember.Service.extend(Ember.Evented, {
-  VERSION: '2.0.3-beta',
+  VERSION: '2.0.4-beta',
   /**
    * initialize with the providerId to find in
    * EmberENV['ember-oauth2'] config
@@ -38,7 +38,9 @@ export default Ember.Service.extend(Ember.Evented, {
     this.set('providerId', providerId);
     // if the provider id doesn't exist in the config throw an error
     if (!this.get('config')[this.get('providerId')]) {
-      throw new Error(`Cannot find the providerId: ${this.get('providerId')} in the config.`);
+      throw new Error(
+        `Cannot find the providerId: ${this.get('providerId')} in the config.`
+      );
     } else {
       this.set('providerConfig', this.get('config')[this.get('providerId')]);
       this.setProperties(this.providerConfig);
@@ -53,10 +55,18 @@ export default Ember.Service.extend(Ember.Evented, {
    * @return {Promise}
    */
   authorize() {
-    if (!this.get('providerId')) { throw new Error('No provider id given.'); }
-    if (!this.get('clientId')) { throw new Error('No client id given.'); }
-    if (!this.get('authBaseUri')) { throw new Error('No auth base uri given.'); }
-    if (!this.get('redirectUri')) { throw new Error('No redirect uri given.'); }
+    if (!this.get('providerId')) {
+      throw new Error('No provider id given.');
+    }
+    if (!this.get('clientId')) {
+      throw new Error('No client id given.');
+    }
+    if (!this.get('authBaseUri')) {
+      throw new Error('No auth base uri given.');
+    }
+    if (!this.get('redirectUri')) {
+      throw new Error('No redirect uri given.');
+    }
     this.clearStates();
     this.saveState(this.requestObj());
     return this.openWindow(this.authUri());
@@ -72,10 +82,15 @@ export default Ember.Service.extend(Ember.Evented, {
    */
   openWindow(url) {
     let dialog = window.open(url, 'Authorize', 'height=600, width=450');
-    if (window.focus && dialog) { dialog.focus(); }
+    if (window.focus && dialog) {
+      dialog.focus();
+    }
     return new Ember.RSVP.Promise(function(resolve, reject) {
-      if (dialog) { resolve(dialog); }
-      else { reject(new Error('Opening dialog login window failed.')); }
+      if (dialog) {
+        resolve(dialog);
+      } else {
+        reject(new Error('Opening dialog login window failed.'));
+      }
     });
   },
 
@@ -96,14 +111,17 @@ export default Ember.Service.extend(Ember.Evented, {
       if (self.get('responseType') === 'token') {
         self.saveToken(self.generateToken(params));
         // verify the token on the client end
-        self.verifyToken().then(function(result) {
-          /*jshint unused:false*/
-          self.trigger('success');
-        }, function(error) {
-          /*jshint unused:false*/
-          self.removeToken();
-          self.trigger('error', 'Error: verifying token', params);
-        });
+        self.verifyToken().then(
+          function(result) {
+            /*jshint unused:false*/
+            self.trigger('success');
+          },
+          function(error) {
+            /*jshint unused:false*/
+            self.removeToken();
+            self.trigger('error', 'Error: verifying token', params);
+          }
+        );
       } else {
         self.trigger('success', params.code);
       }
@@ -111,7 +129,7 @@ export default Ember.Service.extend(Ember.Evented, {
       self.trigger('error', 'Error: authorization', params);
     }
 
-    if (callback && typeof(callback) === 'function') {
+    if (callback && typeof callback === 'function') {
       callback();
     }
   }),
@@ -122,8 +140,10 @@ export default Ember.Service.extend(Ember.Evented, {
     @return {Boolean} True if success false otherwise
   */
   authSuccess: function(params) {
-    return (this.get('responseType') === 'token' && params.access_token) ||
-            (this.get('responseType') === 'code' && params.code);
+    return (
+      (this.get('responseType') === 'token' && params.access_token) ||
+      (this.get('responseType') === 'code' && params.code)
+    );
   },
 
   /**
@@ -189,13 +209,17 @@ export default Ember.Service.extend(Ember.Evented, {
    * @return {Boolean} Will return true if the states false if they do not match
    */
   checkState: function(state) {
-    if (!state) { return false; }
+    if (!state) {
+      return false;
+    }
     // check the state returned with state saved in localstorage
     if (state === this.readState().state) {
       this.removeState(this.stateKeyName());
       return true;
     } else {
-      Ember.Logger.warn("State returned from the server did not match the local saved state.");
+      Ember.Logger.warn(
+        'State returned from the server did not match the local saved state.'
+      );
       return false;
     }
   },
@@ -230,12 +254,18 @@ export default Ember.Service.extend(Ember.Evented, {
    */
   authUri: function() {
     var uri = this.get('authBaseUri');
-    uri += '?response_type=' + encodeURIComponent(this.get('responseType')) +
-        '&redirect_uri=' + encodeURIComponent(this.get('redirectUri')) +
-        '&client_id=' + encodeURIComponent(this.get('clientId')) +
-        '&state=' + encodeURIComponent(this.get('state'));
+    uri +=
+      '?response_type=' +
+      encodeURIComponent(this.get('responseType')) +
+      '&redirect_uri=' +
+      encodeURIComponent(this.get('redirectUri')) +
+      '&client_id=' +
+      encodeURIComponent(this.get('clientId')) +
+      '&state=' +
+      encodeURIComponent(this.get('state'));
     if (this.get('scope')) {
-      uri += '&scope=' + encodeURIComponent(this.get('scope')).replace('%20', '+');
+      uri +=
+        '&scope=' + encodeURIComponent(this.get('scope')).replace('%20', '+');
     }
     return uri;
   },
@@ -252,7 +282,9 @@ export default Ember.Service.extend(Ember.Evented, {
     request.providerId = this.get('providerId');
     request.clientId = this.get('clientId');
     request.state = this.generateState();
-    if (this.get('scope')) { request.scope = this.get('scope'); }
+    if (this.get('scope')) {
+      request.scope = this.get('scope');
+    }
     return request;
   },
 
@@ -261,27 +293,30 @@ export default Ember.Service.extend(Ember.Evented, {
    * @param {Object} requestObj Properties of the request state to save in localStorage
    */
   saveState: function(requestObj) {
-    window.localStorage.setItem(this.stateKeyName(), JSON.stringify(requestObj));
+    window.localStorage.setItem(
+      this.stateKeyName(),
+      JSON.stringify(requestObj)
+    );
   },
 
   /**
-    * Remove any states from localStorage if they exist
-    * @method clearStates
-    * @return {Array} Keys used to remove states from localStorage
-    */
+   * Remove any states from localStorage if they exist
+   * @method clearStates
+   * @return {Array} Keys used to remove states from localStorage
+   */
   clearStates: function() {
-    let regex = new RegExp( '^' + this.get('statePrefix') + '-.*', 'g');
+    let regex = new RegExp('^' + this.get('statePrefix') + '-.*', 'g');
 
     let name;
     let toRemove = [];
-    for(let i = 0, l = window.localStorage.length; i < l; i++) {
+    for (let i = 0, l = window.localStorage.length; i < l; i++) {
       name = window.localStorage.key(i);
       if (name.match(regex)) {
         toRemove.push(name);
       }
     }
 
-    for(let j = 0, len = toRemove.length; j < len; j++) {
+    for (let j = 0, len = toRemove.length; j < len; j++) {
       name = toRemove[j];
       this.removeState(name);
     }
@@ -311,7 +346,9 @@ export default Ember.Service.extend(Ember.Evented, {
    */
   readState: function() {
     var stateObj = JSON.parse(window.localStorage.getItem(this.stateKeyName()));
-    if (!stateObj) { return false; }
+    if (!stateObj) {
+      return false;
+    }
 
     return stateObj;
   },
@@ -322,8 +359,9 @@ export default Ember.Service.extend(Ember.Evented, {
    */
   uuid() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-          var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
-              return v.toString(16);
+      var r = (Math.random() * 16) | 0,
+        v = c === 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
     });
   },
 
@@ -332,7 +370,7 @@ export default Ember.Service.extend(Ember.Evented, {
    * @return {Number} The current time in seconds rounded
    */
   now() {
-    return Math.round(new Date().getTime()/1000.0);
+    return Math.round(new Date().getTime() / 1000.0);
   },
 
   /**
@@ -342,7 +380,9 @@ export default Ember.Service.extend(Ember.Evented, {
    * @return {String} The state key name used for localstorage
    */
   stateKeyName() {
-    if (!this.get('state')) { this.generateState(); }
+    if (!this.get('state')) {
+      this.generateState();
+    }
     return this.get('statePrefix') + '-' + this.get('state');
   },
 
@@ -351,7 +391,9 @@ export default Ember.Service.extend(Ember.Evented, {
    * @return {String} The state
    */
   generateState(clear = false) {
-    if (!this.get('state') || clear === true) { this.set('state', this.uuid()); }
+    if (!this.get('state') || clear === true) {
+      this.set('state', this.uuid());
+    }
     return this.get('state');
   },
 
@@ -361,8 +403,12 @@ export default Ember.Service.extend(Ember.Evented, {
    */
   getToken: function() {
     var token = JSON.parse(window.localStorage.getItem(this.tokenKeyName()));
-    if (!token) { return null; }
-    if (!token.access_token) { return null; }
+    if (!token) {
+      return null;
+    }
+    if (!token.access_token) {
+      return null;
+    }
     return token;
   },
 
@@ -372,7 +418,9 @@ export default Ember.Service.extend(Ember.Evented, {
    */
   getAccessToken: function() {
     var token = this.getToken();
-    if (!token) { return null; }
+    if (!token) {
+      return null;
+    }
     return token.access_token;
   },
 
@@ -390,7 +438,7 @@ export default Ember.Service.extend(Ember.Evented, {
    * @method expiresIn
    * @param {String} expires lifetime left of token in seconds
    * @return {Number} When the token expires in seconds.
-  */
+   */
   expiresIn: function(expires) {
     return this.now() + parseInt(expires, 10);
   },
@@ -401,7 +449,9 @@ export default Ember.Service.extend(Ember.Evented, {
    */
   accessTokenIsExpired: function() {
     let token = this.getToken();
-    if (!token) { return true; }
+    if (!token) {
+      return true;
+    }
     if (this.now() >= token.expires_in) {
       return true;
     } else {
@@ -415,8 +465,10 @@ export default Ember.Service.extend(Ember.Evented, {
    */
   expireAccessToken: function() {
     var token = this.getToken();
-    if (!token) { return null; }
+    if (!token) {
+      return null;
+    }
     token.expires_in = 0;
     this.saveToken(token);
-  }
+  },
 });
