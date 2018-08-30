@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { reject } from 'rsvp';
 import { moduleFor, test } from 'ember-qunit';
 import sinon from 'sinon';
 
@@ -325,7 +325,7 @@ test('#handleRedirect - success', function(assert) {
 test('#handleRedirect - verifyToken failure', function(assert) {
   let spy = sinon.spy(service, 'handleRedirect');
   let triggerSpy = sinon.spy(service, 'trigger');
-  let verifyStub = sinon.stub(service, 'verifyToken', function() { return new Ember.RSVP.reject('error'); });
+  let verifyStub = sinon.stub(service, 'verifyToken', function() { return new reject('error'); });
 
   // create stubbed callback return
   let callbackUri = redirectUri;

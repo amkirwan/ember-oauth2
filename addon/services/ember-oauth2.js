@@ -1,3 +1,6 @@
+import { Promise } from 'rsvp';
+import Evented, { on } from '@ember/object/evented';
+import Service from '@ember/service';
 import Ember from 'ember';
 
 /**
@@ -9,7 +12,7 @@ import Ember from 'ember';
  * @module ember-oauth2
  * @class ember-oauth2
  */
-export default Ember.Service.extend(Ember.Evented, {
+export default Service.extend(Evented, {
   VERSION: '2.0.4-beta',
   /**
    * initialize with the providerId to find in
@@ -85,7 +88,7 @@ export default Ember.Service.extend(Ember.Evented, {
     if (window.focus && dialog) {
       dialog.focus();
     }
-    return new Ember.RSVP.Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
       if (dialog) {
         resolve(dialog);
       } else {
@@ -103,7 +106,7 @@ export default Ember.Service.extend(Ember.Evented, {
    * @param {Function} callback Optional callback
    */
 
-  handleRedirect: Ember.on('redirect', function(hash, callback) {
+  handleRedirect: on('redirect', function(hash, callback) {
     let self = this;
     let params = self.parseCallback(hash);
 
@@ -112,12 +115,10 @@ export default Ember.Service.extend(Ember.Evented, {
         self.saveToken(self.generateToken(params));
         // verify the token on the client end
         self.verifyToken().then(
-          function(result) {
-            /*jshint unused:false*/
+          function() {
             self.trigger('success');
           },
-          function(error) {
-            /*jshint unused:false*/
+          function() {
             self.removeToken();
             self.trigger('error', 'Error: verifying token', params);
           }
@@ -198,7 +199,7 @@ export default Ember.Service.extend(Ember.Evented, {
    * @return {Promise} Checks with the endpoint if the token is valid
    */
   verifyToken: function() {
-    return Ember.RSVP.Promise.resolve(true);
+    return Promise.resolve(true);
   },
 
   /**

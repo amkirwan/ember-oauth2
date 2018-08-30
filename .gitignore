@@ -1,25 +1,23 @@
-*.gem
-*.rbc
-.bundle
-.config
-.yardoc
-*.swp
-*.swo
-.DS_Store
-.grunt
-Gemfile.lock
-InstalledFiles
-_yardoc
-coverage
-doc/
-lib/bundler/man
-pkg
-rdoc
-spec/reports
-test/tmp
-test/version_tmp
-tmp/
+# See https://help.github.com/ignore-files/ for more about ignoring files.
 
-bower_components/
-node_modules/
-vendor/
+# compiled output
+/dist
+/tmp
+
+# dependencies
+/node_modules
+/bower_components
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage/*
+/libpeerconnection.log
+npm-debug.log*
+yarn-error.log
+testem.log
+
+# ember-try
+.node_modules.ember-try/
+bower.json.ember-try
+package.json.ember-try

@@ -2,7 +2,6 @@
 
 
 ember-oauth2
-============
 
 JavaScript library for using OAuth 2.0 Implicit Grant flow (Client-Side Flow) or Authorization Grant flow (Server-Side Flow) for Ember.js
 
