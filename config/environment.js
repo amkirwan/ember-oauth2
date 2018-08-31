@@ -39,7 +39,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-
+    // production settings go here
   }
 
   return ENV;
