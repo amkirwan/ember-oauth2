@@ -84,7 +84,7 @@ export default Service.extend(Evented, {
                     On reject returns Object with reference to dialog and error.
    */
   openWindow(url) {
-    let dialog = window.open(url, 'Authorize', 'height=600, width=450');
+    const dialog = window.open(url, 'Authorize', 'height=600, width=450');
     if (window.focus && dialog) {
       dialog.focus();
     }
@@ -107,8 +107,8 @@ export default Service.extend(Evented, {
    */
 
   handleRedirect: on('redirect', function(hash, callback) {
-    let self = this;
-    let params = self.parseCallback(hash);
+    const self = this;
+    const params = self.parseCallback(hash);
 
     if (self.authSuccess(params) && self.checkState(params.state)) {
       if (self.get('responseType') === 'token') {
@@ -183,7 +183,7 @@ export default Service.extend(Evented, {
     @return {Object} The access_token object with info about the token
    */
   generateToken(params) {
-    let token = {};
+    const token = {};
     token.provider_id = this.get('providerId');
     token.expires_in = this.expiresIn(params.expires_in);
     token.scope = this.get('scope');
@@ -240,9 +240,9 @@ export default Service.extend(Evented, {
    * @return {Object} The params returned from the OAuth2 provider
    */
   parseCallback(locationHash) {
-    let oauthParams = {};
-    let queryString = locationHash.substring(locationHash.indexOf('?'));
-    let regex = /([^#?&=]+)=([^&]*)/g;
+    const oauthParams = {};
+    const queryString = locationHash.substring(locationHash.indexOf('?'));
+    const regex = /([^#?&=]+)=([^&]*)/g;
     let match;
     while ((match = regex.exec(queryString)) !== null) {
       oauthParams[decodeURIComponent(match[1])] = decodeURIComponent(match[2]);
@@ -279,7 +279,7 @@ export default Service.extend(Evented, {
    * @return {Object} request object
    */
   requestObj() {
-    let request = {};
+    const request = {};
     request.response_type = this.get('responseType');
     request.providerId = this.get('providerId');
     request.clientId = this.get('clientId');
@@ -307,10 +307,10 @@ export default Service.extend(Evented, {
    * @return {Array} Keys used to remove states from localStorage
    */
   clearStates() {
-    let regex = new RegExp('^' + this.get('statePrefix') + '-.*', 'g');
+    const regex = new RegExp('^' + this.get('statePrefix') + '-.*', 'g');
 
     let name;
-    let toRemove = [];
+    const toRemove = [];
     for (let i = 0, l = window.localStorage.length; i < l; i++) {
       name = window.localStorage.key(i);
       if (name.match(regex)) {
@@ -347,7 +347,7 @@ export default Service.extend(Evented, {
    * @return {Object} Properties of the request state
    */
   readState() {
-    let stateObj = JSON.parse(window.localStorage.getItem(this.stateKeyName()));
+    const stateObj = JSON.parse(window.localStorage.getItem(this.stateKeyName()));
     if (!stateObj) {
       return false;
     }
@@ -361,7 +361,7 @@ export default Service.extend(Evented, {
    */
   uuid() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      let r = (Math.random() * 16) | 0,
+      const r = (Math.random() * 16) | 0,
         v = c === 'x' ? r : (r & 0x3) | 0x8;
       return v.toString(16);
     });
@@ -404,7 +404,7 @@ export default Service.extend(Evented, {
    * @return {Object} The params from the OAuth2 response from localStorage with the key 'tokenPrefix-providerId'.
    */
   getToken() {
-    let token = JSON.parse(window.localStorage.getItem(this.tokenKeyName()));
+    const token = JSON.parse(window.localStorage.getItem(this.tokenKeyName()));
     if (!token) {
       return null;
     }
@@ -419,7 +419,7 @@ export default Service.extend(Evented, {
    * @return {Object} The access_token param from the OAuth2 response from localStorage with the key 'tokenPrefix-providerId'.
    */
   getAccessToken() {
-    let token = this.getToken();
+    const token = this.getToken();
     if (!token) {
       return null;
     }
@@ -450,7 +450,7 @@ export default Service.extend(Evented, {
    * @return {Boolean} Check if the access_token is expired.
    */
   accessTokenIsExpired() {
-    let token = this.getToken();
+    const token = this.getToken();
     if (!token) {
       return true;
     }
@@ -466,7 +466,7 @@ export default Service.extend(Evented, {
    * @method expireAccessToken
    */
   expireAccessToken() {
-    let token = this.getToken();
+    const token = this.getToken();
     if (!token) {
       return null;
     }
