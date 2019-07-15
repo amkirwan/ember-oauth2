@@ -1,4 +1,7 @@
-import Ember from 'ember';
+import { Promise as EmberPromise } from 'rsvp';
+import Evented, { on } from '@ember/object/evented';
+import Service from '@ember/service';
+import { warn } from '@ember/debug';
 
 /**
  * @overview OAuth2 addon for Emberjs that stores tokens in the browsers localStorage
@@ -9,7 +12,7 @@ import Ember from 'ember';
  * @module ember-oauth2
  * @class ember-oauth2
  */
-export default Ember.Service.extend(Ember.Evented, {
+export default Service.extend(Evented, {
   VERSION: '2.0.4-beta',
   /**
    * initialize with the providerId to find in
@@ -86,7 +89,7 @@ export default Ember.Service.extend(Ember.Evented, {
     const options = `menubar, width=${windowWidth}, height=${windowHeight}, top=${windowTop}, left=${windowLeft}`;
     const dialog = window.open(url, 'Authorize', options);
     if (window.focus && dialog) { dialog.focus(); }
-    return new Ember.RSVP.Promise(function(resolve, reject) {
+    return new EmberPromise(function(resolve, reject) {
       if (dialog) {
         resolve(dialog);
       } else {
@@ -104,21 +107,19 @@ export default Ember.Service.extend(Ember.Evented, {
    * @param {Function} callback Optional callback
    */
 
-  handleRedirect: Ember.on('redirect', function(hash, callback) {
-    let self = this;
-    let params = self.parseCallback(hash);
+  handleRedirect: on('redirect', function(hash, callback) {
+    const self = this;
+    const params = self.parseCallback(hash);
 
     if (self.authSuccess(params) && self.checkState(params.state)) {
       if (self.get('responseType') === 'token') {
         self.saveToken(self.generateToken(params));
         // verify the token on the client end
         self.verifyToken().then(
-          function(result) {
-            /*jshint unused:false*/
+          function() {
             self.trigger('success');
           },
-          function(error) {
-            /*jshint unused:false*/
+          function() {
             self.removeToken();
             self.trigger('error', 'Error: verifying token', params);
           }
@@ -140,7 +141,7 @@ export default Ember.Service.extend(Ember.Evented, {
     @param {Object} The params returned from the OAuth2 callback
     @return {Boolean} True if success false otherwise
   */
-  authSuccess: function(params) {
+  authSuccess(params) {
     return (
       (this.get('responseType') === 'token' && params.access_token) ||
       (this.get('responseType') === 'code' && params.code)
@@ -153,7 +154,7 @@ export default Ember.Service.extend(Ember.Evented, {
    * @method tokenKeyName
    * @return {String} The token key name used for localstorage
    */
-  tokenKeyName: function() {
+  tokenKeyName() {
     return this.get('tokenPrefix') + '-' + this.get('providerId');
   },
 
@@ -167,7 +168,7 @@ export default Ember.Service.extend(Ember.Evented, {
    * @method saveToken
    * @param {Object} token Saves the params in the response from the OAuth2 server to localStorage with the key 'tokenPrefix-providerId
    */
-  saveToken: function(token) {
+  saveToken(token) {
     window.localStorage.setItem(this.tokenKeyName(), JSON.stringify(token));
     return window.localStorage.getItem(this.tokenKeyName());
   },
@@ -182,8 +183,8 @@ export default Ember.Service.extend(Ember.Evented, {
     @method generateToken
     @return {Object} The access_token object with info about the token
    */
-  generateToken: function(params) {
-    var token = {};
+  generateToken(params) {
+    const token = {};
     token.provider_id = this.get('providerId');
     token.expires_in = this.expiresIn(params.expires_in);
     token.scope = this.get('scope');
@@ -198,8 +199,8 @@ export default Ember.Service.extend(Ember.Evented, {
    * @method verifyToken
    * @return {Promise} Checks with the endpoint if the token is valid
    */
-  verifyToken: function() {
-    return Ember.RSVP.Promise.resolve(true);
+  verifyToken() {
+    return EmberPromise.resolve(true);
   },
 
   /**
@@ -209,7 +210,7 @@ export default Ember.Service.extend(Ember.Evented, {
    * @param {String} state The state to check
    * @return {Boolean} Will return true if the states false if they do not match
    */
-  checkState: function(state) {
+  checkState(state) {
     if (!state) {
       return false;
     }
@@ -218,8 +219,9 @@ export default Ember.Service.extend(Ember.Evented, {
       this.removeState(this.stateKeyName());
       return true;
     } else {
-      Ember.Logger.warn(
-        'State returned from the server did not match the local saved state.'
+      warn('State returned from the server did not match the local saved state.', false, {
+        id: 'ember-oauth2.invalid-state'
+      }
       );
       return false;
     }
@@ -238,11 +240,11 @@ export default Ember.Service.extend(Ember.Evented, {
    * @param {String} locationHash
    * @return {Object} The params returned from the OAuth2 provider
    */
-  parseCallback: function(locationHash) {
-    var oauthParams = {};
-    var queryString = locationHash.substring(locationHash.indexOf('?'));
-    var regex = /([^#?&=]+)=([^&]*)/g;
-    var match;
+  parseCallback(locationHash) {
+    const oauthParams = {};
+    const queryString = locationHash.substring(locationHash.indexOf('?'));
+    const regex = /([^#?&=]+)=([^&]*)/g;
+    let match;
     while ((match = regex.exec(queryString)) !== null) {
       oauthParams[decodeURIComponent(match[1])] = decodeURIComponent(match[2]);
     }
@@ -253,8 +255,8 @@ export default Ember.Service.extend(Ember.Evented, {
    * @method authUri
    * @return {String} Authorization uri for generating an OAuth2 token
    */
-  authUri: function() {
-    var uri = this.get('authBaseUri');
+  authUri() {
+    let uri = this.get('authBaseUri');
     uri +=
       '?response_type=' +
       encodeURIComponent(this.get('responseType')) +
@@ -277,8 +279,8 @@ export default Ember.Service.extend(Ember.Evented, {
    * @method requestObj
    * @return {Object} request object
    */
-  requestObj: function() {
-    var request = {};
+  requestObj() {
+    const request = {};
     request.response_type = this.get('responseType');
     request.providerId = this.get('providerId');
     request.clientId = this.get('clientId');
@@ -293,7 +295,7 @@ export default Ember.Service.extend(Ember.Evented, {
    * @method saveState
    * @param {Object} requestObj Properties of the request state to save in localStorage
    */
-  saveState: function(requestObj) {
+  saveState(requestObj) {
     window.localStorage.setItem(
       this.stateKeyName(),
       JSON.stringify(requestObj)
@@ -305,11 +307,11 @@ export default Ember.Service.extend(Ember.Evented, {
    * @method clearStates
    * @return {Array} Keys used to remove states from localStorage
    */
-  clearStates: function() {
-    let regex = new RegExp('^' + this.get('statePrefix') + '-.*', 'g');
+  clearStates() {
+    const regex = new RegExp('^' + this.get('statePrefix') + '-.*', 'g');
 
     let name;
-    let toRemove = [];
+    const toRemove = [];
     for (let i = 0, l = window.localStorage.length; i < l; i++) {
       name = window.localStorage.key(i);
       if (name.match(regex)) {
@@ -331,7 +333,7 @@ export default Ember.Service.extend(Ember.Evented, {
    * @param {String} stateName The keyname of the state object in localstorage
    * @return {Object} The deleted state object from localstorage
    */
-  removeState: function(stateName) {
+  removeState(stateName) {
     if (stateName) {
       return window.localStorage.removeItem(stateName);
     } else {
@@ -345,8 +347,8 @@ export default Ember.Service.extend(Ember.Evented, {
    * @method getState
    * @return {Object} Properties of the request state
    */
-  readState: function() {
-    var stateObj = JSON.parse(window.localStorage.getItem(this.stateKeyName()));
+  readState() {
+    const stateObj = JSON.parse(window.localStorage.getItem(this.stateKeyName()));
     if (!stateObj) {
       return false;
     }
@@ -360,7 +362,7 @@ export default Ember.Service.extend(Ember.Evented, {
    */
   uuid() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = (Math.random() * 16) | 0,
+      const r = (Math.random() * 16) | 0,
         v = c === 'x' ? r : (r & 0x3) | 0x8;
       return v.toString(16);
     });
@@ -402,8 +404,8 @@ export default Ember.Service.extend(Ember.Evented, {
    * @method getToken
    * @return {Object} The params from the OAuth2 response from localStorage with the key 'tokenPrefix-providerId'.
    */
-  getToken: function() {
-    var token = JSON.parse(window.localStorage.getItem(this.tokenKeyName()));
+  getToken() {
+    const token = JSON.parse(window.localStorage.getItem(this.tokenKeyName()));
     if (!token) {
       return null;
     }
@@ -417,8 +419,8 @@ export default Ember.Service.extend(Ember.Evented, {
    * @method getAccessToken
    * @return {Object} The access_token param from the OAuth2 response from localStorage with the key 'tokenPrefix-providerId'.
    */
-  getAccessToken: function() {
-    var token = this.getToken();
+  getAccessToken() {
+    const token = this.getToken();
     if (!token) {
       return null;
     }
@@ -431,7 +433,7 @@ export default Ember.Service.extend(Ember.Evented, {
    * @method removeToken
    * @return {Object} The token object in localstorage
    */
-  removeToken: function() {
+  removeToken() {
     return window.localStorage.removeItem(this.tokenKeyName());
   },
 
@@ -440,7 +442,7 @@ export default Ember.Service.extend(Ember.Evented, {
    * @param {String} expires lifetime left of token in seconds
    * @return {Number} When the token expires in seconds.
    */
-  expiresIn: function(expires) {
+  expiresIn(expires) {
     return this.now() + parseInt(expires, 10);
   },
 
@@ -448,8 +450,8 @@ export default Ember.Service.extend(Ember.Evented, {
    * @method accessTokenIsExpired
    * @return {Boolean} Check if the access_token is expired.
    */
-  accessTokenIsExpired: function() {
-    let token = this.getToken();
+  accessTokenIsExpired() {
+    const token = this.getToken();
     if (!token) {
       return true;
     }
@@ -464,12 +466,12 @@ export default Ember.Service.extend(Ember.Evented, {
    * Sets the access token expires_in time to 0 and saves the token to localStorage
    * @method expireAccessToken
    */
-  expireAccessToken: function() {
-    var token = this.getToken();
+  expireAccessToken() {
+    const token = this.getToken();
     if (!token) {
       return null;
     }
     token.expires_in = 0;
     this.saveToken(token);
-  },
+  }
 });
