@@ -1,5 +1,12 @@
 # Changelog Ember-OAuth2
 
+## v2.0.5-beta
+  (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v2.0.4-beta...v2.0.5-beta]
+  - Update ember-cli
+  - Use ES6
+  - Update Tests
+  - cleanup
+
 ## v2.0.4-beta
   (Full Changelog)[https://github.com/amkirwan/ember-oauth2/compare/v2.0.3-beta...v2.0.4-beta]
   - Move ember-cli-babel to dev dependencies
