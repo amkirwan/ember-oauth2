@@ -12,6 +12,7 @@ import { warn } from '@ember/debug';
  * @module ember-oauth2
  * @class ember-oauth2
  */
+// eslint-disable-next-line ember/no-classic-classes
 export default Service.extend(Evented, {
   VERSION: '2.0.5-beta',
   /**
@@ -40,12 +41,12 @@ export default Service.extend(Evented, {
   setProvider(providerId) {
     this.set('providerId', providerId);
     // if the provider id doesn't exist in the config throw an error
-    if (!this.get('config')[this.get('providerId')]) {
+    if (!this.config[this.providerId]) {
       throw new Error(
-        `Cannot find the providerId: ${this.get('providerId')} in the config.`
+        `Cannot find the providerId: ${this.providerId} in the config.`
       );
     } else {
-      this.set('providerConfig', this.get('config')[this.get('providerId')]);
+      this.set('providerConfig', this.config[this.providerId]);
       this.setProperties(this.providerConfig);
       return this;
     }
@@ -58,16 +59,16 @@ export default Service.extend(Evented, {
    * @return {Promise}
    */
   authorize() {
-    if (!this.get('providerId')) {
+    if (!this.providerId) {
       throw new Error('No provider id given.');
     }
-    if (!this.get('clientId')) {
+    if (!this.clientId) {
       throw new Error('No client id given.');
     }
-    if (!this.get('authBaseUri')) {
+    if (!this.authBaseUri) {
       throw new Error('No auth base uri given.');
     }
-    if (!this.get('redirectUri')) {
+    if (!this.redirectUri) {
       throw new Error('No redirect uri given.');
     }
     this.clearStates();
@@ -83,13 +84,15 @@ export default Service.extend(Evented, {
     @return {Object} On resolve returns reference to the opened window.
                     On reject returns Object with reference to dialog and error.
    */
-  openWindow(url, windowWidth=600, windowHeight=800) {
-    const windowLeft = (window.screen.width / 2) - (windowWidth / 2);
-    const windowTop = (window.screen.height / 2) - (windowHeight / 2);
+  openWindow(url, windowWidth = 600, windowHeight = 800) {
+    const windowLeft = window.screen.width / 2 - windowWidth / 2;
+    const windowTop = window.screen.height / 2 - windowHeight / 2;
     const options = `menubar, width=${windowWidth}, height=${windowHeight}, top=${windowTop}, left=${windowLeft}`;
     const dialog = window.open(url, 'Authorize', options);
-    if (window.focus && dialog) { dialog.focus(); }
-    return new EmberPromise(function(resolve, reject) {
+    if (window.focus && dialog) {
+      dialog.focus();
+    }
+    return new EmberPromise(function (resolve, reject) {
       if (dialog) {
         resolve(dialog);
       } else {
@@ -107,7 +110,7 @@ export default Service.extend(Evented, {
    * @param {Function} callback Optional callback
    */
 
-  handleRedirect: on('redirect', function(hash, callback) {
+  handleRedirect: on('redirect', function (hash, callback) {
     const self = this;
     const params = self.parseCallback(hash);
 
@@ -116,10 +119,10 @@ export default Service.extend(Evented, {
         self.saveToken(self.generateToken(params));
         // verify the token on the client end
         self.verifyToken().then(
-          function() {
+          function () {
             self.trigger('success');
           },
-          function() {
+          function () {
             self.removeToken();
             self.trigger('error', 'Error: verifying token', params);
           }
@@ -143,8 +146,8 @@ export default Service.extend(Evented, {
   */
   authSuccess(params) {
     return (
-      (this.get('responseType') === 'token' && params.access_token) ||
-      (this.get('responseType') === 'code' && params.code)
+      (this.responseType === 'token' && params.access_token) ||
+      (this.responseType === 'code' && params.code)
     );
   },
 
@@ -155,7 +158,7 @@ export default Service.extend(Evented, {
    * @return {String} The token key name used for localstorage
    */
   tokenKeyName() {
-    return this.get('tokenPrefix') + '-' + this.get('providerId');
+    return this.tokenPrefix + '-' + this.providerId;
   },
 
   /**
@@ -185,9 +188,9 @@ export default Service.extend(Evented, {
    */
   generateToken(params) {
     const token = {};
-    token.provider_id = this.get('providerId');
+    token.provider_id = this.providerId;
     token.expires_in = this.expiresIn(params.expires_in);
-    token.scope = this.get('scope');
+    token.scope = this.scope;
     token.access_token = params.access_token;
     return token;
   },
@@ -219,9 +222,12 @@ export default Service.extend(Evented, {
       this.removeState(this.stateKeyName());
       return true;
     } else {
-      warn('State returned from the server did not match the local saved state.', false, {
-        id: 'ember-oauth2.invalid-state'
-      }
+      warn(
+        'State returned from the server did not match the local saved state.',
+        false,
+        {
+          id: 'ember-oauth2.invalid-state',
+        }
       );
       return false;
     }
@@ -256,19 +262,18 @@ export default Service.extend(Evented, {
    * @return {String} Authorization uri for generating an OAuth2 token
    */
   authUri() {
-    let uri = this.get('authBaseUri');
+    let uri = this.authBaseUri;
     uri +=
       '?response_type=' +
-      encodeURIComponent(this.get('responseType')) +
+      encodeURIComponent(this.responseType) +
       '&redirect_uri=' +
-      encodeURIComponent(this.get('redirectUri')) +
+      encodeURIComponent(this.redirectUri) +
       '&client_id=' +
-      encodeURIComponent(this.get('clientId')) +
+      encodeURIComponent(this.clientId) +
       '&state=' +
-      encodeURIComponent(this.get('state'));
-    if (this.get('scope')) {
-      uri +=
-        '&scope=' + encodeURIComponent(this.get('scope')).replace('%20', '+');
+      encodeURIComponent(this.state);
+    if (this.scope) {
+      uri += '&scope=' + encodeURIComponent(this.scope).replace('%20', '+');
     }
     return uri;
   },
@@ -281,12 +286,12 @@ export default Service.extend(Evented, {
    */
   requestObj() {
     const request = {};
-    request.response_type = this.get('responseType');
-    request.providerId = this.get('providerId');
-    request.clientId = this.get('clientId');
+    request.response_type = this.responseType;
+    request.providerId = this.providerId;
+    request.clientId = this.clientId;
     request.state = this.generateState();
-    if (this.get('scope')) {
-      request.scope = this.get('scope');
+    if (this.scope) {
+      request.scope = this.scope;
     }
     return request;
   },
@@ -308,7 +313,7 @@ export default Service.extend(Evented, {
    * @return {Array} Keys used to remove states from localStorage
    */
   clearStates() {
-    const regex = new RegExp('^' + this.get('statePrefix') + '-.*', 'g');
+    const regex = new RegExp('^' + this.statePrefix + '-.*', 'g');
 
     let name;
     const toRemove = [];
@@ -348,7 +353,9 @@ export default Service.extend(Evented, {
    * @return {Object} Properties of the request state
    */
   readState() {
-    const stateObj = JSON.parse(window.localStorage.getItem(this.stateKeyName()));
+    const stateObj = JSON.parse(
+      window.localStorage.getItem(this.stateKeyName())
+    );
     if (!stateObj) {
       return false;
     }
@@ -361,11 +368,14 @@ export default Service.extend(Evented, {
    * @return {String} A pseudo random uuid
    */
   uuid() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      const r = (Math.random() * 16) | 0,
-        v = c === 'x' ? r : (r & 0x3) | 0x8;
-      return v.toString(16);
-    });
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+      /[xy]/g,
+      function (c) {
+        const r = (Math.random() * 16) | 0,
+          v = c === 'x' ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
   },
 
   /**
@@ -383,10 +393,10 @@ export default Service.extend(Evented, {
    * @return {String} The state key name used for localstorage
    */
   stateKeyName() {
-    if (!this.get('state')) {
+    if (!this.state) {
       this.generateState();
     }
-    return this.get('statePrefix') + '-' + this.get('state');
+    return this.statePrefix + '-' + this.state;
   },
 
   /**
@@ -394,10 +404,10 @@ export default Service.extend(Evented, {
    * @return {String} The state
    */
   generateState(clear = false) {
-    if (!this.get('state') || clear === true) {
+    if (!this.state || clear === true) {
       this.set('state', this.uuid());
     }
-    return this.get('state');
+    return this.state;
   },
 
   /**
@@ -473,5 +483,5 @@ export default Service.extend(Evented, {
     }
     token.expires_in = 0;
     this.saveToken(token);
-  }
+  },
 });
