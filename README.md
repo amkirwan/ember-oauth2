@@ -27,30 +27,30 @@ The latest version of Ember-OAuth2 is an Ember Addon and uses the ES6 modules. T
 
 Ember-OAuth2 is an Ember Addon that can be installed with the following command from your ember project.
 
-```javascript
+```bash
 $ ember install ember-oauth2
 ```
 
 Ember-OAuth2 is an Ember [service](https://guides.emberjs.com/v2.8.0/applications/services/) that you can inject to different parts of your app using the inject syntax
 
-```javascript
-import Ember from 'ember';
+```js
+import Controller from '@ember/controller';
+import { inject as service } from '@ember/service';
 
-export default DS.Model.extend({
-  emberOauth2: Ember.inject.service();
-});
+export default class ApplicationController extends Controller {
+  @service emberOauth2;
+}
 ```
-
 
 
 ## Configure
 
 First you must configure your OAuth provider. For Google you would configure it like this.
 
-```
+```js
 window.EmberENV['ember-oauth2'] = {
   google: {
-    clientId: "xxxxxxxxxxxx",
+    clientId: 'xxxxxxxxxxxx',
     authBaseUri: 'https://accounts.google.com/o/oauth2/auth',
     redirectUri: 'https://oauth2-login-demo.appspot.com/oauth/callback',
     scope: 'public write'
@@ -60,7 +60,7 @@ window.EmberENV['ember-oauth2'] = {
 
 If using ember-cli, you can add the configuration to `config/environment.js`:
 
-```
+```js
 EmberENV: {
   FEATURES: {
     // Here you can enable experimental features on an ember canary build
@@ -68,7 +68,7 @@ EmberENV: {
   },
   'ember-oauth2': {
     google: {
-      clientId: "xxxxxxxxxxxx",
+      clientId: 'xxxxxxxxxxxx',
       authBaseUri: 'https://accounts.google.com/o/oauth2/auth',
       redirectUri: 'https://oauth2-login-demo.appspot.com/oauth/callback',
       scope: 'public write'
@@ -81,10 +81,10 @@ The example above sets *google* as a *providerId* along with configuration infor
 
 The configuration object allows you to also customize the prefix for the state and token that are stored in the browsers localStorage. The default value for the state prefix is *state* and the default for token is *token*. Using the previous example you can customize the prefixes by doing the following.
 
-```javascript
+```js
 window.ENV['ember-oauth2'] = {
   google: {
-    clientId: "xxxxxxxxxxxx",
+    clientId: 'xxxxxxxxxxxx',
     authBaseUri: 'https://accounts.google.com/o/oauth2/auth',
     redirectUri: 'https://oauth2-login-demo.appspot.com/oauth/callback',
     scope: 'public write',
@@ -108,25 +108,29 @@ The following are the options available for configuring a provider:
 
 ## Authorization
 
-To sign into the OAuth2 provider create by injecting the service, set the provider with `setProvider` and call the `authorize`. You can inject this addon into your route for example and when the user clicks a button fire the action to handle the request and set the service providerId and call authorize. This is a simple example and you would probably want to wrap this functionality in a session model. Checkout [ember-token-auth](https://github.com/amkirwan/ember-token-auth) for a full example.
+To sign into the OAuth2 provider create by injecting the service, set the provider with `setProvider` and call the `authorize`. You can inject this addon into your controller for example and when the user clicks a button fire the action to handle the request and set the service providerId and call authorize. This is a simple example and you would probably want to wrap this functionality in a session model. Checkout [ember-token-auth](https://github.com/amkirwan/ember-token-auth) for a full example.
 
-```javascript
+```js
 // login route
-import Ember from 'ember';
-export default Ember.Route.extend({
-  emberOauth2: Ember.inject.service(),
-  action: {
-    authenticate(providerId) {
-      this.get('emberOauth2').setProvider(providerId);
-      return this.get('emberOauth2').authorize().then(function(response) {
-        this.get('emberOauth2').get('auth').trigger('redirect', response.location.hash);
-      }, function(error) {
-        this.get('emberOauth2').get('auth').trigger('error', error);
-      })
+import Controller from '@ember/controller';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+
+export default class LoginController extends Controller {
+  @service emberOauth2;
+  
+  @action
+  async authenticate(providerId) {
+    this.emberOauth2.setProvider(providerId);
+
+    try {
+      let response = await this.emberOauth2.authorize();
+      this.emberOauth2.trigger('redirect', response.location.hash);
+    } catch (error) {
+      this.emberOauth2.trigger('error', error);
     }
   }
-
-});
+}
 ```
 
 Calling `authorize()` will open a new window and the OAuth provider's OAuth dialog will be displayed. If the user chooses to authenticate with your website upon authorization by OAuth provider the user will be redirected back to the redirectUri with the params access_token, token_type and state.
@@ -165,7 +169,7 @@ When using the client-side flow it is vital to validate the token received from 
 
 Here is an example of how this might be accomplished in an Ember-CLI instance initializer using the Google token validation endpoint.
 
-```javascript
+```js
 import Ember from 'ember';
 import EmberOAuth2 from 'ember-oauth2';
 import env from 'ember-pacu/config/environment';
@@ -211,11 +215,11 @@ If using the Authorization Grant flow with your provider your backend server wil
 
 To enable the Authorization Grant flow for a provider set the `responseType` value to `code`.
 
-```javascript
+```js
 window.ENV = window.ENV || {};
 window.ENV['ember-oauth2'] = {
   google: {
-    clientId: "xxxxxxxxxxxx",
+    clientId: 'xxxxxxxxxxxx',
     authBaseUri: 'https://accounts.google.com/o/oauth2/auth',
     redirectUri: 'https://oauth2-login-demo.appspot.com/oauth/callback',
     responseType: 'code'
