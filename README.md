@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/amkirwan/ember-oauth2.png)](https://travis-ci.org/amkirwan/ember-oauth2)
+[![CI](https://github.com/amkirwan/ember-oauth2/actions/workflows/ci.yml/badge.svg)](https://github.com/amkirwan/ember-oauth2/actions/workflows/ci.yml)
 
 ember-oauth2
 ============
